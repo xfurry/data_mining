@@ -1,0 +1,18 @@
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\bin\WebApplication_OLAP.dll
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\bin\WebApplication_OLAP.pdb
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\obj\Debug\WebApplication_OLAP.dll
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\obj\Debug\WebApplication_OLAP.pdb
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\obj\Debug\Interop.ADOMD.dll
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\obj\Debug\WebApplication_OLAP.csproj.ResolveComReference.cache
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\bin\Interop.ADOMD.dll
+C:\Users\Radu\Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\bin\WebApplication_OLAP.dll
+C:\Users\Radu\Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\bin\WebApplication_OLAP.pdb
+C:\Users\Radu\Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\bin\EO.Web.dll
+C:\Users\Radu\Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\bin\Interop.ADOMD.dll
+C:\Users\Radu\Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Radu\Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\obj\Debug\Interop.ADOMD.dll
+C:\Users\Radu\Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\obj\Debug\WebApplication_OLAP.csproj.ResolveComReference.cache
+C:\Users\Radu\Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\obj\Debug\WebApplication_OLAP.dll
+C:\Users\Radu\Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\obj\Debug\WebApplication_OLAP.pdb
+C:\Documents and Settings\Administrator\My Documents\Visual Studio 2008\Projects\WebApplication_OLAP\WebApplication_OLAP\bin\EO.Web.dll
