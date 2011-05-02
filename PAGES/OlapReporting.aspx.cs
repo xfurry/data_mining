@@ -278,10 +278,11 @@ myReader.Close();*/
         {
             // get from session
             if (Session != null)
+            {
                 ObjMainTable = (DataTable)Session["queryData"];
-
-            // call export method
-            ExportDataTableToExcel(this.objMainTable);
+                // call export method
+                ExportDataTableToExcel(this.objMainTable);
+            }
         }
 
         private void ExportDataTableToExcel(DataTable sInputTable)

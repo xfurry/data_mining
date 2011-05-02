@@ -22,6 +22,11 @@
                     Retrieve data here</h2>
                 <div style="width: 536px; height: 137px; overflow: auto;">
                     <asp:Button ID="ButtonExecute" runat="server" OnClick="ButtonExecute_Click" Text="Execute Query" />
+                    &nbsp;&nbsp;&nbsp;
+                    <asp:Button ID="ButtonExport" runat="server" onclick="Button1_Click" 
+                        Text="Export to Excel" />
+&nbsp;&nbsp;&nbsp;
+                    <asp:Label ID="Label1" runat="server"></asp:Label>
                     <br />
                     <asp:TextBox ID="TextBoxQuery" runat="server" Height="106px" TextMode="MultiLine"
                         Width="524px"></asp:TextBox>
