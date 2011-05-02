@@ -20,6 +20,13 @@
                 <h2>
                     WELCOME
                 </h2>
+                <asp:Button ID="Button2" runat="server" onclick="Button2_Click" Text="Button" />
+                <br />
+                <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+                <br />
+                <br />
+                <br />
+                <br />
                 Greysleek is a CSS template that is free and fully standards compliant. <a href="http://www.free-css-templates.com/">
                     Free CSS Templates</a> designed this template. This template is allowed for
                 all uses, including commercial use, as it is released under the <strong>Creative Commons

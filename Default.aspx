@@ -72,8 +72,6 @@
                         NavigateUrl="~/pages/OlapReporting.aspx" Visible="False"><span>Olap Report</span></asp:HyperLink>
                     <asp:HyperLink ID="HyperLinkSql" runat="server" 
                         NavigateUrl="~/pages/SqlReporting.aspx" Visible="False"><span>Sql Report</span></asp:HyperLink>
-                    <asp:HyperLink ID="HyperLinkMining" runat="server" 
-                        NavigateUrl="~/pages/DataMining.aspx" Visible="False"><span>Mining Report</span></asp:HyperLink>
                     <a href="#"><span>Contact Us</span></a>
                 </div>
                 <h2>

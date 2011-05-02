@@ -25,7 +25,9 @@ namespace WebApplication_OLAP
             GridView1.DataBind();
             manager.CloseConnection();
 
+            // store the data table and prepare the mining link
             Session.Add("queryData", objTable);
+            HyperLinkMining.Visible = true;
         }
 
         private void ExportDataTableToExcel(DataTable sInputTable)

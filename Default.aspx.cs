@@ -19,7 +19,6 @@ namespace WebApplication_OLAP
             LabelLogin.Text = "Login Success!";
             HyperLinkOlap.Visible = true;
             HyperLinkSql.Visible = true;
-            HyperLinkMining.Visible = true;
         }
     }
 }

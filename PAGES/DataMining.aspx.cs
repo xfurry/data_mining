@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data.Clustering;
+using System.Data;
 
 namespace WebApplication_OLAP.classes
 {
@@ -11,12 +13,22 @@ namespace WebApplication_OLAP.classes
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            // get from session
+            if (Session != null)
+            {
+                DataTable objTable = (DataTable)Session["queryData"];
+            }
         }
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            System.Threading.Thread.Sleep(5000);
+            //System.Threading.Thread.Sleep(5000);
+        }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            //CMeansAlgorithm miner = new CMeansAlgorithm();
+            //miner.Run(5);
         }
     }
 }
