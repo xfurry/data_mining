@@ -25,6 +25,12 @@
                 <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
                 <br />
                 <br />
+                <div style="width: 536px; height: 227px; overflow: auto;">
+                    <asp:GridView ID="GridView1" runat="server">
+                    </asp:GridView>
+                </div>
+                <br />
+                <br />
                 <br />
                 <br />
                 Greysleek is a CSS template that is free and fully standards compliant. <a href="http://www.free-css-templates.com/">

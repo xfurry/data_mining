@@ -17,6 +17,8 @@ namespace WebApplication_OLAP.classes
             if (Session != null)
             {
                 DataTable objTable = (DataTable)Session["queryData"];
+                GridView1.DataSource = objTable;
+                GridView1.DataBind();
             }
         }
 
