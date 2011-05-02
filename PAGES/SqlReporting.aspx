@@ -20,6 +20,16 @@
             <div id="contentarea">
                 <h2>
                     WELCOME</h2>
+                <asp:Button ID="ButtonExecute" runat="server" onclick="ButtonExecute_Click" 
+                    Text="Execute Query" />
+                <br />
+                <br />
+                <asp:TextBox ID="TextBoxQuery" runat="server" Height="106px" 
+                    TextMode="MultiLine" Width="253px"></asp:TextBox>
+                <br />
+                <br />
+                <br />
+                <br />
                 Greysleek is a CSS template that is free and fully standards compliant. <a href="http://www.free-css-templates.com/">
                     Free CSS Templates</a> designed this template. This template is allowed for
                 all uses, including commercial use, as it is released under the <strong>Creative Commons

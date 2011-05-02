@@ -85,12 +85,20 @@ namespace WebApplication_OLAP
             if (this.objConnection == null)
                 this.InitConnection();
 
-            this.objConnection.Open();
+            try
+            {
+                this.objConnection.Open();
 
-            ObjCommand = new AdomdCommand(sQuery, this.objConnection);
-            objResult = ObjCommand.ExecuteCellSet();
+                ObjCommand = new AdomdCommand(sQuery, this.objConnection);
+                objResult = ObjCommand.ExecuteCellSet();
 
-            return objResult;
+                return objResult;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
         }
 
         // get local cubes

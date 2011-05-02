@@ -75,6 +75,7 @@
     <Compile Include="classes\data_managers\ExcelManager.cs" />
     <Compile Include="classes\data_managers\MiningManager.cs" />
     <Compile Include="classes\data_managers\OlapManager.cs" />
+    <Compile Include="classes\data_managers\SQLManager.cs" />
     <Compile Include="classes\mining_managers\ClusterCentroid.cs" />
     <Compile Include="classes\mining_managers\ClusterPoint.cs" />
     <Compile Include="classes\mining_managers\FuzzyCMeansAlgorithm.cs" />

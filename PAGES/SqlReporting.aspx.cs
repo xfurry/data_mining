@@ -13,5 +13,11 @@ namespace WebApplication_OLAP
         {
 
         }
+
+        protected void ButtonExecute_Click(object sender, EventArgs e)
+        {
+            SQLManager manager = new SQLManager();
+            manager.GetQueryResult();
+        }
     }
 }
