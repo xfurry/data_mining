@@ -19,23 +19,18 @@
         <div id="mainarea">
             <div id="contentarea">
                 <h2>
-                    WELCOME</h2>
-                <asp:Button ID="ButtonExecute" runat="server" onclick="ButtonExecute_Click" 
-                    Text="Execute Query" />
-                <br />
-                <br />
-                <asp:TextBox ID="TextBoxQuery" runat="server" Height="106px" 
-                    TextMode="MultiLine" Width="253px"></asp:TextBox>
-                <br />
-                <br />
-                <br />
-                <br />
-                Greysleek is a CSS template that is free and fully standards compliant. <a href="http://www.free-css-templates.com/">
-                    Free CSS Templates</a> designed this template. This template is allowed for
-                all uses, including commercial use, as it is released under the <strong>Creative Commons
-                    Attributions 2.5</strong> license. The only stipulation to the use of this free
-                template is that the links appearing in the footer remain intact. Beyond that, simply
-                enjoy and have fun with it!
+                    Retrieve data here</h2>
+                <div style="width: 536px; height: 137px; overflow: auto;">
+                    <asp:Button ID="ButtonExecute" runat="server" OnClick="ButtonExecute_Click" Text="Execute Query" />
+                    <br />
+                    <asp:TextBox ID="TextBoxQuery" runat="server" Height="106px" TextMode="MultiLine"
+                        Width="524px"></asp:TextBox>
+                    <br />
+                </div>
+                <div style="width: 536px; height: 227px; overflow: auto;">
+                    <asp:GridView ID="GridView1" runat="server">
+                    </asp:GridView>
+                </div>
                 <br />
                 <br />
                 Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor sit amet, consectetur
@@ -44,35 +39,7 @@
                 ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
                 esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit.
-                <br />
-                <br />
-                Anim id est laborum adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                <br />
-                <br />
-                Lorem ipsum <a href="#">link</a> dolor sit amet, consectetur adipisicing elit, sed
-                do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                <br />
-                <br />
-                Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-                esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum adipisicing
-                elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </div>
+                </div>
             <div id="sidebar">
                 <div id="sidebarnav">
                     <a class="active" href="../Default.aspx"><span>Home</span></a>

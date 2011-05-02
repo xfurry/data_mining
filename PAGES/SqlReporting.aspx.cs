@@ -11,13 +11,15 @@ namespace WebApplication_OLAP
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            // show DB details on load; ToDo
         }
 
         protected void ButtonExecute_Click(object sender, EventArgs e)
         {
             SQLManager manager = new SQLManager();
-            manager.GetQueryResult();
+            GridView1.DataSource = manager.GetQueryResult(TextBoxQuery.Text);
+            GridView1.DataBind();
+            manager.CloseConnection();
         }
     }
 }
