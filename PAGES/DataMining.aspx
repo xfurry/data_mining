@@ -22,7 +22,6 @@
                 </h2>
                 <asp:Button ID="Button2" runat="server" onclick="Button2_Click" Text="Button" />
                 <br />
-                <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
                 <br />
                 <br />
                 <div style="width: 536px; height: 227px; overflow: auto;">
@@ -104,6 +103,7 @@
                         <asp:Button ID="Button1" runat="server" Text="Button" onclick="Button1_Click" />
                     </ContentTemplate>
                 </asp:UpdatePanel>
+                <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
                 <br />
                 <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="UpdatePanel1">
                     <ProgressTemplate>

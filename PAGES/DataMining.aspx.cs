@@ -24,6 +24,10 @@ namespace WebApplication_OLAP.classes
 
         protected void Button1_Click(object sender, EventArgs e)
         {
+            MiningManager mining = new MiningManager();
+            mining.AddMiningStructure();
+            Label1.Text = mining.SResult;
+
             //System.Threading.Thread.Sleep(5000);
         }
 
