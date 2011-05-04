@@ -22,17 +22,19 @@
                 <h2>
                     REPORT
                 </h2>
-                <div style="width: 536px; height: 121px; overflow: auto;">
+                <div style="width: 536px; height: 300px; overflow: auto;">
                     <asp:Label ID="Label1" runat="server" Text="Cubes"></asp:Label>
-                    &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
-                    <asp:Label ID="Label2" runat="server" Text="Dimensions"></asp:Label>
+                    &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <br />
                     <asp:DropDownList ID="DropDownList1" runat="server" OnSelectedIndexChanged="DropDownList1_SelectedIndexChanged">
                     </asp:DropDownList>
-                    &nbsp &nbsp &nbsp<asp:TreeView ID="TreeView1" runat="server">
+                    &nbsp &nbsp<br />
+                    <asp:Label ID="Label2" runat="server" Text="Dimensions"></asp:Label>
+                    <br />
+                    <asp:ListBox ID="ListBox1" runat="server"></asp:ListBox>
+                    <br />
+&nbsp;&nbsp<asp:TreeView ID="TreeView1" runat="server">
                     </asp:TreeView>
-                &nbsp;<%--<asp:ListBox ID="ListBox1" runat="server"></asp:ListBox>--%>
-                    &nbsp &nbsp &nbsp
                     </div>
                 <div style="width: 536px; height: 34px; overflow: auto;">
                     <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Execute Query" />

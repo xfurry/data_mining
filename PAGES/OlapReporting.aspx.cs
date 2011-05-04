@@ -260,16 +260,16 @@ myReader.Close();*/
             }
 
             // clear items to avoid duplicates
-            //ListBox1.Items.Clear();
-
+            ListBox1.Items.Clear();
             List<string> lDimensions = objOlapManager.LDim;
-            for (int i = 0; i < lCubeList.Count; i++)
+            ListBox1.Rows = lDimensions.Count;
+            for (int i = 0; i < lDimensions.Count; i++)
             {
                 string myItem = lDimensions[i];
-                //ListBox1.Items.Add(myItem);
+                ListBox1.Items.Add(myItem);
             }
             // reload component
-            //ListBox1.DataBind();
+            ListBox1.DataBind();
 
             objOlapManager.CloseConnection();
         }

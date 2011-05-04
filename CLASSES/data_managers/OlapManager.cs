@@ -124,7 +124,7 @@ namespace WebApplication_OLAP
         // get cube dimensions
         public void GetDimension(CubeDef objInputCube)
         {
-            //Write out all dimensions, indented by a tab.
+            //Write out all dimensions, indented by a tab
             foreach (Dimension objDim in objInputCube.Dimensions)
                 LDim.Add(objDim.Name);
         }
