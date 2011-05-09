@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
+using WebApplication_OLAP.classes.data_managers;
 
 namespace WebApplication_OLAP.pages
 {
@@ -19,6 +20,12 @@ namespace WebApplication_OLAP.pages
                 GridView1.DataSource = objTable;
                 GridView1.DataBind();
             }
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            SQLMiningManager sm = new SQLMiningManager();
+            sm.Initialize();
         }
     }
 }

@@ -23,7 +23,7 @@
                 </h2>
                 <div>
                 <br />
-                    <asp:Button ID="Button1" runat="server" Text="Button" />
+                    <asp:Button ID="Button1" runat="server" onclick="Button1_Click" Text="Button" />
                 <br />
                 <br />
                 </div>
