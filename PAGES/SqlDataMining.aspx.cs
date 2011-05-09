@@ -24,8 +24,14 @@ namespace WebApplication_OLAP.pages
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            SQLMiningManager sm = new SQLMiningManager();
-            sm.Initialize();
+            SQLMiningManager objMiningManager = new SQLMiningManager();
+            // return mining result
+            if (objMiningManager.CreateMiningStructureIfCan())
+                LabelStatus.Text = LabelStatus.Text + "Success!";
+            else
+                LabelStatus.Text = LabelStatus.Text + "Failed!";
+
+            // display results
         }
     }
 }

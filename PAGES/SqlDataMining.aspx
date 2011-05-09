@@ -24,6 +24,8 @@
                 <div>
                 <br />
                     <asp:Button ID="Button1" runat="server" onclick="Button1_Click" Text="Button" />
+                    <br />
+                    <asp:Label ID="LabelStatus" runat="server" Text="Mining status:"></asp:Label>
                 <br />
                 <br />
                 </div>

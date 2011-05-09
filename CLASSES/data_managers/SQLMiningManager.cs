@@ -16,9 +16,9 @@ namespace WebApplication_OLAP.classes.data_managers
         private string sStructureName = "MyMiningStructure";            // to be removed
         private string sModelName = "MyMiningModel";                    // to be removed
 
-        public void Initialize()
+        public bool CreateMiningStructureIfCan()
         {
-            //try
+            try
             {
                 // init server connection
                 Server svr = new Server();
@@ -40,13 +40,17 @@ namespace WebApplication_OLAP.classes.data_managers
                 CreateModels(currentStructure);
 
                 // Process Database and structure
-                //myMS.Process();
+                currentStructure.Process();
                 //ProcessDatabase(myDB);
+
+                return true;
             }
-            //catch (Exception e)
+            catch (Exception e)
             {
-                //Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.StackTrace);
             }
+
+            return false;
         }
 
         /*
@@ -109,53 +113,56 @@ namespace WebApplication_OLAP.classes.data_managers
             DropExistingStructures(objDatabase, sStructureName);
 
             // Initialize a new mining structure
-            MiningStructure ms = new MiningStructure(sStructureName, sStructureName);
-            ms.Source = new DataSourceViewBinding("Adventure Works DW");
+            MiningStructure currentMiningStruct = new MiningStructure(sStructureName, sStructureName);
+            currentMiningStruct.Source = new DataSourceViewBinding("Adventure Works DW");
+            DataSourceView currentDataSource = new DataSourceView("Adventure Works DW");
+
 
             // Create the columns of the mining structure
             // setting the type, content and data binding
             // User Id column
-            ScalarMiningStructureColumn UserID = new ScalarMiningStructureColumn("UserId", "UserId");
-            UserID.Type = MiningStructureColumnTypes.Long;
-            UserID.Content = MiningStructureColumnContents.Key;
-            UserID.IsKey = true;
-
+            ScalarMiningStructureColumn StructKey = new ScalarMiningStructureColumn("StructKey", "StructKey");
+            StructKey.Type = MiningStructureColumnTypes.Long;
+            StructKey.Content = MiningStructureColumnContents.Key;
+            StructKey.IsKey = true;
             // Add data binding to the column
-            UserID.KeyColumns.Add("Customer", "CustomerKey", System.Data.OleDb.OleDbType.Integer);
-
+            StructKey.KeyColumns.Add("dbo_DimCustomer", "CustomerKey", System.Data.OleDb.OleDbType.Integer);
             // Add the column to the mining structure
-            ms.Columns.Add(UserID);
+            currentMiningStruct.Columns.Add(StructKey);
+
 
             // Generation column
-            ScalarMiningStructureColumn Generation = new ScalarMiningStructureColumn("Generation", "Generation");
-            Generation.Type = MiningStructureColumnTypes.Text;
-            Generation.Content = MiningStructureColumnContents.Discrete;
-
+            ScalarMiningStructureColumn Gender = new ScalarMiningStructureColumn("Gender", "Gender");
+            Gender.Type = MiningStructureColumnTypes.Text;
+            Gender.Content = MiningStructureColumnContents.Discrete;
             // Add data binding to the column
-            Generation.KeyColumns.Add("Customers", "LastName", System.Data.OleDb.OleDbType.WChar);
-
+            Gender.KeyColumns.Add("dbo_DimCustomer", "Gender", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
-            ms.Columns.Add(Generation);
+            currentMiningStruct.Columns.Add(Gender);
+
 
             // Add Nested table by creating a table column and adding
             // a key column to the nested table
+            /*
             TableMiningStructureColumn PayChannels = new TableMiningStructureColumn("PayChannels", "PayChannels");
             PayChannels.ForeignKeyColumns.Add("Customer", "Phone", System.Data.OleDb.OleDbType.Integer);
+
             ScalarMiningStructureColumn Channel = new ScalarMiningStructureColumn("Channel", "Channel");
             Channel.Type = MiningStructureColumnTypes.Text;
             Channel.Content = MiningStructureColumnContents.Key;
             Channel.IsKey = true;
-
             // Add data binding to the column
             Channel.KeyColumns.Add("Customer", "FirstName", System.Data.OleDb.OleDbType.WChar);
             PayChannels.Columns.Add(Channel);
-            ms.Columns.Add(PayChannels);
+            currentMiningStruct.Columns.Add(PayChannels);
+            */
+
 
             // Add the mining structure to the database
-            objDatabase.MiningStructures.Add(ms);
-            ms.Update();
+            objDatabase.MiningStructures.Add(currentMiningStruct);
+            currentMiningStruct.Update();
 
-            return ms;
+            return currentMiningStruct;
         }
 
         /*
@@ -171,8 +178,10 @@ namespace WebApplication_OLAP.classes.data_managers
             // and parameters
             DropExistingMiningModels(objStructure, sModelName);
             ClusterModel = objStructure.CreateMiningModel(true, sModelName);
-            ClusterModel.Algorithm = "Microsoft_Clustering";
+            ClusterModel.Algorithm = MiningModelAlgorithms.MicrosoftClustering;// "Microsoft_Clustering";
             ClusterModel.AlgorithmParameters.Add("CLUSTER_COUNT", 0);
+            ClusterModel.Update();
+
 
             // The CreateMiningModel method adds
             // all the structure columns to the collection
@@ -180,30 +189,29 @@ namespace WebApplication_OLAP.classes.data_managers
             TreeModel = ClusterModel.Clone();
             DropExistingMiningModels(objStructure, sModelName + "Generation Trees");
             TreeModel.Name = sModelName + "Generation Trees";
-            TreeModel.ID = "Generation Trees";
-            TreeModel.Algorithm = "Microsoft_Decision_Trees";
+            TreeModel.ID = sModelName + "Generation Trees";
+            TreeModel.Algorithm = MiningModelAlgorithms.MicrosoftDecisionTrees;// "Microsoft_Decision_Trees";
             TreeModel.AlgorithmParameters.Clear();
-            TreeModel.Columns["Generation"].Usage = "Predict";
-            TreeModel.Columns["PayChannels"].Usage = "Predict";
+            TreeModel.Columns["Gender"].Usage = "Predict";
+            //TreeModel.Columns["PayChannels"].Usage = "Predict";
 
             // Add an aliased copy of the PayChannels table to the trees model
-            mmc = TreeModel.Columns.Add("PayChannels_Hbo_Encore");
-            mmc.SourceColumnID = "PayChannels";
-            mmc = mmc.Columns.Add("Channel");
-            mmc.SourceColumnID = "Channel";
+            mmc = TreeModel.Columns.Add("MaritalStatus");
+            mmc.SourceColumnID = "MaritalStatus";
+            mmc = mmc.Columns.Add("MaritalStatus");
+            mmc.SourceColumnID = "MaritalStatus";
             mmc.Usage = "Key";
             // Now set a filter on the PayChannels_Hbo_Encore table and use it
             // as input to predict other channels
 
-            TreeModel.Columns["PayChannels_Hbo_Encore"].Filter = "Channel=’HBO’ OR Channel=’Encore’";
+            //TreeModel.Columns["PayChannels_Hbo_Encore"].Filter = "Channel=’HBO’ OR Channel=’Encore’";
             // Set a complementary filter on the payChannels predictable
             // nested table
 
-            TreeModel.Columns["PayChannels"].Filter = "Channel<>’HBO’ AND Channel<>’Encore’";
+            //TreeModel.Columns["PayChannels"].Filter = "Channel<>’HBO’ AND Channel<>’Encore’";
             objStructure.MiningModels.Add(TreeModel);
 
             // Submit the models to the server
-            ClusterModel.Update();
             // ToDo: fix this
             //TreeModel.Update();
         }
