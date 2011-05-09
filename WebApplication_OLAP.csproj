@@ -61,9 +61,10 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="pages\DataMining.aspx" />
+    <Content Include="pages\OlapDataMining.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="pages\OlapReporting.aspx" />
+    <Content Include="pages\SqlDataMining.aspx" />
     <Content Include="pages\SqlReporting.aspx" />
     <Content Include="scripts\codethatgridstd.js" />
     <Content Include="scripts\codethatsdk.js" />
@@ -73,15 +74,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="classes\data_managers\ExcelManager.cs" />
-    <Compile Include="classes\data_managers\MiningManager.cs" />
+    <Compile Include="classes\data_managers\OlapMiningManager.cs" />
     <Compile Include="classes\data_managers\OlapManager.cs" />
     <Compile Include="classes\data_managers\SQLManager.cs" />
-    <Compile Include="pages\DataMining.aspx.cs">
-      <DependentUpon>DataMining.aspx</DependentUpon>
+    <Compile Include="classes\data_managers\SQLMiningManager.cs" />
+    <Compile Include="pages\OlapDataMining.aspx.cs">
+      <DependentUpon>OlapDataMining.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="pages\DataMining.aspx.designer.cs">
-      <DependentUpon>DataMining.aspx</DependentUpon>
+    <Compile Include="pages\OlapDataMining.aspx.designer.cs">
+      <DependentUpon>OlapDataMining.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -96,6 +98,13 @@
     </Compile>
     <Compile Include="pages\OlapReporting.aspx.designer.cs">
       <DependentUpon>OlapReporting.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\SqlDataMining.aspx.cs">
+      <DependentUpon>SqlDataMining.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\SqlDataMining.aspx.designer.cs">
+      <DependentUpon>SqlDataMining.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="pages\SqlReporting.aspx.cs">

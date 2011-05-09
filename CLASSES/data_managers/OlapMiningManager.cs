@@ -89,6 +89,18 @@ namespace WebApplication_OLAP.classes
             Microsoft.AnalysisServices.MiningStructure myMiningStructure = db.MiningStructures.Add("TestMining", "TestMining");
             myMiningStructure.Source = new CubeDimensionBinding(".", myCube.ID, myDimension.ID);
 
+            // get current mining models
+            // Demo code
+            foreach (Microsoft.AnalysisServices.MiningStructure ms in db.MiningStructures)
+            {
+                Console.WriteLine(ms.Name);
+
+                foreach (Microsoft.AnalysisServices.MiningModel mm in ms.MiningModels)
+                {
+                    Console.WriteLine(mm.Name);
+                }
+            }
+
             CubeAttribute basketAttribute;
             CubeAttribute itemAttribute;
             basketAttribute = myCube.Dimensions.GetByName("Customer").Attributes[0];

@@ -57,7 +57,7 @@
                 <div id="sidebarnav">
                     <a class="active" href="../Default.aspx"><span>Home</span></a>
                     <asp:HyperLink ID="HyperLinkMining" runat="server" 
-                        NavigateUrl="~/pages/DataMining.aspx" Visible="False"><span>Mining Report</span></asp:HyperLink>
+                        NavigateUrl="~/pages/OlapDataMining.aspx" Visible="False"><span>Mining Report</span></asp:HyperLink>
                     <a href="#"><span>Services</span></a>
                     <a href="#"><span>Pricing</span></a>
                     <a href="#"><span>Contact Us</span></a>

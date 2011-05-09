@@ -1,14 +1,15 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DataMining.aspx.cs" Inherits="WebApplication_OLAP.classes.DataMining" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SqlDataMining.aspx.cs" Inherits="WebApplication_OLAP.pages.SqlDataMining" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="Head1" runat="server">
     <title>Data Miner</title>
     <link rel="Stylesheet" href="../style.css" type="text/css" media="screen" />
 </head>
 <body>
     <form id="form1" runat="server">
-    <<div id="page">
+    <div id="page">
         <div id="header">
             <h1>
                 <a href="#">Data Miner</a></h1>
@@ -20,15 +21,15 @@
                 <h2>
                     WELCOME
                 </h2>
-                <asp:Button ID="Button2" runat="server" onclick="Button2_Click" Text="Button" />
+                <div>
+                <br />
+                    <asp:Button ID="Button1" runat="server" Text="Button" />
                 <br />
                 <br />
-                <br />
-                <div style="width: 536px; height: 227px; overflow: auto;">
-                    <asp:GridView ID="GridView1" runat="server">
-                    </asp:GridView>
                 </div>
                 <br />
+                <asp:GridView ID="GridView1" runat="server">
+                </asp:GridView>
                 <br />
                 <br />
                 <br />
@@ -96,20 +97,6 @@
                 <br />
                 <strong>Joe Bloggs</strong>
                 <br />
-                <asp:ScriptManager ID="ScriptManager1" runat="server">
-                </asp:ScriptManager>
-                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-                    <ContentTemplate>
-                        <asp:Button ID="Button1" runat="server" Text="Button" onclick="Button1_Click" />
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-                <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
-                <br />
-                <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="UpdatePanel1">
-                    <ProgressTemplate>
-                        <strong>Please wait...</strong>
-                    </ProgressTemplate>
-                </asp:UpdateProgress>
             </div>
         </div>
         <div id="footer">

@@ -49,7 +49,7 @@
                 <div id="sidebarnav">
                     <a class="active" href="../Default.aspx"><span>Home</span></a>
                     <asp:HyperLink ID="HyperLinkMining" runat="server" 
-                        NavigateUrl="~/pages/DataMining.aspx" Visible="False"><span>Mining Report</span></asp:HyperLink>
+                        NavigateUrl="~/pages/SqlDataMining.aspx" Visible="False"><span>Mining Report</span></asp:HyperLink>
                 </div>
                 <h2>
                     TESTIMONIALS</h2>
