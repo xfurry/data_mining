@@ -412,5 +412,145 @@ namespace WebApplication_OLAP.classes.data_managers
             // Update the database to create the objects on the server
             db.Update(UpdateOptions.ExpandFull);
         }
+
+        public void SimplePredictionQuery()
+        {
+            Microsoft.AnalysisServices.AdomdClient.AdomdConnection connection = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection();
+            connection.ConnectionString =
+            "Data Source=localhost; Initial Catalog=Chapter 16";
+            connection.Open();
+            Microsoft.AnalysisServices.AdomdClient.AdomdCommand cmd = connection.CreateCommand();
+            cmd.CommandText =
+            "SELECT Predict(Generation) FROM [Generation Trees] " +
+            "NATURAL PREDICTION JOIN " +
+            "( SELECT " +
+            " (SELECT ’Cinemax’ AS Channel UNION " +
+            " SELECT ’Showtime’ AS Channel) AS PayChannels " +
+            ") AS T ";
+            // execute the command and display the prediction result
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                string predictedGeneration = reader.GetValue(0).ToString();
+                Console.WriteLine(predictedGeneration);
+            }
+            reader.Close();
+            connection.Close();
+        }
+
+        public void MultipleRowQuery(Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn)
+        {
+            Microsoft.AnalysisServices.AdomdClient.AdomdCommand cmd = objConn.CreateCommand();
+            cmd.CommandText =
+            "SELECT FLATTENED PredictHistogram(Generation) " +
+            "FROM [Generation Trees] " +
+            "NATURAL PREDICTION JOIN " +
+            "( SELECT " +
+            " (SELECT ’Cinemax’ AS Channel UNION " +
+            " SELECT ’Showtime’ AS Channel) AS PayChannels " +
+            ") AS T ";
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader reader = cmd.ExecuteReader();
+            try
+            {
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    Console.Write(reader.GetName(i) + "\t");
+                }
+                Console.WriteLine();
+                while (reader.Read())
+                {
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        object value = reader.GetValue(i);
+                        string strValue = (value == null) ?
+                        string.Empty : value.ToString();
+                        Console.Write(strValue + "\t");
+                    }
+                    Console.WriteLine();
+                }
+            }
+            finally
+            {
+                reader.Close();
+            }
+
+            // Demo code
+            while (reader.Read())
+            {
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    // Check for nested table columns
+                    if (reader.GetFieldType(i) == typeof(Microsoft.AnalysisServices.AdomdClient.AdomdDataReader))
+                    {
+                        // fetch the nested data reader
+                        Microsoft.AnalysisServices.AdomdClient.AdomdDataReader nestedReader = reader.GetDataReader(i);
+                        while (nestedReader.Read())
+                        {
+                            for (int j = 0; j < nestedReader.FieldCount; j++)
+                            {
+                                object value = nestedReader.GetValue(j);
+                                string strValue = (value == null) ?
+                                string.Empty : value.ToString();
+                                Console.Write(strValue);
+                            }
+                            Console.WriteLine();
+                        }
+                        // close the nested reader
+                        nestedReader.Close();
+                    }
+                }
+            }
+
+            cmd.CommandText =
+            "SELECT Predict(Generation) FROM [Generation Trees] " +
+            "NATURAL PREDICTION JOIN " +
+            "( SELECT " +
+            " (SELECT @Channel1 AS Channel UNION " +
+            " SELECT @Channel2 AS Channel) AS PayChannels " +
+            ") AS T ";
+            Microsoft.AnalysisServices.AdomdClient.AdomdParameter p1 = new Microsoft.AnalysisServices.AdomdClient.AdomdParameter();
+            p1.ParameterName = "Channel1";
+            p1.Value = "Cinemax";
+            cmd.Parameters.Add(p1);
+            Microsoft.AnalysisServices.AdomdClient.AdomdParameter p2 = new Microsoft.AnalysisServices.AdomdClient.AdomdParameter();
+            p2.ParameterName = "Channel2";
+            p2.Value = "Showtime";
+            cmd.Parameters.Add(p2);
+
+
+            Microsoft.AnalysisServices.AdomdClient.AdomdCommand cmd2 = objConn.CreateCommand();
+            cmd2.CommandText =
+            "SELECT Predict(Generation) FROM [Generation Trees] " +
+            "NATURAL PREDICTION JOIN " +
+            "SHAPE { @CaseTable } " +
+            " APPEND( { @NestedTable } RELATE CustID TO CustID) " +
+            " AS PayChannels " +
+            "AS T ";
+            DataTable caseTable = new DataTable();
+            caseTable.Columns.Add("CustID", typeof(int));
+            caseTable.Rows.Add(0);
+            DataTable nestedTable = new DataTable();
+            nestedTable.Columns.Add("CustID", typeof(int));
+            nestedTable.Columns.Add("Channel", typeof(string));
+            nestedTable.Rows.Add(0, "Cinemax");
+            nestedTable.Rows.Add(0, "Showtime");
+            Microsoft.AnalysisServices.AdomdClient.AdomdParameter p3 = new Microsoft.AnalysisServices.AdomdClient.AdomdParameter();
+            p3.ParameterName = "CaseTable";
+            p3.Value = caseTable;
+            cmd.Parameters.Add(p3);
+            Microsoft.AnalysisServices.AdomdClient.AdomdParameter p4 = new Microsoft.AnalysisServices.AdomdClient.AdomdParameter();
+
+            p4.ParameterName = "NestedTable";
+            p4.Value = nestedTable;
+            cmd.Parameters.Add(p4);
+            // execute the command and display the prediction result
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader reader2 = cmd.ExecuteReader();
+            if (reader2.Read())
+            {
+                string predictedGeneration = reader2.GetValue(0).ToString();
+                Console.WriteLine(predictedGeneration);
+            }
+            reader2.Close();
+        }
     }
 }
