@@ -5,6 +5,7 @@ using System.Web;
 using System.Data.SqlClient;
 using Microsoft.AnalysisServices;
 using System.Data.OleDb;
+using System.Data;
 
 namespace WebApplication_OLAP.classes.data_managers
 {
@@ -77,7 +78,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Drop an existing mining structure; used in order to avoid the crash if the user wants to add a structure with the same name
          */
-        void DropExistingStructures(Database objDataBase, string sName)
+        private void DropExistingStructures(Database objDataBase, string sName)
         {
             foreach (MiningStructure objMiningStruc in objDataBase.MiningStructures)
             {
@@ -92,7 +93,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Drop an existing mining model; used in order to avoid the crash if the user wants to add a model with the same name
          */
-        void DropExistingMiningModels(MiningStructure objStruct, string sName)
+        private void DropExistingMiningModels(MiningStructure objStruct, string sName)
         {
             foreach (MiningModel objModel in objStruct.MiningModels)
             {
@@ -107,7 +108,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining structure for selected database
          */
-        MiningStructure CreateMiningStructure(Database objDatabase)
+        private MiningStructure CreateMiningStructure(Database objDatabase)
         {
             // drop the existing structures with the same name
             DropExistingStructures(objDatabase, sStructureName);
@@ -168,7 +169,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining model for the selected mining strucutre
          */
-        void CreateModels(MiningStructure objStructure)
+        private void CreateModels(MiningStructure objStructure)
         {
             MiningModel ClusterModel;
             MiningModel TreeModel;
@@ -219,7 +220,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Process database
          */
-        void ProcessDatabase(Database objDatabase, Server objServer)
+        private void ProcessDatabase(Database objDatabase, Server objServer)
         {
             Trace t;
             TraceEvent e;
@@ -245,27 +246,171 @@ namespace WebApplication_OLAP.classes.data_managers
             }
         }
 
-        void ProgressReportHandler(object sender, TraceEventArgs e)
+        private void ProgressReportHandler(object sender, TraceEventArgs e)
         {
             Console.WriteLine(e[TraceColumn.TextData]);
         }
 
-        //public void DiscoverServices()
-        //{
-        //    AdomdConnection connection = new AdomdConnection(
-        //    "Data Source=localhost");
-        //    connection.Open();
-        //    foreach (MiningService ms in connection.MiningServices)
-        //    {
-        //        Console.WriteLine("Service: " + ms.Name);
-        //        foreach (MiningServiceParameter mp in
-        //        ms.AvailableParameters)
-        //        {
-        //            Console.WriteLine(" Parameter: " + mp.Name +
-        //            " Default: " + mp.DefaultValue);
-        //        }
-        //    }
-        //    connection.Close();
-        //}
+        /*
+         * Discover mining services; for future use
+         */
+        private void DiscoverServices()
+        {
+            Microsoft.AnalysisServices.AdomdClient.AdomdConnection connection = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection("Data Source=" + sServer + "; Initial Catalog=" + sCatalog);
+            connection.Open();
+
+            foreach (Microsoft.AnalysisServices.AdomdClient.MiningService ms in connection.MiningServices)
+            {
+                Console.WriteLine("Service: " + ms.Name);
+                foreach (Microsoft.AnalysisServices.AdomdClient.MiningServiceParameter mp in ms.AvailableParameters)
+                {
+                    Console.WriteLine(" Parameter: " + mp.Name + " Default: " + mp.DefaultValue);
+                }
+            }
+            connection.Close();
+        }
+
+        /*
+         * Setup mining permissions; for future use
+         */
+        private void SetModelPermissions(Database objDb, MiningModel objModel)
+        {
+            // Create a new role and add members
+            Role newRole = new Role("ModelReader", "ModelReader");
+            newRole.Members.Add(new RoleMember("redmond\\jamiemac"));
+            newRole.Members.Add(new RoleMember("redmond\\zhaotang"));
+            newRole.Members.Add(new RoleMember("redmond\\bogdanc"));
+
+            // Add the role to the database and updat
+            objDb.Roles.Add(newRole);
+            newRole.Update();
+
+            // Create a permission object referring the role
+            MiningModelPermission newMiningPermision = new MiningModelPermission();
+            newMiningPermision.Name = "ModelReader";
+            newMiningPermision.ID = "ModelReader";
+            newMiningPermision.RoleID = "ModelReader";
+            // Assign access rights to the permission
+            newMiningPermision.Read = ReadAccess.Allowed;
+            newMiningPermision.AllowBrowsing = true;
+            newMiningPermision.AllowDrillThrough = true;
+            newMiningPermision.ReadDefinition = ReadDefinitionAccess.Allowed;
+            // Add permission to the model and update
+            objModel.MiningModelPermissions.Add(newMiningPermision);
+            newMiningPermision.Update();
+        }
+
+        /*
+         * Create new database; for future use
+         */
+        private Database CreateDatabase(Server objServer)
+        {
+            // Create a database and set the properties
+            Database newDB = new Database();
+            newDB.Name = "Chapter 16";
+            newDB.ID = "Chapter 16";
+            // Add the database to the server and commit
+            objServer.Databases.Add(newDB);
+            newDB.Update();
+
+            return newDB;
+        }
+
+        /*
+         * Create new database objects; for future use
+         */
+        private void CreateDataAccessObjects(Database objDB)
+        {
+            // Create a relational data source
+            // by specifying the name and the id
+            RelationalDataSource ds = new RelationalDataSource("MovieClick", Utils.GetSyntacticallyValidID("MovieClick", typeof(Database)));
+            ds.ConnectionString = "Provider=SQLNCLI10.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=Chapter 16";
+            objDB.DataSources.Add(ds);
+
+            // Create connection to datasource to extract schema to a dataset
+            DataSet dset = new DataSet();
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=Chapter 16; Integrated Security=true");
+
+            // Create data adapters from database tables and load schemas
+            SqlDataAdapter daCustomers = new SqlDataAdapter("SELECT * FROM Customers", cn);
+            daCustomers.FillSchema(dset, SchemaType.Mapped, "Customers");
+            SqlDataAdapter daChannels = new SqlDataAdapter("SELECT * FROM Channels", cn);
+            daChannels.FillSchema(dset, SchemaType.Mapped, "Channels");
+
+            // Add relationship between Customers and Channels
+            DataRelation drCustomerChannels = new DataRelation("Customer_Channels", dset.Tables["Customers"].Columns["SurveyTakenID"], dset.Tables["Channels"].Columns["SurveyTakenID"]);
+            dset.Relations.Add(drCustomerChannels);
+
+            // Create the DSV, ad the dataset and add to the database
+            DataSourceView dsv = new DataSourceView("SimpleMovieClick", "SimpleMovieClick");
+            dsv.DataSourceID = "MovieClick";
+            dsv.Schema = dset.Clone();
+            objDB.DataSourceViews.Add(dsv);
+
+            // Update the database to create the objects on the server
+            objDB.Update(UpdateOptions.ExpandFull);
+        }
+
+        /*
+         * Create new database objects; for future use
+         */
+        void AddNewDataAccessObjects(Database db)
+        {
+            // Create connection to datasource cto extract schema to a dataset
+            DataSet dset = new DataSet();
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=Chapter 16; Integrated Security=true");
+            // Create the Customers data adapter with the calculated appended
+            SqlDataAdapter daCustomers = new SqlDataAdapter(
+            "SELECT *, " +
+            "(CASE WHEN (Age < 30) THEN ’GenY’ " +
+            " WHEN (Age >= 30 AND Age < 40) THEN ’GenX’ " +
+            "ELSE ’Baby Boomer’ END) AS Generation " +
+            "FROM Customers", cn);
+            daCustomers.FillSchema(dset, SchemaType.Mapped, "Customers");
+            // Add Extended properties to the Generation column indicating to
+            // Analysis Services that it is a calculated column
+            DataColumn genColumn = dset.Tables["Customers"].Columns
+            ["Generation"];
+            genColumn.ExtendedProperties.Add("DbColumnName", "Generation");
+            genColumn.ExtendedProperties.Add("Description",
+            "Customer generation");
+            genColumn.ExtendedProperties.Add("IsLogical", "true");
+            genColumn.ExtendedProperties.Add("ComputedColumnExpression",
+            "CASE WHEN (Age < 30) THEN ’GenY’ " +
+            "WHEN (Age >= 30 AND Age < 40) THEN ’GenX’ " +
+            "ELSE ’Baby Boomer’ END");
+            // Create a ’Pay Channels’ data adapter with a customer query
+            // for our named query
+                        SqlDataAdapter daPayChannels = new SqlDataAdapter(
+            "SELECT * FROM Channels " +
+            "WHERE Channel IN (’Cinemax’, ’Encore’, ’HBO’, ’Showtime’, " +
+            "’STARZ!’, ’The Movie Channel’)", cn);
+            daPayChannels.FillSchema(dset, SchemaType.Mapped, "PayChannels");
+            // Add Extended properties to the PayChannels table indicating to
+            // Analysis Services that it is a named query
+            DataTable pcTable = dset.Tables["PayChannels"];
+            pcTable.ExtendedProperties.Add("IsLogical", "true");
+            pcTable.ExtendedProperties.Add("Description",
+            "Channels requiring an additional fee");
+            pcTable.ExtendedProperties.Add("TableType", "View");
+            pcTable.ExtendedProperties.Add("QueryDefinition",
+            "SELECT * FROM Channels " +
+            "WHERE Channel IN (’Cinemax’, ’Encore’, ’HBO’, ’Showtime’, " +
+            "’STARZ!’, ’The Movie Channel’)");
+            // Add relationship between Customers and PayChannels
+            DataRelation drCustomerPayChannels = new DataRelation(
+            "CustomerPayChannels",
+            dset.Tables["Customers"].Columns["SurveyTakenID"],
+            dset.Tables["PayChannels"].Columns["SurveyTakenID"]);
+            dset.Relations.Add(drCustomerPayChannels);
+            // Access the data source and the DSV created previously
+            // by specifying the ID
+            DataSourceView dsv = new DataSourceView("MovieClick", "MovieClick");
+            dsv.DataSourceID = "MovieClick";
+            dsv.Schema = dset.Clone();
+            db.DataSourceViews.Add(dsv);
+            // Update the database to create the objects on the server
+            db.Update(UpdateOptions.ExpandFull);
+        }
     }
 }
