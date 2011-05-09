@@ -552,5 +552,54 @@ namespace WebApplication_OLAP.classes.data_managers
             }
             reader2.Close();
         }
+
+        // Identify all the attributes that split on a specified attribute
+        public void FindSplits(string ModelID, string AttributeName)
+        {
+            // Access the model and throw an exception if not found
+            // The error text will be propagated to the client
+            //MiningModel model = objConn.MiningModels[ModelID];
+            //if (model == null)
+            //{
+            //    throw new System.Exception("Model not found");
+            //}
+            //// Look for the attribute in all model trees
+            //foreach (MiningContentNode node in model.Content[0].Children)
+            //{
+            //    if (node.Type == MiningNodeType.Tree)
+            //    {
+            //        FindSplits(node, AttributeName);
+            //    }
+            //}
+        }
+
+        // Recursively search for the attribute among content nodes
+        // return when children are exhausted or attribute is found
+        private void FindSplits(Microsoft.AnalysisServices.AdomdClient.MiningContentNode node, string AttributeName)
+        {
+            // Check for the attribute in the MarginalRule
+            // and add row to the table if found
+            if (node.MarginalRule.Contains(AttributeName))
+            {
+                Console.WriteLine(node.Attribute.Name);
+                return;
+            }
+            // recurse over child nodes
+            //foreach (MiningContentNode childNode in node.Children)
+            //{
+            //    FindSplits(childNode, AttributeName);
+            //}
+        }
+
+        //public string GetPredictionReason(string ModelID, string NodeID, Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn)
+        //{
+        //    // return the node description
+        //    if (connection.MiningModels[ModelID] == null)
+        //        throw new Exception("Model not found");
+        //    MiningContentNode node = objConn.MiningModels[ModelID].GetNodeFromUniqueName(NodeID);
+        //    if (node == null)
+        //        throw new Exception("Node not found");
+        //    return node.Description;
+        //}
     }
 }
