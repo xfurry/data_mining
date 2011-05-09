@@ -23,15 +23,23 @@
                 </h2>
                 <div>
                 <br />
-                    <asp:Button ID="Button1" runat="server" onclick="Button1_Click" Text="Button" />
+                    <asp:Button ID="Button1" runat="server" onclick="Button1_Click" 
+                        Text="Create Mining Structure" />
+                    <br />
+                    <br />
+                    <asp:Button ID="Button2" runat="server" onclick="Button2_Click" 
+                        Text="Show mining results" />
+                    <br />
                     <br />
                     <asp:Label ID="LabelStatus" runat="server" Text="Mining status:"></asp:Label>
                 <br />
                 <br />
                 </div>
                 <br />
-                <asp:GridView ID="GridView1" runat="server">
-                </asp:GridView>
+                <div style="width: 536px; height: 227px; overflow: auto;">
+                    <asp:GridView ID="GridView1" runat="server">
+                    </asp:GridView>
+                </div>
                 <br />
                 <br />
                 <br />
