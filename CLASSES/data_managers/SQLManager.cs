@@ -9,10 +9,18 @@ namespace WebApplication_OLAP
 {
     public class SQLManager
     {
-        private const string sCatalog = "AdventureWorksDW";
+        private string sCatalog = "AdventureWorksDW";
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
 
         private SqlConnection objSqlConnection = null;
+
+        public SQLManager() { }
+
+        // override constructor to set current database
+        public SQLManager(string sCatalog)
+        {
+            this.sCatalog = sCatalog;
+        }
 
         // start sql connection
         private void InitConnection()

@@ -12,13 +12,21 @@ namespace WebApplication_OLAP
 {
     public partial class SqlReporting : System.Web.UI.Page
     {
+        private string sSelectedDB = "AdventureWorksDW";
+
         protected void Page_Load(object sender, EventArgs e)
         {
             // Load listbox on first use
             if (!Page.IsPostBack)
-                InitTableNames();
+            {
+                InitDatabases();
+                //InitTableNames();
+            }
+
+            sSelectedDB = DropDownListDatabases.SelectedItem.ToString();
 
             // register event handler
+            DropDownListDatabases.SelectedIndexChanged += new EventHandler(DropDownListDatabases_SelectedIndexChanged);
             ListBoxTables.SelectedIndexChanged += new EventHandler(ListBoxTables_SelectedIndexChanged);
         }
 
@@ -28,12 +36,26 @@ namespace WebApplication_OLAP
         private void InitTableNames()
         {
             // show DB tables
-            SQLManager manager = new SQLManager();
+            SQLManager manager = new SQLManager(sSelectedDB);
             DataSet objSet = manager.GetQueryDataSet("Select name, id from sysobjects where xtype='U'");
             ListBoxTables.DataSource = objSet;
             ListBoxTables.DataTextField = "name";
             ListBoxTables.DataValueField = "id";
             ListBoxTables.DataBind();
+            manager.CloseConnection();
+        }
+
+        /*
+         * Init databases from the server
+         */
+        private void InitDatabases()
+        {
+            SQLManager manager = new SQLManager();
+            DataSet objSet = manager.GetQueryDataSet("SELECT name, dbid FROM master..sysdatabases");
+            DropDownListDatabases.DataSource = objSet;
+            DropDownListDatabases.DataTextField = "name";
+            DropDownListDatabases.DataValueField = "dbid";
+            DropDownListDatabases.DataBind();
             manager.CloseConnection();
         }
 
@@ -93,7 +115,7 @@ namespace WebApplication_OLAP
                     ListBoxTables.SelectedItem.ToString() + "'ORDER BY ORDINAL_POSITION";
 
                 // execute query
-                SQLManager manager = new SQLManager();
+                SQLManager manager = new SQLManager(sSelectedDB);
                 DataTable objTable = new DataTable();
                 objTable.Load(manager.GetQueryResult(sQueryText));
                 GridViewMain.DataSource = objTable;
@@ -130,7 +152,7 @@ namespace WebApplication_OLAP
             }
 
             // Execute query
-            string sQuery = "Select " + objBuilder.ToString() + " from " + ListBoxTables.SelectedItem.ToString() + ";";
+            string sQuery = "Select top 1000" + objBuilder.ToString() + " from " + ListBoxTables.SelectedItem.ToString() + ";";
             ExecuteRelationalQuery(sQuery);
 
             // list column names; for remove
@@ -173,7 +195,7 @@ namespace WebApplication_OLAP
          */
         private void ExecuteRelationalQuery(string sQuery)
         {
-            SQLManager manager = new SQLManager();
+            SQLManager manager = new SQLManager(sSelectedDB);
             DataTable objTable = new DataTable();
             objTable.Load(manager.GetQueryResult(sQuery));
             GridViewData.DataSource = objTable;
@@ -183,6 +205,19 @@ namespace WebApplication_OLAP
             // store the data table and prepare the mining link
             Session.Add("queryData", objTable);
             HyperLinkMining.Visible = true;
+        }
+
+        /*
+         * Load the current database items
+         */
+        protected void DropDownListDatabases_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Sets the array count variable makes sure index is not -1.
+            if (DropDownListDatabases.SelectedIndex >= 0)
+            {
+                this.sSelectedDB = DropDownListDatabases.SelectedItem.ToString();
+                InitTableNames();
+            }
         }
     }
 }

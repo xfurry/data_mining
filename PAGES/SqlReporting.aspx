@@ -1,7 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SqlReporting.aspx.cs" Inherits="WebApplication_OLAP.SqlReporting" %>
 
-<%@ Register assembly="EO.Web" namespace="EO.Web" tagprefix="eo" %>
-
+<%@ Register Assembly="EO.Web" Namespace="EO.Web" TagPrefix="eo" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -21,20 +20,16 @@
         <div id="mainarea">
             <div id="contentarea">
                 <h2>
-                    Retrieve data here</h2>
-                <div style="width: 536px; height: 137px; overflow: auto;">
-                    <asp:Button ID="ButtonExecute" runat="server" OnClick="ButtonExecute_Click" Text="Execute Query" />
-                    &nbsp;&nbsp;&nbsp;
-                    <asp:Button ID="ButtonExport" runat="server" onclick="Button1_Click" 
-                        Text="Export to Excel" />
-&nbsp;&nbsp;&nbsp;
-                    <asp:Label ID="Label1" runat="server"></asp:Label>
-                    <br />
-                    <asp:TextBox ID="TextBoxQuery" runat="server" Height="106px" TextMode="MultiLine"
-                        Width="524px"></asp:TextBox>
-                    <br />
+                    Relational Data Manager</h2>
+                <div style="width: 536px; height: 106px; overflow: auto;">
+                    <h3>
+                        Column list</h3>
+                    <asp:Button ID="ButtonCheck" runat="server" OnClick="ButtonCheck_Click" Text="Check All" />
+                    <asp:Button ID="ButtonUncheck" runat="server" OnClick="ButtonUncheck_Click" Text="Uncheck All" />
+                    &nbsp;<asp:Button ID="ButtonRunFields" runat="server" OnClick="ButtonRunFields_Click"
+                        Text="Execute selected fields" />
                 </div>
-                <div style="width: 536px; height: 227px; overflow: auto;">
+                <div style="width: 536px; height: 227px; overflow: auto; margin-top: 19px;">
                     <asp:GridView ID="GridViewMain" runat="server">
                         <Columns>
                             <asp:TemplateField HeaderText="Select columns">
@@ -47,33 +42,45 @@
                             <asp:CheckBox ID="CheckBoxColumnCheck" runat="server" />
                         </EmptyDataTemplate>
                     </asp:GridView>
-                    <asp:Button ID="ButtonCheck" runat="server" onclick="ButtonCheck_Click" 
-                        Text="Check All" />
-                    <asp:Button ID="ButtonUncheck" runat="server" onclick="ButtonUncheck_Click" 
-                        Text="Uncheck All" />
-                    <br />
-                    <br />
-                    <asp:Button ID="ButtonRunFields" runat="server" onclick="ButtonRunFields_Click" 
-                        Text="Execute selected fields" />
+                </div>
+                <div style="width: 536px; height: 106px; overflow: auto;">
+                    <h3>
+                        Data</h3>
+                    <asp:Button ID="ButtonExport" runat="server" OnClick="Button1_Click" Text="Export to Excel" />
+                    &nbsp;<asp:Label ID="Label1" runat="server"></asp:Label>
                 </div>
                 <div style="width: 536px; height: 227px; overflow: auto;">
                     <asp:GridView ID="GridViewData" runat="server">
                     </asp:GridView>
                 </div>
-                <br />
-                <br />
+                <div style="width: 536px; height: 106px; overflow: auto;">
+                    <h3>
+                        Custom query</h3>
+                    <asp:Button ID="ButtonExecute" runat="server" OnClick="ButtonExecute_Click" Text="Execute Query" />
                 </div>
+                <div style="width: 536px; height: 137px; overflow: auto;">
+                    <asp:TextBox ID="TextBoxQuery" runat="server" Height="106px" TextMode="MultiLine"
+                        Width="524px"></asp:TextBox>
+                    <br />
+                </div>
+            </div>
             <div id="sidebar">
                 <div id="sidebarnav">
                     <a class="active" href="../Default.aspx"><span>Home</span></a>
-                    <asp:HyperLink ID="HyperLinkMining" runat="server" 
-                        NavigateUrl="~/pages/SqlDataMining.aspx" Visible="False"><span>Mining Report</span></asp:HyperLink>
+                    <asp:HyperLink ID="HyperLinkMining" runat="server" NavigateUrl="~/pages/SqlDataMining.aspx"
+                        Visible="False"><span>Mining Report</span></asp:HyperLink>
                 </div>
                 <h2>
+                    Database list
+                </h2>
+                <asp:DropDownList ID="DropDownListDatabases" runat="server" AutoPostBack="True" 
+                    onselectedindexchanged="DropDownListDatabases_SelectedIndexChanged">
+                    </asp:DropDownList>
+                <br />
+                <h2>
                     Table list</h2>
-                <asp:ListBox ID="ListBoxTables" runat="server" AutoPostBack="True" 
-                    Height="95px" onselectedindexchanged="ListBoxTables_SelectedIndexChanged" 
-                    Width="251px"></asp:ListBox>
+                <asp:ListBox ID="ListBoxTables" runat="server" AutoPostBack="True" Height="95px"
+                    OnSelectedIndexChanged="ListBoxTables_SelectedIndexChanged" Width="251px"></asp:ListBox>
                 <br />
             </div>
         </div>
