@@ -16,14 +16,16 @@ namespace WebApplication_OLAP
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // load database list
+            if (!Page.IsPostBack)
+                InitDatabases();
+
+            // set current database
+            sSelectedDB = DropDownListDatabases.SelectedItem.ToString();
+
             // Load listbox on first use
             if (!Page.IsPostBack)
-            {
-                InitDatabases();
-                //InitTableNames();
-            }
-
-            sSelectedDB = DropDownListDatabases.SelectedItem.ToString();
+                InitTableNames();
 
             // register event handler
             DropDownListDatabases.SelectedIndexChanged += new EventHandler(DropDownListDatabases_SelectedIndexChanged);
