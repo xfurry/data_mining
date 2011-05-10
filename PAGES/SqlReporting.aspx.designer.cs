@@ -59,13 +59,49 @@ namespace WebApplication_OLAP {
         protected global::System.Web.UI.WebControls.TextBox TextBoxQuery;
         
         /// <summary>
-        /// GridView1 control.
+        /// GridViewMain control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridView1;
+        protected global::System.Web.UI.WebControls.GridView GridViewMain;
+        
+        /// <summary>
+        /// ButtonCheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonCheck;
+        
+        /// <summary>
+        /// ButtonUncheck control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonUncheck;
+        
+        /// <summary>
+        /// ButtonRunFields control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonRunFields;
+        
+        /// <summary>
+        /// GridViewData control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GridViewData;
         
         /// <summary>
         /// HyperLinkMining control.
@@ -75,5 +111,14 @@ namespace WebApplication_OLAP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink HyperLinkMining;
+        
+        /// <summary>
+        /// ListBoxTables control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListBox ListBoxTables;
     }
 }

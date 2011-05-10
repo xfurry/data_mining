@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace WebApplication_OLAP
 {
     public class SQLManager
     {
-        private const string sCatalog = "AdventureWorks";
+        private const string sCatalog = "AdventureWorksDW";
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
 
         private SqlConnection objSqlConnection = null;
@@ -29,6 +30,31 @@ namespace WebApplication_OLAP
         {
             if (this.objSqlConnection != null)
                 objSqlConnection.Close();
+        }
+
+        // Retrieve a data set from the DB
+        public DataSet GetQueryDataSet(string sQuery)
+        {
+            if (this.objSqlConnection == null)
+                this.InitConnection();
+
+            try
+            {
+                objSqlConnection.Open();
+
+                SqlCommand command = new SqlCommand(sQuery, objSqlConnection);
+                SqlDataAdapter mySqlDataAdapter = new SqlDataAdapter(command);
+                DataSet myDataSet = new DataSet();
+                mySqlDataAdapter.Fill(myDataSet);
+
+                return myDataSet;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                return null;
+            }
         }
 
         // get a query result
