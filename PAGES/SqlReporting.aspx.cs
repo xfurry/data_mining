@@ -139,11 +139,11 @@ namespace WebApplication_OLAP
                 DataTable objTable = new DataTable();
 
                 // handle errors
-                if (manager.GetQueryResult(sQueryText) == null)
-                {
-                    HandleQueryError();
-                    return;
-                }
+                //if (manager.GetQueryResult(sQueryText) == null)
+                //{
+                //    HandleQueryError();
+                //    return;
+                //}
 
                 objTable.Load(manager.GetQueryResult(sQueryText));
                 GridViewMain.DataSource = objTable;
@@ -227,11 +227,11 @@ namespace WebApplication_OLAP
             DataTable objTable = new DataTable();
 
             // handle errors
-            if (manager.GetQueryResult(sQuery) == null)
-            {
-                HandleQueryError();
-                return;
-            }
+            //if (manager.GetQueryResult(sQuery) == null)
+            //{
+            //    HandleQueryError();
+            //    return;
+            //}
 
             objTable.Load(manager.GetQueryResult(sQuery));
             GridViewData.DataSource = objTable;
