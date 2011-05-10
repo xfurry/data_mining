@@ -39,7 +39,16 @@ namespace WebApplication_OLAP
         {
             // show DB tables
             SQLManager manager = new SQLManager(sSelectedDB);
-            DataSet objSet = manager.GetQueryDataSet("Select name, id from sysobjects where xtype='U'");
+            string sQuery = "Select name, id from sysobjects where xtype='U'";
+
+            // handle errors
+            //if (manager.GetQueryDataSet(sQuery) == null)
+            //{
+            //    HandleQueryError();
+            //    return;
+            //}
+
+            DataSet objSet = manager.GetQueryDataSet(sQuery);
             ListBoxTables.DataSource = objSet;
             ListBoxTables.DataTextField = "name";
             ListBoxTables.DataValueField = "id";
@@ -53,7 +62,16 @@ namespace WebApplication_OLAP
         private void InitDatabases()
         {
             SQLManager manager = new SQLManager();
-            DataSet objSet = manager.GetQueryDataSet("SELECT name, dbid FROM master..sysdatabases");
+            string sQuery = "SELECT name, dbid FROM master..sysdatabases order by name";
+
+            // handle errors
+            //if (manager.GetQueryDataSet(sQuery) == null)
+            //{
+            //    HandleQueryError();
+            //    return;
+            //}
+
+            DataSet objSet = manager.GetQueryDataSet(sQuery);
             DropDownListDatabases.DataSource = objSet;
             DropDownListDatabases.DataTextField = "name";
             DropDownListDatabases.DataValueField = "dbid";
@@ -119,6 +137,14 @@ namespace WebApplication_OLAP
                 // execute query
                 SQLManager manager = new SQLManager(sSelectedDB);
                 DataTable objTable = new DataTable();
+
+                // handle errors
+                if (manager.GetQueryResult(sQueryText) == null)
+                {
+                    HandleQueryError();
+                    return;
+                }
+
                 objTable.Load(manager.GetQueryResult(sQueryText));
                 GridViewMain.DataSource = objTable;
                 GridViewMain.DataBind();
@@ -199,6 +225,14 @@ namespace WebApplication_OLAP
         {
             SQLManager manager = new SQLManager(sSelectedDB);
             DataTable objTable = new DataTable();
+
+            // handle errors
+            if (manager.GetQueryResult(sQuery) == null)
+            {
+                HandleQueryError();
+                return;
+            }
+
             objTable.Load(manager.GetQueryResult(sQuery));
             GridViewData.DataSource = objTable;
             GridViewData.DataBind();
@@ -206,6 +240,9 @@ namespace WebApplication_OLAP
 
             // store the data table and prepare the mining link
             Session.Add("queryData", objTable);
+            Session.Add("queryTable", ListBoxTables.SelectedItem.ToString());
+            Session.Add("queryDB", DropDownListDatabases.SelectedItem.ToString());
+            // make mining link visible
             HyperLinkMining.Visible = true;
         }
 
@@ -220,6 +257,14 @@ namespace WebApplication_OLAP
                 this.sSelectedDB = DropDownListDatabases.SelectedItem.ToString();
                 InitTableNames();
             }
+        }
+
+        /*
+         * Handle the query errors
+         */
+        private void HandleQueryError()
+        {
+            Label1.Text = "<h3 style='color:red'>There was an error with the SQL query or with the database connection. Please try again later!</h3>";
         }
     }
 }

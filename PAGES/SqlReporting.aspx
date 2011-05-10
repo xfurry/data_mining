@@ -43,11 +43,12 @@
                         </EmptyDataTemplate>
                     </asp:GridView>
                 </div>
-                <div style="width: 536px; height: 106px; overflow: auto;">
+                <div style="width: 536px; height: 126px; overflow: auto;">
                     <h3>
                         Data</h3>
                     <asp:Button ID="ButtonExport" runat="server" OnClick="Button1_Click" Text="Export to Excel" />
-                    &nbsp;<asp:Label ID="Label1" runat="server"></asp:Label>
+                    <br />
+                    <asp:Label ID="Label1" runat="server"></asp:Label>
                 </div>
                 <div style="width: 536px; height: 227px; overflow: auto;">
                     <asp:GridView ID="GridViewData" runat="server">
