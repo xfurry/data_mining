@@ -51,6 +51,15 @@
                     <asp:GridView ID="GridViewDistribution" runat="server">
                     </asp:GridView>
                 </div>
+                <br />
+                <div style="width: 536px; height: 227px; overflow: auto;">
+                    <asp:Button ID="ButtonQuery" runat="server" Text="Execute custom query" 
+                        onclick="ButtonQuery_Click" />
+                    <br />
+                    <br />
+                    <asp:TextBox ID="TextBoxQuery" runat="server" Height="144px" 
+                        TextMode="MultiLine" Width="532px"></asp:TextBox>
+                </div>
             </div>
             <div id="sidebar">
                 <div id="sidebarnav">

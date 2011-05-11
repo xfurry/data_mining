@@ -68,6 +68,24 @@ namespace WebApplication_OLAP.pages {
         protected global::System.Web.UI.WebControls.GridView GridViewDistribution;
         
         /// <summary>
+        /// ButtonQuery control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonQuery;
+        
+        /// <summary>
+        /// TextBoxQuery control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxQuery;
+        
+        /// <summary>
         /// DropDownListKey control.
         /// </summary>
         /// <remarks>

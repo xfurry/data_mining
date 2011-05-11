@@ -56,53 +56,63 @@ namespace WebApplication_OLAP.classes.data_managers
 
         public Microsoft.AnalysisServices.AdomdClient.AdomdDataReader GetMiningResults(string sQuery)
         {
-            string sConnString = "Data Source=" + sServer + "; Initial Catalog=" + sCatalog;
-            Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection(sConnString);
-            objConn.Open();
-            Microsoft.AnalysisServices.AdomdClient.AdomdCommand objCmd = objConn.CreateCommand();
-            objCmd.CommandText = sQuery;
-
-            /*
-            "SELECT FLATTENED PredictHistogram(Generation) " +
-            "FROM [Generation Trees] " +
-            "NATURAL PREDICTION JOIN " +
-            "( SELECT " +
-            " (SELECT ’Cinemax’ AS Channel UNION " +
-            " SELECT ’Showtime’ AS Channel) AS PayChannels " +
-            ") AS T ";*/
-
-            //Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objReader = objCmd.ExecuteReader();
-            //Microsoft.AnalysisServices.AdomdClient.AdomdDataAdapter objDataAdaptor = new Microsoft.AnalysisServices.AdomdClient.AdomdDataAdapter(objCmd);
-
-            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objDataReader = objCmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-            /*
             try
             {
-                for (int i = 0; i < objDataReader.FieldCount; i++)
-                {
-                    Console.Write(objDataReader.GetName(i) + "\t");
-                }
-                Console.WriteLine();
-                while (objDataReader.Read())
+
+                string sConnString = "Data Source=" + sServer + "; Initial Catalog=" + sCatalog;
+                Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection(sConnString);
+                objConn.Open();
+                Microsoft.AnalysisServices.AdomdClient.AdomdCommand objCmd = objConn.CreateCommand();
+                objCmd.CommandText = sQuery;
+
+                /*
+                "SELECT FLATTENED PredictHistogram(Generation) " +
+                "FROM [Generation Trees] " +
+                "NATURAL PREDICTION JOIN " +
+                "( SELECT " +
+                " (SELECT ’Cinemax’ AS Channel UNION " +
+                " SELECT ’Showtime’ AS Channel) AS PayChannels " +
+                ") AS T ";*/
+
+                //Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objReader = objCmd.ExecuteReader();
+                //Microsoft.AnalysisServices.AdomdClient.AdomdDataAdapter objDataAdaptor = new Microsoft.AnalysisServices.AdomdClient.AdomdDataAdapter(objCmd);
+
+                Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objDataReader = objCmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                /*
+                try
                 {
                     for (int i = 0; i < objDataReader.FieldCount; i++)
                     {
-                        object value = objDataReader.GetValue(i);
-                        string strValue = (value == null) ?
-                        string.Empty : value.ToString();
-                        Console.Write(strValue + "\t");
+                        Console.Write(objDataReader.GetName(i) + "\t");
                     }
                     Console.WriteLine();
+                    while (objDataReader.Read())
+                    {
+                        for (int i = 0; i < objDataReader.FieldCount; i++)
+                        {
+                            object value = objDataReader.GetValue(i);
+                            string strValue = (value == null) ?
+                            string.Empty : value.ToString();
+                            Console.Write(strValue + "\t");
+                        }
+                        Console.WriteLine();
+                    }
                 }
-            }
-            finally
-            {
-                objDataReader.Close();
-            }
-            */
+                finally
+                {
+                    objDataReader.Close();
+                }
+                */
 
-            return objDataReader;
+                return objDataReader;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+
+            return null;
         }
 
         /*

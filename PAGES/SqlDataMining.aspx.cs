@@ -48,54 +48,8 @@ namespace WebApplication_OLAP.pages
          */
         protected void Button2_Click(object sender, EventArgs e)
         {
-            SQLMiningManager objMiningManager = new SQLMiningManager();
-
-            // clear node table
-            GridViewDistribution.DataSource = null;
-            GridViewDistribution.DataBind();
-
-            // display results
             string sQuery = "select * from [" + DropDownListStructures.SelectedItem.ToString() + "].CONTENT";
-            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objMiningData = objMiningManager.GetMiningResults(sQuery);
-
-            DataTable objTable = new DataTable();
-            DataColumn myColumn = new DataColumn();
-            DataRow myRow = null;
-
-            DataTable objSchemaTable = objMiningData.GetSchemaTable();
-            List<string> lMeta = new List<string>();
-
-            // init meta values
-            for (int i = 0; i < objSchemaTable.Rows.Count; i++)
-                lMeta.Add(objSchemaTable.Rows[i][0].ToString());
-
-            // add columns and column captions
-            for (int i = 0; i < objMiningData.FieldCount; i++)
-            {
-                myColumn = new DataColumn(lMeta[i]);
-                objTable.Columns.Add(myColumn);
-            }
-
-            // output the rows in the DataReader
-            while (objMiningData.Read())
-            {
-                // new row
-                myRow = objTable.NewRow();
-                // set the row values
-                for (int i = 0; i < objMiningData.FieldCount; i++)
-                    myRow[i] = objMiningData[i];
-
-                // add row to the table
-                objTable.Rows.Add(myRow);
-            }
-            // close reader
-            objMiningData.Close();
-
-            GridViewResults.DataSource = objTable;
-            GridViewResults.DataBind();
-
-            // load the main table data
-            Session.Add("queryData", objTable);
+            InitDataTable(sQuery);
         }
 
         /*
@@ -191,13 +145,78 @@ namespace WebApplication_OLAP.pages
                 int index = Convert.ToInt32(e.CommandArgument);
 
                 // Retrieve the row that contains the button clicked
-                // by the user from the Rows collection.
+                // name is always on index = 5
                 GridViewRow row = GridViewResults.Rows[index];
                 DisplayDistributionNode(row.Cells[5].Text);
 
                 // for remove
                 //LabelStatus.Text = row.Cells[5].Text;
             }
+        }
+
+        /*
+         * Execute custom query
+         */
+        protected void ButtonQuery_Click(object sender, EventArgs e)
+        {
+            string sQuery = TextBoxQuery.Text;
+        }
+
+        /*
+         * Execute custom query
+         */
+        private void InitDataTable(string sQuery)
+        {
+            SQLMiningManager objMiningManager = new SQLMiningManager();
+
+            // clear node table
+            GridViewDistribution.DataSource = null;
+            GridViewDistribution.DataBind();
+
+            // display results
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objMiningData = objMiningManager.GetMiningResults(sQuery);
+
+            if (objMiningData == null)
+                return;
+
+            DataTable objTable = new DataTable();
+            DataColumn myColumn = new DataColumn();
+            DataRow myRow = null;
+
+            DataTable objSchemaTable = objMiningData.GetSchemaTable();
+            List<string> lMeta = new List<string>();
+
+            // init meta values
+            for (int i = 0; i < objSchemaTable.Rows.Count; i++)
+                lMeta.Add(objSchemaTable.Rows[i][0].ToString());
+
+            // add columns and column captions
+            for (int i = 0; i < objMiningData.FieldCount; i++)
+            {
+                myColumn = new DataColumn(lMeta[i]);
+                objTable.Columns.Add(myColumn);
+            }
+
+            // output the rows in the DataReader
+            while (objMiningData.Read())
+            {
+                // new row
+                myRow = objTable.NewRow();
+                // set the row values
+                for (int i = 0; i < objMiningData.FieldCount; i++)
+                    myRow[i] = objMiningData[i];
+
+                // add row to the table
+                objTable.Rows.Add(myRow);
+            }
+            // close reader
+            objMiningData.Close();
+
+            GridViewResults.DataSource = objTable;
+            GridViewResults.DataBind();
+
+            // load the main table data
+            Session.Add("queryData", objTable);
         }
     }
 }
