@@ -22,14 +22,15 @@
                     Mining data manager
                 </h2>
                 <div>
-                <br />
                     <asp:Button ID="Button1" runat="server" onclick="Button1_Click" 
                         Text="Create Mining Structure" />
                     <br />
-                    <br />
                     <asp:Label ID="LabelStatus" runat="server" Text="Mining status:"></asp:Label>
+                </div>
                 <br />
-                <br />
+                <div style="width: 536px; height: 227px; overflow: auto;">
+                    <asp:GridView ID="GridViewData" runat="server">
+                    </asp:GridView>
                 </div>
                 <br />
                 <div style="width: 536px; height: 227px; overflow: auto;">

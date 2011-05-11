@@ -50,6 +50,15 @@ namespace WebApplication_OLAP.pages {
         protected global::System.Web.UI.WebControls.Label LabelStatus;
         
         /// <summary>
+        /// GridViewData control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GridViewData;
+        
+        /// <summary>
         /// GridViewResults control.
         /// </summary>
         /// <remarks>

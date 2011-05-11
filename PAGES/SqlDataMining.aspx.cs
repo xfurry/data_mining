@@ -23,13 +23,33 @@ namespace WebApplication_OLAP.pages
             // get from session
             if (Session != null)
             {
-                DataTable objTable = (DataTable)Session["queryData"];
-                GridViewResults.DataSource = objTable;
-                GridViewResults.DataBind();
+                // initial query data
+                DataTable objTable = new DataTable();
 
-                objTable = (DataTable)Session["queryNode"];
-                GridViewDistribution.DataSource = objTable;
-                GridViewDistribution.DataBind();
+                if (Session["queryData"] != null)
+                {
+                    objTable = (DataTable)Session["queryData"];
+                    GridViewData.DataSource = objTable;
+                    GridViewData.DataBind();
+                    // initialize column list
+                    InitializeColumns(objTable);
+                }
+
+                // mining query data
+                if (Session["queryMining"] != null)
+                {
+                    objTable = (DataTable)Session["queryMining"];
+                    GridViewResults.DataSource = objTable;
+                    GridViewResults.DataBind();
+                }
+
+                // node query data
+                if (Session["queryNode"] != null)
+                {
+                    objTable = (DataTable)Session["queryNode"];
+                    GridViewDistribution.DataSource = objTable;
+                    GridViewDistribution.DataBind();
+                }
             }
         }
 
@@ -38,7 +58,10 @@ namespace WebApplication_OLAP.pages
             SQLMiningManager objMiningManager = new SQLMiningManager();
             // return mining result
             if (objMiningManager.CreateMiningStructureIfCan())
+            {
                 LabelStatus.Text = LabelStatus.Text + "Success!";
+                LoadExistingStructures();
+            }
             else
                 LabelStatus.Text = LabelStatus.Text + "Failed!";
         }
@@ -223,7 +246,22 @@ namespace WebApplication_OLAP.pages
             GridViewResults.DataBind();
 
             // load the main table data
-            Session.Add("queryData", objTable);
+            Session.Add("queryMining", objTable);
+        }
+
+        void InitializeColumns(DataTable objMainTable)
+        {
+            if (objMainTable == null)
+                return;
+
+            for (int i = 0; i < objMainTable.Columns.Count; i++)
+            {
+                DropDownListKey.Items.Add(objMainTable.Columns[i].ColumnName.ToString());
+                CheckBoxListColumns.Items.Add(objMainTable.Columns[i].ColumnName.ToString());
+            }
+
+            DropDownListKey.DataBind();
+            CheckBoxListColumns.DataBind();
         }
     }
 }
