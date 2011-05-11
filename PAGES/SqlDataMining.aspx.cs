@@ -160,6 +160,7 @@ namespace WebApplication_OLAP.pages
         protected void ButtonQuery_Click(object sender, EventArgs e)
         {
             string sQuery = TextBoxQuery.Text;
+            InitDataTable(sQuery);
         }
 
         /*
