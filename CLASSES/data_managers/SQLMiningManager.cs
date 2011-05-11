@@ -26,7 +26,7 @@ namespace WebApplication_OLAP.classes.data_managers
                 svr.Connect("integrated security=SSPI;data source=" + sServer + ";persist security info=False;initial catalog=" + sCatalog);
 
                 // Connect to the Analysis Service server
-                Database currentDB = GetCurrentDatabase();
+                Database currentDB = GetCurrentDatabase(sCatalog);
                 currentDB.Refresh();
 
                 // if current database doesn't exist, then create it
@@ -54,13 +54,13 @@ namespace WebApplication_OLAP.classes.data_managers
             return false;
         }
 
-        public Microsoft.AnalysisServices.AdomdClient.AdomdDataReader GetMiningResults(string sStructureName)
+        public Microsoft.AnalysisServices.AdomdClient.AdomdDataReader GetMiningResults(string sQuery)
         {
             string sConnString = "Data Source=" + sServer + "; Initial Catalog=" + sCatalog;
             Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection(sConnString);
             objConn.Open();
             Microsoft.AnalysisServices.AdomdClient.AdomdCommand objCmd = objConn.CreateCommand();
-            objCmd.CommandText = "select * from [" + sStructureName + "].CONTENT";
+            objCmd.CommandText = sQuery;
 
             /*
             "SELECT FLATTENED PredictHistogram(Generation) " +
@@ -108,7 +108,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Returns an existing DB
          */
-        private Database GetCurrentDatabase()
+        private Database GetCurrentDatabase(string sCatalogName)
         {
             try
             {
@@ -124,6 +124,20 @@ namespace WebApplication_OLAP.classes.data_managers
             }
 
             return null;
+        }
+
+        /*
+         * Return current list with mining structures
+         */
+        public List<string> GetExistingStructures(string sDbName)
+        {
+            List<string> lStructures = new List<string>();
+            Database currentDB = GetCurrentDatabase(sDbName);
+
+            foreach (MiningStructure objMiningStruc in currentDB.MiningStructures)
+                lStructures.Add(objMiningStruc.Name.ToString());
+
+            return lStructures;
         }
 
         /*
@@ -197,17 +211,17 @@ namespace WebApplication_OLAP.classes.data_managers
             // a key column to the nested table
             /*
             TableMiningStructureColumn PayChannels = new TableMiningStructureColumn("PayChannels", "PayChannels");
-            PayChannels.ForeignKeyColumns.Add("Customer", "Phone", System.Data.OleDb.OleDbType.Integer);
+            PayChannels.ForeignKeyColumns.Add("dbo_Customer", "TotalChildren", System.Data.OleDb.OleDbType.Integer);
 
             ScalarMiningStructureColumn Channel = new ScalarMiningStructureColumn("Channel", "Channel");
             Channel.Type = MiningStructureColumnTypes.Text;
             Channel.Content = MiningStructureColumnContents.Key;
             Channel.IsKey = true;
             // Add data binding to the column
-            Channel.KeyColumns.Add("Customer", "FirstName", System.Data.OleDb.OleDbType.WChar);
+            Channel.KeyColumns.Add("dbo_Customer", "FirstName", System.Data.OleDb.OleDbType.WChar);
             PayChannels.Columns.Add(Channel);
             currentMiningStruct.Columns.Add(PayChannels);
-            */
+             * */
 
 
             // Add the mining structure to the database

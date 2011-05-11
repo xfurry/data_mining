@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SqlDataMining.aspx.cs" Inherits="WebApplication_OLAP.pages.SqlDataMining" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" EnableEventValidation="false" CodeBehind="SqlDataMining.aspx.cs" Inherits="WebApplication_OLAP.pages.SqlDataMining" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -27,22 +27,30 @@
                         Text="Create Mining Structure" />
                     <br />
                     <br />
-                    <asp:Button ID="Button2" runat="server" onclick="Button2_Click" 
-                        Text="Show mining results" />
-                    <br />
-                    <br />
                     <asp:Label ID="LabelStatus" runat="server" Text="Mining status:"></asp:Label>
                 <br />
                 <br />
                 </div>
                 <br />
                 <div style="width: 536px; height: 227px; overflow: auto;">
-                    <asp:GridView ID="GridView1" runat="server">
+                    <asp:GridView ID="GridViewResults" runat="server" 
+                        onrowcommand="GridViewResults_RowCommand">
+                        <Columns>
+                            <asp:TemplateField HeaderText="View Node">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="LinkButtonNode" runat="server" CommandName="NodeView" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>">View Node</asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
                     </asp:GridView>
+                    <br />
+                    <br />
                 </div>
                 <br />
-                <br />
-                <br />
+                <div style="width: 536px; height: 227px; overflow: auto;">
+                    <asp:GridView ID="GridViewDistribution" runat="server">
+                    </asp:GridView>
+                </div>
             </div>
             <div id="sidebar">
                 <div id="sidebarnav">
@@ -60,6 +68,13 @@
                 <asp:CheckBoxList ID="CheckBoxListColumns" runat="server">
                 </asp:CheckBoxList>
                 <br />
+                <p>Existing Mining Structures</p>
+                <asp:DropDownList ID="DropDownListStructures" runat="server">
+                    </asp:DropDownList>
+                <br />
+                <br />
+                    <asp:Button ID="Button2" runat="server" onclick="Button2_Click" 
+                        Text="Show mining results" />
             </div>
         </div>
         <div id="footer">
