@@ -48,7 +48,9 @@ namespace WebApplication_OLAP.pages
          */
         protected void Button2_Click(object sender, EventArgs e)
         {
-            string sQuery = "select * from [" + DropDownListStructures.SelectedItem.ToString() + "].CONTENT";
+            string sQuery = "select NODE_NAME, NODE_TYPE, ATTRIBUTE_NAME, " +
+                "[PARENT_UNIQUE_NAME], [CHILDREN_CARDINALITY], NODE_PROBABILITY, MARGINAL_PROBABILITY, NODE_SUPPORT, " +
+                "MSOLAP_MODEL_COLUMN, MSOLAP_NODE_SCORE from [" + DropDownListStructures.SelectedItem.ToString() + "].CONTENT";
             InitDataTable(sQuery);
         }
 
@@ -77,6 +79,10 @@ namespace WebApplication_OLAP.pages
             string sQuery = "select NODE_DISTRIBUTION from [" + DropDownListStructures.SelectedItem.ToString() + "].CONTENT where NODE_NAME ='" + sNodeName + "'";
             // display results
             Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objMiningData = objMiningManager.GetMiningResults(sQuery);
+
+            // return for invalid data
+            if (objMiningData == null)
+                return;
 
             Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objNode = null;
 
@@ -145,9 +151,9 @@ namespace WebApplication_OLAP.pages
                 int index = Convert.ToInt32(e.CommandArgument);
 
                 // Retrieve the row that contains the button clicked
-                // name is always on index = 5
+                // name is always on index = 1
                 GridViewRow row = GridViewResults.Rows[index];
-                DisplayDistributionNode(row.Cells[5].Text);
+                DisplayDistributionNode(row.Cells[1].Text);
 
                 // for remove
                 //LabelStatus.Text = row.Cells[5].Text;
