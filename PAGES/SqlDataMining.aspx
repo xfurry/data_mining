@@ -1,5 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" EnableEventValidation="false" CodeBehind="SqlDataMining.aspx.cs" Inherits="WebApplication_OLAP.pages.SqlDataMining" %>
 
+<%@ Register assembly="Microsoft.AnalysisServices.DataMiningHtmlViewers" namespace="Microsoft.AnalysisServices.DataMiningHtmlViewers" tagprefix="cc1" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
@@ -48,9 +50,12 @@
                     <br />
                 </div>
                 <br />
-                <div style="width: 536px; height: 227px; overflow: auto;">
+                <div style="width: 536px; height: 400px; overflow: auto;">
                     <asp:GridView ID="GridViewDistribution" runat="server">
                     </asp:GridView>
+                    <br />
+                    <asp:Panel ID="PanelViewer" runat="server" Height="200px">
+                    </asp:Panel>
                 </div>
                 <br />
                 <div style="width: 536px; height: 227px; overflow: auto;">

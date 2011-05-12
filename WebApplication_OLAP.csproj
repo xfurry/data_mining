@@ -30,13 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EO.Web, Version=8.0.56.2, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Program Files\Essential Objects\EO.Web Controls 8.0 (2010)\Net20\EO.Web.dll</HintPath>
-    </Reference>
     <Reference Include="GemBox.Spreadsheet, Version=33.1.30.1062, Culture=neutral, PublicKeyToken=b1b72c69714d4847, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.AnalysisServices, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.AnalysisServices.AdomdClient, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.AnalysisServices.DataMiningHtmlViewers, Version=9.0.0.0, Culture=neutral, PublicKeyToken=c594555dffe01963, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Data Mining Web Controls\WebControls\bin\Release\Microsoft.AnalysisServices.DataMiningHtmlViewers.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -148,7 +148,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>5462</DevelopmentServerPort>
+          <DevelopmentServerPort>10073</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

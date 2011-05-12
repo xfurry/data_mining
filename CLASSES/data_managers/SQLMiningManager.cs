@@ -58,7 +58,6 @@ namespace WebApplication_OLAP.classes.data_managers
         {
             try
             {
-
                 string sConnString = "Data Source=" + sServer + "; Initial Catalog=" + sCatalog;
                 Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection(sConnString);
                 objConn.Open();

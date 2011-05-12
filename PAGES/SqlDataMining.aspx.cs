@@ -6,7 +6,9 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
 using WebApplication_OLAP.classes.data_managers;
+using Microsoft.AnalysisServices.DataMiningHtmlViewers;
 using Microsoft.AnalysisServices;
+using System.Data.OleDb;
 
 namespace WebApplication_OLAP.pages
 {
@@ -19,6 +21,8 @@ namespace WebApplication_OLAP.pages
             // load existing mining structures
             if (!Page.IsPostBack)
                 LoadExistingStructures();
+
+            LoadViewer();
 
             // get from session
             if (Session != null)
@@ -53,8 +57,64 @@ namespace WebApplication_OLAP.pages
             }
         }
 
+        private void LoadViewer()
+        {
+            DMHtmlViewer objViewer = null;
+            Microsoft.AnalysisServices.AdomdClient.MiningModel objModel = null;
+            Microsoft.AnalysisServices.AdomdClient.MiningService objService = null;
+
+
+            string sCatalog = "Adventure Works DW 2008";
+            string sServer = "CLARITY-7HYGMQM\\ANA";
+            string sConnString = "Data Source=" + sServer + "; Initial Catalog=" + sCatalog;
+            Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection(sConnString);
+
+            objConn.Open();
+
+            objModel = objConn.MiningModels["Customer"];
+            objService = objConn.MiningServices[objModel.Algorithm];
+
+            if (objService.ViewerType == "Microsoft_Cluster_Viewer")
+                objViewer = new DMClusterViewer();
+            else if (objService.ViewerType == "Microsoft_Tree_Viewer")
+                objViewer = new DMDecisionTreeViewer();
+            else if (objService.ViewerType == "Microsoft_TimeSeries_Viewer")
+                objViewer = new DMNaiveBayesViewer();
+
+            objViewer.Connection = new OleDbConnection("Provider=MSOLAP.3; Data Source=CLARITY-7HYGMQM\\ANA;" + "Initial Catalog=Adventure Works DW 2008");
+            objViewer.DataBind();
+
+            ClusterGridViewer viewer = new DMClusterViewer();
+            //viewer.Connection = new OleDbConnection("Provider=MSOLAP.3; Data Source=CLARITY-7HYGMQM\\ANA;" + "Initial Catalog=Adventure Works DW 2008");
+            //viewer.Connection.Open();
+            viewer.Server = "CLARITY-7HYGMQM\\ANA";
+            viewer.Database = "Adventure Works DW 2008";
+            viewer.Model = "Employee";
+            //viewer.ViewerMode = GridViewerMode.Characteristics;
+            objViewer = viewer;
+            viewer.DataBind();
+
+            PanelViewer.Controls.Add(viewer);
+        }
+
+        /*
+         * Create mining structure for selected data
+         */
         protected void Button1_Click(object sender, EventArgs e)
         {
+            // get selected key column and selected input columns
+            string sKeyColumn = DropDownListKey.SelectedItem.ToString();
+            List<string> lInputColumns = new List<string>();
+
+            for (int i = 0; i < CheckBoxListColumns.Items.Count; i++)
+            {
+                if (CheckBoxListColumns.Items[i].Selected)
+                    lInputColumns.Add(CheckBoxListColumns.Items[i].ToString());
+            }
+
+            // create mining structure for the current data with the selected columns and key
+            // ToDo:
+
             SQLMiningManager objMiningManager = new SQLMiningManager();
             // return mining result
             if (objMiningManager.CreateMiningStructureIfCan())
@@ -249,11 +309,22 @@ namespace WebApplication_OLAP.pages
             Session.Add("queryMining", objTable);
         }
 
+        /*
+         * Initialize column names in checkbox list and dropdown box
+         */
         void InitializeColumns(DataTable objMainTable)
         {
             if (objMainTable == null)
                 return;
 
+            // reset controlls
+            DropDownListKey.DataSource = null;
+            DropDownListKey.DataBind();
+
+            CheckBoxListColumns.DataSource = null;
+            CheckBoxListColumns.DataBind();
+
+            // add columns
             for (int i = 0; i < objMainTable.Columns.Count; i++)
             {
                 DropDownListKey.Items.Add(objMainTable.Columns[i].ColumnName.ToString());

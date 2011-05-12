@@ -77,6 +77,15 @@ namespace WebApplication_OLAP.pages {
         protected global::System.Web.UI.WebControls.GridView GridViewDistribution;
         
         /// <summary>
+        /// PanelViewer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelViewer;
+        
+        /// <summary>
         /// ButtonQuery control.
         /// </summary>
         /// <remarks>
