@@ -22,8 +22,6 @@ namespace WebApplication_OLAP.pages
             if (!Page.IsPostBack)
                 LoadExistingStructures();
 
-            LoadViewer();
-
             // get from session
             if (Session != null)
             {
@@ -45,6 +43,8 @@ namespace WebApplication_OLAP.pages
                     objTable = (DataTable)Session["queryMining"];
                     GridViewResults.DataSource = objTable;
                     GridViewResults.DataBind();
+                    // load viewer for the current model
+                    //LoadViewer();
                 }
 
                 // node query data
@@ -57,44 +57,54 @@ namespace WebApplication_OLAP.pages
             }
         }
 
+        /*
+         * Load mining viewer for the selected structure
+         */
         private void LoadViewer()
         {
+            // clear all the controls in order to avoid adding the same control twice
+            PanelViewer.Controls.Clear();
+
+            // define objects
             DMHtmlViewer objViewer = null;
             Microsoft.AnalysisServices.AdomdClient.MiningModel objModel = null;
             Microsoft.AnalysisServices.AdomdClient.MiningService objService = null;
 
-
+            // Todo: make this dynamic
             string sCatalog = "Adventure Works DW 2008";
             string sServer = "CLARITY-7HYGMQM\\ANA";
             string sConnString = "Data Source=" + sServer + "; Initial Catalog=" + sCatalog;
             Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection(sConnString);
 
             objConn.Open();
-
-            objModel = objConn.MiningModels["Customer"];
+            objModel = objConn.MiningModels[DropDownListStructures.SelectedItem.ToString()];
             objService = objConn.MiningServices[objModel.Algorithm];
 
-            if (objService.ViewerType == "Microsoft_Cluster_Viewer")
-                objViewer = new DMClusterViewer();
-            else if (objService.ViewerType == "Microsoft_Tree_Viewer")
-                objViewer = new DMDecisionTreeViewer();
-            else if (objService.ViewerType == "Microsoft_TimeSeries_Viewer")
-                objViewer = new DMNaiveBayesViewer();
+            // switch mining service
+            switch (objService.ViewerType)
+            {
+                case "Microsoft_Cluster_Viewer":
+                    objViewer = new DMClusterViewer();
+                    break;
+                case "Microsoft_Tree_Viewer":
+                    objViewer = new DMDecisionTreeViewer();
+                    break;
+                case "Microsoft_TimeSeries_Viewer":
+                    // ToDo: fix this! may not be the right one
+                    objViewer = new DMNaiveBayesViewer();
+                    break;
+                default:
+                    // if none of the above then return
+                    return;
+            }
 
-            objViewer.Connection = new OleDbConnection("Provider=MSOLAP.3; Data Source=CLARITY-7HYGMQM\\ANA;" + "Initial Catalog=Adventure Works DW 2008");
+            // init data for the current viewer type
+            objViewer.Server = sServer;
+            objViewer.Database = sCatalog;
+            objViewer.Model = DropDownListStructures.SelectedItem.ToString();
             objViewer.DataBind();
 
-            ClusterGridViewer viewer = new DMClusterViewer();
-            //viewer.Connection = new OleDbConnection("Provider=MSOLAP.3; Data Source=CLARITY-7HYGMQM\\ANA;" + "Initial Catalog=Adventure Works DW 2008");
-            //viewer.Connection.Open();
-            viewer.Server = "CLARITY-7HYGMQM\\ANA";
-            viewer.Database = "Adventure Works DW 2008";
-            viewer.Model = "Employee";
-            //viewer.ViewerMode = GridViewerMode.Characteristics;
-            objViewer = viewer;
-            viewer.DataBind();
-
-            PanelViewer.Controls.Add(viewer);
+            PanelViewer.Controls.Add(objViewer);
         }
 
         /*
@@ -135,6 +145,8 @@ namespace WebApplication_OLAP.pages
                 "[PARENT_UNIQUE_NAME], [CHILDREN_CARDINALITY], NODE_PROBABILITY, MARGINAL_PROBABILITY, NODE_SUPPORT, " +
                 "MSOLAP_MODEL_COLUMN, MSOLAP_NODE_SCORE from [" + DropDownListStructures.SelectedItem.ToString() + "].CONTENT";
             InitDataTable(sQuery);
+            // load viewer for the current model
+            LoadViewer();
         }
 
         /*
