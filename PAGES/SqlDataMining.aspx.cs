@@ -141,6 +141,54 @@ namespace WebApplication_OLAP.pages
          */
         protected void Button1_Click(object sender, EventArgs e)
         {
+            // Create mining structure based on column and table selection
+            List<string> lsInputItems = new List<string>();
+            List<string> lsPredictItems = new List<string>();
+
+            // add values to list
+            foreach (ListItem objItem in CheckBoxListInputColumns.Items)
+            {
+                if (objItem.Selected)
+                    lsInputItems.Add(objItem.Value.ToString());
+            }
+
+            foreach (ListItem objItem in CheckBoxListPredictColumns.Items)
+            {
+                if (objItem.Selected)
+                    lsPredictItems.Add(objItem.Value.ToString());
+            }
+
+            if (lsPredictItems.Count == 0 || lsInputItems.Count == 0)
+            {
+                LabelStatus.Text = LabelStatus.Text + "Please select at least one input column!";
+                return;
+            }
+
+            string objAlgorithm = null;
+
+            // create mining structure
+            if (DropDownListAlgorithm.SelectedIndex == 0)
+                objAlgorithm = MiningModelAlgorithms.MicrosoftClustering;
+            else if (DropDownListAlgorithm.SelectedIndex == 1)
+                objAlgorithm = MiningModelAlgorithms.MicrosoftDecisionTrees;
+            else if (DropDownListAlgorithm.SelectedIndex == 2)
+                objAlgorithm = MiningModelAlgorithms.MicrosoftNaiveBayes;
+
+            SQLMiningManager objMiningManager = new SQLMiningManager();
+
+            // Create mining query from the existing results
+            if (objMiningManager.CreateMiningStructure(lsInputItems, lsPredictItems, objAlgorithm, DropDownListTables.SelectedItem.Value.ToString()))
+            {
+                LabelStatus.Text = LabelStatus.Text + "Success!";
+                LoadExistingStructures();
+
+                return;
+            }
+            else
+                LabelStatus.Text = LabelStatus.Text + "Failed!";
+
+
+
             // get selected key column and selected input columns
             string sKeyColumn = DropDownListKey.SelectedItem.ToString();
             List<string> lInputColumns = new List<string>();
@@ -154,7 +202,7 @@ namespace WebApplication_OLAP.pages
             // create mining structure for the current data with the selected columns and key
             // ToDo:
 
-            SQLMiningManager objMiningManager = new SQLMiningManager();
+            //SQLMiningManager objMiningManager = new SQLMiningManager();
             // return mining result
             if (objMiningManager.CreateMiningStructureIfCan())
             {

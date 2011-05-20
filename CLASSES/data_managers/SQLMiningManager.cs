@@ -54,6 +54,16 @@ namespace WebApplication_OLAP.classes.data_managers
             return false;
         }
 
+        /*
+         * Create mining structure based on selection
+         */
+        public bool CreateMiningStructure(List<string> inputColumns, List<string> predictColumns, string sAlgorithm, string sTableName)
+        {
+
+
+            return true;
+        }
+
         public Microsoft.AnalysisServices.AdomdClient.AdomdDataReader GetMiningResults(string sQuery)
         {
             try
@@ -179,6 +189,9 @@ namespace WebApplication_OLAP.classes.data_managers
             }
         }
 
+        /*
+         * Demo code!
+         */
         private void AddTable(DataSourceView dsv, OleDbConnection connection, string tableName, string dataSourceID)
         {
             OleDbDataAdapter adapter = new OleDbDataAdapter(
