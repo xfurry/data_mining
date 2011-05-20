@@ -104,6 +104,33 @@ namespace WebApplication_OLAP.pages {
         protected global::System.Web.UI.WebControls.TextBox TextBoxQuery;
         
         /// <summary>
+        /// DropDownListAlgorithm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListAlgorithm;
+        
+        /// <summary>
+        /// DropDownListSources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListSources;
+        
+        /// <summary>
+        /// DropDownListTables control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListTables;
+        
+        /// <summary>
         /// DropDownListKey control.
         /// </summary>
         /// <remarks>
@@ -113,13 +140,22 @@ namespace WebApplication_OLAP.pages {
         protected global::System.Web.UI.WebControls.DropDownList DropDownListKey;
         
         /// <summary>
-        /// CheckBoxListColumns control.
+        /// CheckBoxListInputColumns control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListColumns;
+        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListInputColumns;
+        
+        /// <summary>
+        /// CheckBoxListPredictColumns control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListPredictColumns;
         
         /// <summary>
         /// DropDownListStructures control.

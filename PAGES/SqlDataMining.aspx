@@ -75,12 +75,27 @@
                 <h2>
                     Options
                 </h2>
+                <p>Select Algorithm</p>
+                <asp:DropDownList ID="DropDownListAlgorithm" runat="server">
+                    <asp:ListItem>Clustering</asp:ListItem>
+                    <asp:ListItem>Decision Trees</asp:ListItem>
+                    <asp:ListItem>Naive Bayes</asp:ListItem>
+                </asp:DropDownList>
+                <p>Select Data Source</p>
+                <asp:DropDownList ID="DropDownListSources" runat="server">
+                </asp:DropDownList>
+                <p>Select Input Table</p>
+                <asp:DropDownList ID="DropDownListTables" runat="server">
+                </asp:DropDownList>
                 <p>Select key column</p>
                 <asp:DropDownList ID="DropDownListKey" runat="server">
                     </asp:DropDownList>
                 <br />
                 <p>Select input columns</p>
-                <asp:CheckBoxList ID="CheckBoxListColumns" runat="server">
+                <asp:CheckBoxList ID="CheckBoxListInputColumns" runat="server">
+                </asp:CheckBoxList>
+                <p>Select predict columns</p>
+                <asp:CheckBoxList ID="CheckBoxListPredictColumns" runat="server">
                 </asp:CheckBoxList>
                 <br />
                 <p>Existing Mining Structures</p>

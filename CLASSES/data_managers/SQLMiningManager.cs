@@ -179,6 +179,22 @@ namespace WebApplication_OLAP.classes.data_managers
             }
         }
 
+        private void AddTable(DataSourceView dsv, OleDbConnection connection, string tableName, string dataSourceID)
+        {
+            OleDbDataAdapter adapter = new OleDbDataAdapter(
+                "SELECT * FROM [dbo].[" + tableName + "] WHERE 1=0",
+                connection);
+            DataTable[] dataTables = adapter.FillSchema(dsv.Schema,
+              SchemaType.Mapped, tableName);
+            DataTable dataTable = dataTables[0];
+
+            dataTable.ExtendedProperties.Add("TableType", "Table");
+            dataTable.ExtendedProperties.Add("DbSchemaName", "dbo");
+            dataTable.ExtendedProperties.Add("DbTableName", tableName);
+            dataTable.ExtendedProperties.Add("FriendlyName", tableName);
+            dataTable.ExtendedProperties.Add("DataSourceID", dataSourceID);
+        }
+
         /*
          * Create mining structure for selected database
          */

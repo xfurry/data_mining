@@ -44,7 +44,7 @@ namespace WebApplication_OLAP.pages
                     GridViewResults.DataSource = objTable;
                     GridViewResults.DataBind();
                     // load viewer for the current model
-                    //LoadViewer();
+                    LoadViewer();
                 }
 
                 // node query data
@@ -62,6 +62,9 @@ namespace WebApplication_OLAP.pages
          */
         private void LoadViewer()
         {
+            if (DropDownListStructures.SelectedItem == null)
+                return;
+
             // clear all the controls in order to avoid adding the same control twice
             PanelViewer.Controls.Clear();
 
@@ -80,6 +83,25 @@ namespace WebApplication_OLAP.pages
             objModel = objConn.MiningModels[DropDownListStructures.SelectedItem.ToString()];
             objService = objConn.MiningServices[objModel.Algorithm];
 
+            // Viewer types
+            /*
+            if (service.ViewerType == "Microsoft_Cluster_Viewer")
+                viewer = new ClusterViewer();
+            else if (service.ViewerType == "Microsoft_Tree_Viewer")
+                viewer = new TreeViewer();
+            else if (service.ViewerType == "Microsoft_NaiveBayesian_Viewer")
+                viewer = new NaiveBayesViewer();
+            else if (service.ViewerType == "Microsoft_SequenceCluster_Viewer")
+                viewer = new SequenceClusterViewer();
+            else if (service.ViewerType == "Microsoft_TimeSeries_Viewer")
+                viewer = new TimeSeriesViewer();
+            else if (service.ViewerType == "Microsoft_AssociationRules_Viewer")
+                viewer = new AssociationViewer();
+            else if (service.ViewerType == "Microsoft_NeuralNetwork_Viewer")
+                viewer = new NeuralNetViewer();
+            else throw new System.Exception("Custom Viewers not supported");
+            */
+
             // switch mining service
             switch (objService.ViewerType)
             {
@@ -89,8 +111,7 @@ namespace WebApplication_OLAP.pages
                 case "Microsoft_Tree_Viewer":
                     objViewer = new DMDecisionTreeViewer();
                     break;
-                case "Microsoft_TimeSeries_Viewer":
-                    // ToDo: fix this! may not be the right one
+                case "Microsoft_NaiveBayesian_Viewer":
                     objViewer = new DMNaiveBayesViewer();
                     break;
                 default:
@@ -116,10 +137,10 @@ namespace WebApplication_OLAP.pages
             string sKeyColumn = DropDownListKey.SelectedItem.ToString();
             List<string> lInputColumns = new List<string>();
 
-            for (int i = 0; i < CheckBoxListColumns.Items.Count; i++)
+            for (int i = 0; i < CheckBoxListInputColumns.Items.Count; i++)
             {
-                if (CheckBoxListColumns.Items[i].Selected)
-                    lInputColumns.Add(CheckBoxListColumns.Items[i].ToString());
+                if (CheckBoxListInputColumns.Items[i].Selected)
+                    lInputColumns.Add(CheckBoxListInputColumns.Items[i].ToString());
             }
 
             // create mining structure for the current data with the selected columns and key
@@ -333,18 +354,18 @@ namespace WebApplication_OLAP.pages
             DropDownListKey.DataSource = null;
             DropDownListKey.DataBind();
 
-            CheckBoxListColumns.DataSource = null;
-            CheckBoxListColumns.DataBind();
+            CheckBoxListInputColumns.DataSource = null;
+            CheckBoxListInputColumns.DataBind();
 
             // add columns
             for (int i = 0; i < objMainTable.Columns.Count; i++)
             {
                 DropDownListKey.Items.Add(objMainTable.Columns[i].ColumnName.ToString());
-                CheckBoxListColumns.Items.Add(objMainTable.Columns[i].ColumnName.ToString());
+                CheckBoxListInputColumns.Items.Add(objMainTable.Columns[i].ColumnName.ToString());
             }
 
             DropDownListKey.DataBind();
-            CheckBoxListColumns.DataBind();
+            CheckBoxListInputColumns.DataBind();
         }
     }
 }
