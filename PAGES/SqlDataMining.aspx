@@ -93,10 +93,20 @@
                     onselectedindexchanged="DropDownListKey_SelectedIndexChanged">
                     </asp:DropDownList>
                 <br />
-                <p>Select input columns</p>
+                <p>
+                    Select input columns
+                    <br />
+                    <asp:Button ID="ButtonInput" runat="server" Text="Check All" 
+                        onclick="ButtonInput_Click" />
+                </p>
                 <asp:CheckBoxList ID="CheckBoxListInputColumns" runat="server">
                 </asp:CheckBoxList>
-                <p>Select predict columns</p>
+                <p>
+                    Select predict columns
+                    <br />
+                    <asp:Button ID="ButtonPredict" runat="server" Text="Check All" 
+                        onclick="ButtonPredict_Click" />
+                </p>
                 <asp:CheckBoxList ID="CheckBoxListPredictColumns" runat="server">
                 </asp:CheckBoxList>
                 <br />

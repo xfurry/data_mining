@@ -140,6 +140,15 @@ namespace WebApplication_OLAP.pages {
         protected global::System.Web.UI.WebControls.DropDownList DropDownListKey;
         
         /// <summary>
+        /// ButtonInput control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonInput;
+        
+        /// <summary>
         /// CheckBoxListInputColumns control.
         /// </summary>
         /// <remarks>
@@ -147,6 +156,15 @@ namespace WebApplication_OLAP.pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListInputColumns;
+        
+        /// <summary>
+        /// ButtonPredict control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonPredict;
         
         /// <summary>
         /// CheckBoxListPredictColumns control.

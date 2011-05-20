@@ -504,5 +504,43 @@ namespace WebApplication_OLAP.pages
 
             manager.CloseConnection();
         }
+
+        /*
+         * Check or uncheck input boxes
+         */
+        protected void ButtonInput_Click(object sender, EventArgs e)
+        {
+            ChangeState(CheckBoxListInputColumns);
+            if (ButtonInput.Text == "Check All")
+                ButtonInput.Text = "Uncheck All";
+            else
+                ButtonInput.Text = "Check All";
+        }
+
+        /*
+         * Modify the state of the selected
+         */
+        private void ChangeState(CheckBoxList objList)
+        {
+            foreach (ListItem objItem in objList.Items)
+            {
+                if (objItem.Selected)
+                    objItem.Selected = false;
+                else
+                    objItem.Selected = true;
+            }
+        }
+
+        /*
+         * Check or uncheck predict boxes
+         */
+        protected void ButtonPredict_Click(object sender, EventArgs e)
+        {
+            ChangeState(CheckBoxListPredictColumns);
+            if (ButtonPredict.Text == "Check All")
+                ButtonPredict.Text = "Uncheck All";
+            else
+                ButtonPredict.Text = "Check All";
+        }
     }
 }
