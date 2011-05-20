@@ -20,7 +20,11 @@ namespace WebApplication_OLAP.pages
         {
             // load existing mining structures
             if (!Page.IsPostBack)
+            {
                 LoadExistingStructures();
+                InitTableNames();
+                InitColumnsControlls();
+            }
 
             // get from session
             if (Session != null)
@@ -34,7 +38,7 @@ namespace WebApplication_OLAP.pages
                     GridViewData.DataSource = objTable;
                     GridViewData.DataBind();
                     // initialize column list
-                    InitializeColumns(objTable);
+                    //InitializeColumns(objTable);
                 }
 
                 // mining query data
@@ -55,6 +59,10 @@ namespace WebApplication_OLAP.pages
                     GridViewDistribution.DataBind();
                 }
             }
+
+            // register event
+            DropDownListTables.SelectedIndexChanged += new EventHandler(DropDownListTables_SelectedIndexChanged);
+            DropDownListKey.SelectedIndexChanged += new EventHandler(DropDownListKey_SelectedIndexChanged);
         }
 
         /*
@@ -366,6 +374,135 @@ namespace WebApplication_OLAP.pages
 
             DropDownListKey.DataBind();
             CheckBoxListInputColumns.DataBind();
+        }
+
+
+        /*
+         * Init all table names into a listbox
+         */
+        private void InitTableNames()
+        {
+            // show DB tables
+            SQLManager manager = new SQLManager("AdventureWorksDW");
+            string sQuery = "Select name, id from sysobjects where xtype='U'";
+
+            // handle errors
+            //if (manager.GetQueryDataSet(sQuery) == null)
+            //{
+            //    HandleQueryError();
+            //    return;
+            //}
+
+            DataSet objSet = manager.GetQueryDataSet(sQuery);
+            DropDownListTables.DataSource = objSet;
+            DropDownListTables.DataTextField = "name";
+            DropDownListTables.DataValueField = "id";
+            DropDownListTables.DataBind();
+            manager.CloseConnection();
+        }
+
+        /*
+         * On table list index changed
+         */
+        protected void DropDownListTables_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DropDownListTables.SelectedIndex <= 0)
+                return;
+
+            // init column controlls
+            InitColumnsControlls();
+        }
+
+        /*
+         * Init all columns
+         */
+        private void InitColumnsControlls()
+        {
+            // clear current query
+            DropDownListKey.DataSource = null;
+            DropDownListKey.DataBind();
+
+            // list selected table: to be removed
+            //Label1.Text = ListBoxTables.SelectedItem.ToString();
+
+            string sQueryText = "SELECT COLUMN_NAME, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
+                DropDownListTables.SelectedItem.ToString() + "'ORDER BY ORDINAL_POSITION";
+
+            // execute query
+            SQLManager manager = new SQLManager("AdventureWorksDW");
+            DataTable objTable = new DataTable();
+
+            // handle errors
+            //if (manager.GetQueryResult(sQueryText) == null)
+            //{
+            //    HandleQueryError();
+            //    return;
+            //}
+
+            objTable.Load(manager.GetQueryResult(sQueryText));
+
+            DropDownListKey.DataSource = objTable;
+            DropDownListKey.DataTextField = "COLUMN_NAME";
+            DropDownListKey.DataValueField = "ORDINAL_POSITION";
+            DropDownListKey.DataBind();
+
+            manager.CloseConnection();
+
+            // init input columns
+            InitCheckboxFields();
+        }
+
+        /*
+         * On key column index changed
+         */
+        protected void DropDownListKey_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DropDownListKey.SelectedIndex <= 0)
+                return;
+
+            // init input columns
+            InitCheckboxFields();
+        }
+
+        /*
+         * Init checkbox fields to exclude the key column
+         */
+        void InitCheckboxFields()
+        {
+            CheckBoxListInputColumns.DataSource = null;
+            CheckBoxListInputColumns.DataBind();
+
+            CheckBoxListPredictColumns.DataSource = null;
+            CheckBoxListPredictColumns.DataBind();
+
+            // execute query
+            SQLManager manager = new SQLManager("AdventureWorksDW");
+            DataTable objTable = new DataTable();
+
+            // handle errors
+            //if (manager.GetQueryResult(sQueryText) == null)
+            //{
+            //    HandleQueryError();
+            //    return;
+            //}
+
+            // exclude the key column
+            string sQueryTextExclude = "SELECT COLUMN_NAME, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
+                DropDownListTables.SelectedItem.ToString() + "' AND COLUMN_NAME <> '" + DropDownListKey.SelectedItem.ToString() + " 'ORDER BY ORDINAL_POSITION";
+
+            objTable.Load(manager.GetQueryResult(sQueryTextExclude));
+
+            CheckBoxListInputColumns.DataSource = objTable;
+            CheckBoxListInputColumns.DataTextField = "COLUMN_NAME";
+            CheckBoxListInputColumns.DataValueField = "ORDINAL_POSITION";
+            CheckBoxListInputColumns.DataBind();
+
+            CheckBoxListPredictColumns.DataSource = objTable;
+            CheckBoxListPredictColumns.DataTextField = "COLUMN_NAME";
+            CheckBoxListPredictColumns.DataValueField = "ORDINAL_POSITION";
+            CheckBoxListPredictColumns.DataBind();
+
+            manager.CloseConnection();
         }
     }
 }

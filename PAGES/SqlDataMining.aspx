@@ -85,10 +85,12 @@
                 <asp:DropDownList ID="DropDownListSources" runat="server">
                 </asp:DropDownList>
                 <p>Select Input Table</p>
-                <asp:DropDownList ID="DropDownListTables" runat="server">
+                <asp:DropDownList ID="DropDownListTables" runat="server" AutoPostBack="True" 
+                    onselectedindexchanged="DropDownListTables_SelectedIndexChanged">
                 </asp:DropDownList>
                 <p>Select key column</p>
-                <asp:DropDownList ID="DropDownListKey" runat="server">
+                <asp:DropDownList ID="DropDownListKey" runat="server" AutoPostBack="True" 
+                    onselectedindexchanged="DropDownListKey_SelectedIndexChanged">
                     </asp:DropDownList>
                 <br />
                 <p>Select input columns</p>
