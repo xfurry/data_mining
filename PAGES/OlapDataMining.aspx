@@ -12,7 +12,7 @@
         <%-- Login --%>
         <div id="top_info">
             <p>
-                Bine ati venit la <b>Easy Data Miner</b> <span id="loginbutton"><a href="#" title="Log In">
+                Bine ati venit la <b>Easy Data Miner</b> <span id="loginbutton"><a href="#" title="Autentificare">
                     &nbsp;</a></span><br />
                 <b>Nu sunteti autentificat!</b> <a href="#">Autentificare</a> </p>
         </div>
@@ -63,10 +63,11 @@
         </div>
         <%-- Search form --%>
         <div id="search">
-            </div>
+            <form method="post" action="?">
             <p>
                 <input type="text" name="search" class="search" />
                 <input type="submit" value="Search" class="button" /></p>
+            </form>
         </div>
         <div id="left">
             <%-- Content Area --%>
@@ -106,7 +107,6 @@
                 <p></p>
             </div> --%>
         </div>
-        </form>
         <%-- Right Side --%>
         <div id="right">
             <div class="right_articles">

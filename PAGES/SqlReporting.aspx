@@ -12,7 +12,7 @@
         <%-- Login --%>
         <div id="top_info">
             <p>
-                Bine ati venit la <b>Easy Data Miner</b> <span id="loginbutton"><a href="#" title="Log In">
+                Bine ati venit la <b>Easy Data Miner</b> <span id="loginbutton"><a href="#" title="Autentificare">
                     &nbsp;</a></span><br />
                 <b>Nu sunteti autentificat!</b> <a href="#">Autentificare</a> </p>
         </div>
