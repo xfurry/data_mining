@@ -86,9 +86,6 @@ namespace WebApplication_OLAP.pages
             Microsoft.AnalysisServices.AdomdClient.MiningModel objModel = null;
             Microsoft.AnalysisServices.AdomdClient.MiningService objService = null;
 
-            // Todo: make this dynamic
-            //string sCatalog = "Adventure Works DW 2008";
-            //string sServer = "CLARITY-7HYGMQM\\ANA";
             string sConnString = "Data Source=" + sServer + "; Initial Catalog=" + sCatalog;
             Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection(sConnString);
 
@@ -191,26 +188,9 @@ namespace WebApplication_OLAP.pages
             {
                 LabelStatus.Text = LabelStatus.Text + "Success!";
                 LoadExistingStructures();
-
-                return;
             }
             else
                 LabelStatus.Text = LabelStatus.Text + "Failed!";
-
-
-
-            // create mining structure for the current data with the selected columns and key
-            // ToDo:
-
-            //SQLMiningManager objMiningManager = new SQLMiningManager();
-            // return mining result
-            //if (objMiningManager.CreateMiningStructureIfCan())
-            //{
-            //    LabelStatus.Text = LabelStatus.Text + "Success!";
-            //    LoadExistingStructures();
-            //}
-            //else
-            //    LabelStatus.Text = LabelStatus.Text + "Failed!";
         }
 
         /*
@@ -218,6 +198,7 @@ namespace WebApplication_OLAP.pages
          */
         protected void Button2_Click(object sender, EventArgs e)
         {
+            // Query uses mining model name!
             string sQuery = "select NODE_NAME, NODE_TYPE, ATTRIBUTE_NAME, " +
                 "[PARENT_UNIQUE_NAME], [CHILDREN_CARDINALITY], NODE_PROBABILITY, MARGINAL_PROBABILITY, NODE_SUPPORT, " +
                 "MSOLAP_MODEL_COLUMN, MSOLAP_NODE_SCORE from [" + DropDownListStructures.SelectedItem.ToString() + "].CONTENT";
@@ -231,6 +212,10 @@ namespace WebApplication_OLAP.pages
          */
         private void LoadExistingStructures()
         {
+            // reset list
+            DropDownListStructures.DataSource = null;
+            DropDownListStructures.DataBind();
+
             SQLMiningManager objMiningManager = new SQLMiningManager();
 
             List<string> lStructs = objMiningManager.GetExistingStructures(sCatalog);
@@ -326,9 +311,6 @@ namespace WebApplication_OLAP.pages
                 // name is always on index = 1
                 GridViewRow row = GridViewResults.Rows[index];
                 DisplayDistributionNode(row.Cells[1].Text);
-
-                // for remove
-                //LabelStatus.Text = row.Cells[5].Text;
             }
         }
 

@@ -70,7 +70,7 @@ namespace WebApplication_OLAP.classes.data_managers
                 MiningStructure currentStructure = CreateCustomMiningStructure(currentDB, sStructureName, sTableName, sKeyColumn, inputColumns, predictColumns);
 
                 // create a mining model for the selected structure
-                CreateCustomModel(currentStructure, sAlgorithm, sStructureName + "_Model", sKeyColumn);
+                CreateCustomModel(currentStructure, sAlgorithm, sStructureName, sKeyColumn);
 
                 // Process Database and structure
                 currentStructure.Process();
@@ -309,9 +309,15 @@ namespace WebApplication_OLAP.classes.data_managers
             {
                 case "smallint":
                 case "int":
+                case "tinyint":
+                case "money":
                     return MiningStructureColumnTypes.Long;
                 case "nvarchar":
                 case "nchar":
+                    return MiningStructureColumnTypes.Text;
+                case "datetime":
+                    return MiningStructureColumnTypes.Date;
+                case "bit":                                 // this is not correct, but we are not expecting such values
                     return MiningStructureColumnTypes.Text;
             }
 
@@ -321,19 +327,24 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Get current Datatype
          */
-        System.Data.OleDb.OleDbType GetColumnDataType(string sData)
+        OleDbType GetColumnDataType(string sData)
         {
             switch (sData)
             {
                 case "smallint":
                 case "int":
-                    return System.Data.OleDb.OleDbType.Integer;
+                case "tinyint":
+                case "datetime":
+                case "bit":
+                    return OleDbType.Integer;
                 case "nvarchar":
                 case "nchar":
-                    return System.Data.OleDb.OleDbType.WChar;
+                    return OleDbType.WChar;
+                case "money":
+                    return OleDbType.Currency;
             }
 
-            return System.Data.OleDb.OleDbType.Error;
+            return OleDbType.Error;
         }
 
         /*
