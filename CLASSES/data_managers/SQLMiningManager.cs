@@ -11,8 +11,10 @@ namespace WebApplication_OLAP.classes.data_managers
 {
     public class SQLMiningManager
     {
+        //private const string sCatalog = "Adventure Works DW 2008";
+        //private const string sServer = "CLARITY-7HYGMQM\\ANA";
         private const string sCatalog = "Adventure Works DW 2008";
-        private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        private const string sServer = "localhost";
 
         private string sStructureName = "MyMiningStructure";            // to be removed
         private string sModelName = "MyMiningModel";                    // to be removed
@@ -57,13 +59,35 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining structure based on selection
          */
-        public bool CreateMiningStructure(List<string> inputColumns, List<string> predictColumns, string sAlgorithm, string sTableName)
+        public bool CreateMiningStructure(List<string> inputColumns, List<string> predictColumns, string sAlgorithm, string sTableName, string sKeyColumn, string sStructureName)
         {
+            try
+            {
+                // Connect to the Analysis Service server
+                Database currentDB = GetCurrentDatabase(sCatalog);
 
+                // create a new mining structure
+                MiningStructure currentStructure = CreateCustomMiningStructure(currentDB, sStructureName, sTableName, sKeyColumn, inputColumns, predictColumns);
 
-            return true;
+                // create a mining model for the selected structure
+                CreateCustomModel(currentStructure, sAlgorithm, sStructureName + "_Model", sKeyColumn);
+
+                // Process Database and structure
+                currentStructure.Process();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+
+            return false;
         }
 
+        /*
+         * Return mining results from query
+         */
         public Microsoft.AnalysisServices.AdomdClient.AdomdDataReader GetMiningResults(string sQuery)
         {
             try
@@ -133,7 +157,7 @@ namespace WebApplication_OLAP.classes.data_managers
             {
                 Server srv = new Server();
                 srv.Connect("integrated security=SSPI;data source=" + sServer + ";persist security info=False;initial catalog=" + sCatalog);
-                Database myDB = srv.Databases["Adventure Works DW 2008"];
+                Database myDB = srv.Databases[sCatalog];
 
                 return myDB;
             }
@@ -206,6 +230,132 @@ namespace WebApplication_OLAP.classes.data_managers
             dataTable.ExtendedProperties.Add("DbTableName", tableName);
             dataTable.ExtendedProperties.Add("FriendlyName", tableName);
             dataTable.ExtendedProperties.Add("DataSourceID", dataSourceID);
+        }
+
+        /*
+         * Create mining structure with cusomt fields
+         */
+        private MiningStructure CreateCustomMiningStructure(Database objDatabase, string sStructName, string sTableName, string sKeyColumn, List<string> lsInputColumns, List<string> lsPredictColumns)
+        {
+            // drop the existing structures with the same name
+            DropExistingStructures(objDatabase, sStructName);
+
+            // Initialize a new mining structure
+            MiningStructure currentMiningStruct = new MiningStructure(sStructName, sStructName);
+            currentMiningStruct.Source = new DataSourceViewBinding("Adventure Works DW");
+
+            // get data type for the selected column
+            string sQueryText = "SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
+                sTableName + "' AND COLUMN_NAME = '" + sKeyColumn + "'";
+
+            // execute query
+            SQLManager manager = new SQLManager("AdventureWorksDW");
+            DataTable objTable = new DataTable();
+
+            // get column data type
+            objTable.Load(manager.GetQueryResult(sQueryText));
+            string sDataType = objTable.Rows[0][0].ToString();
+
+            manager.CloseConnection();
+
+            // create key column
+            ScalarMiningStructureColumn StructKey = new ScalarMiningStructureColumn(sKeyColumn, sKeyColumn);
+            StructKey.Type = GetColumnStructureType(sDataType);
+            StructKey.Content = MiningStructureColumnContents.Key;
+            StructKey.IsKey = true;
+            StructKey.KeyColumns.Add("dbo_" + sTableName, sKeyColumn, GetColumnDataType(sDataType));
+            currentMiningStruct.Columns.Add(StructKey);
+
+            // input columns
+            for (int i = 0; i < lsInputColumns.Count; i++)
+            {
+                // get data type for the selected column
+                sQueryText = "SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
+                    sTableName + "' AND COLUMN_NAME = '" + lsInputColumns[i] + "'";
+
+                // get column data type
+                objTable = new DataTable();
+                objTable.Load(manager.GetQueryResult(sQueryText));
+                sDataType = objTable.Rows[0][0].ToString();
+
+                // Generation column
+                ScalarMiningStructureColumn Input = new ScalarMiningStructureColumn(lsInputColumns[i], lsInputColumns[i]);
+                Input.Type = GetColumnStructureType(sDataType);
+                if (Input.Type == MiningStructureColumnTypes.Long)
+                    Input.Content = MiningStructureColumnContents.Continuous;
+                else
+                    Input.Content = MiningStructureColumnContents.Discrete;
+                // Add data binding to the column
+                Input.KeyColumns.Add("dbo_" + sTableName, lsInputColumns[i], GetColumnDataType(sDataType));
+                // Add the column to the mining structure
+                currentMiningStruct.Columns.Add(Input);
+
+                manager.CloseConnection();
+            }
+
+            // Add the mining structure to the database
+            objDatabase.MiningStructures.Add(currentMiningStruct);
+            currentMiningStruct.Update();
+
+            return currentMiningStruct;
+        }
+
+        /*
+         * Get column type depending on the db table column data type
+         */
+        string GetColumnStructureType(string sData)
+        {
+            switch (sData)
+            {
+                case "smallint":
+                case "int":
+                    return MiningStructureColumnTypes.Long;
+                case "nvarchar":
+                case "nchar":
+                    return MiningStructureColumnTypes.Text;
+            }
+
+            return null;
+        }
+
+        /*
+         * Get current Datatype
+         */
+        System.Data.OleDb.OleDbType GetColumnDataType(string sData)
+        {
+            switch (sData)
+            {
+                case "smallint":
+                case "int":
+                    return System.Data.OleDb.OleDbType.Integer;
+                case "nvarchar":
+                case "nchar":
+                    return System.Data.OleDb.OleDbType.WChar;
+            }
+
+            return System.Data.OleDb.OleDbType.Error;
+        }
+
+        /*
+         * Create mining model with custom fields and algorithm
+         */
+        private void CreateCustomModel(MiningStructure objStructure, string sAlgorithm, string sModelName, string sKeyColumn)
+        {
+            DropExistingMiningModels(objStructure, sModelName);
+
+            switch (sAlgorithm)
+            {
+                case MiningModelAlgorithms.MicrosoftClustering:
+                    MiningModel ClusterModel;
+
+                    ClusterModel = objStructure.CreateMiningModel(true, sModelName);
+                    ClusterModel.Algorithm = sAlgorithm;
+                    ClusterModel.AlgorithmParameters.Add("CLUSTER_COUNT", 0);
+
+                    ClusterModel.Update();
+
+                    break;
+            }
         }
 
         /*

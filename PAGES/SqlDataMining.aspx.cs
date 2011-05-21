@@ -14,6 +14,11 @@ namespace WebApplication_OLAP.pages
 {
     public partial class SqlDataMining : System.Web.UI.Page
     {
+        //private const string sCatalog = "Adventure Works DW 2008";
+        //private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        private const string sCatalog = "Adventure Works DW 2008";
+        private const string sServer = "localhost";
+
         private List<string> lNodesNames = new List<string>();
 
         protected void Page_Load(object sender, EventArgs e)
@@ -82,8 +87,8 @@ namespace WebApplication_OLAP.pages
             Microsoft.AnalysisServices.AdomdClient.MiningService objService = null;
 
             // Todo: make this dynamic
-            string sCatalog = "Adventure Works DW 2008";
-            string sServer = "CLARITY-7HYGMQM\\ANA";
+            //string sCatalog = "Adventure Works DW 2008";
+            //string sServer = "CLARITY-7HYGMQM\\ANA";
             string sConnString = "Data Source=" + sServer + "; Initial Catalog=" + sCatalog;
             Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection(sConnString);
 
@@ -149,20 +154,24 @@ namespace WebApplication_OLAP.pages
             foreach (ListItem objItem in CheckBoxListInputColumns.Items)
             {
                 if (objItem.Selected)
-                    lsInputItems.Add(objItem.Value.ToString());
+                    lsInputItems.Add(objItem.Text);
             }
 
             foreach (ListItem objItem in CheckBoxListPredictColumns.Items)
             {
                 if (objItem.Selected)
-                    lsPredictItems.Add(objItem.Value.ToString());
+                    lsPredictItems.Add(objItem.Text);
             }
 
-            if (lsPredictItems.Count == 0 || lsInputItems.Count == 0)
+            if (lsInputItems.Count == 0)
             {
                 LabelStatus.Text = LabelStatus.Text + "Please select at least one input column!";
                 return;
             }
+
+            string sStructName = TextBoxName.Text;
+            if (sStructName == "")
+                sStructName = "MyMiningStructure";
 
             string objAlgorithm = null;
 
@@ -177,7 +186,8 @@ namespace WebApplication_OLAP.pages
             SQLMiningManager objMiningManager = new SQLMiningManager();
 
             // Create mining query from the existing results
-            if (objMiningManager.CreateMiningStructure(lsInputItems, lsPredictItems, objAlgorithm, DropDownListTables.SelectedItem.Value.ToString()))
+            if (objMiningManager.CreateMiningStructure(lsInputItems, lsPredictItems, objAlgorithm,
+                DropDownListTables.SelectedItem.Text, DropDownListKey.SelectedItem.Text, sStructName))
             {
                 LabelStatus.Text = LabelStatus.Text + "Success!";
                 LoadExistingStructures();
@@ -189,28 +199,18 @@ namespace WebApplication_OLAP.pages
 
 
 
-            // get selected key column and selected input columns
-            string sKeyColumn = DropDownListKey.SelectedItem.ToString();
-            List<string> lInputColumns = new List<string>();
-
-            for (int i = 0; i < CheckBoxListInputColumns.Items.Count; i++)
-            {
-                if (CheckBoxListInputColumns.Items[i].Selected)
-                    lInputColumns.Add(CheckBoxListInputColumns.Items[i].ToString());
-            }
-
             // create mining structure for the current data with the selected columns and key
             // ToDo:
 
             //SQLMiningManager objMiningManager = new SQLMiningManager();
             // return mining result
-            if (objMiningManager.CreateMiningStructureIfCan())
-            {
-                LabelStatus.Text = LabelStatus.Text + "Success!";
-                LoadExistingStructures();
-            }
-            else
-                LabelStatus.Text = LabelStatus.Text + "Failed!";
+            //if (objMiningManager.CreateMiningStructureIfCan())
+            //{
+            //    LabelStatus.Text = LabelStatus.Text + "Success!";
+            //    LoadExistingStructures();
+            //}
+            //else
+            //    LabelStatus.Text = LabelStatus.Text + "Failed!";
         }
 
         /*
@@ -233,7 +233,7 @@ namespace WebApplication_OLAP.pages
         {
             SQLMiningManager objMiningManager = new SQLMiningManager();
 
-            List<string> lStructs = objMiningManager.GetExistingStructures("Adventure Works DW 2008");
+            List<string> lStructs = objMiningManager.GetExistingStructures(sCatalog);
 
             for (int i = 0; i < lStructs.Count; i++)
                 DropDownListStructures.Items.Add(lStructs[i].ToString());

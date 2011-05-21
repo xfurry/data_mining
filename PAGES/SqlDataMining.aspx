@@ -75,7 +75,11 @@
                 <h2>
                     Options
                 </h2>
-                <p>Select Algorithm</p>
+                <p>Structure Name
+                </p>
+                <asp:TextBox ID="TextBoxName" runat="server"></asp:TextBox>
+                <p>Select Algorithm
+                </p>
                 <asp:DropDownList ID="DropDownListAlgorithm" runat="server">
                     <asp:ListItem>Clustering</asp:ListItem>
                     <asp:ListItem>Decision Trees</asp:ListItem>
