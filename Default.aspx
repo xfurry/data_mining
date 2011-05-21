@@ -1,102 +1,182 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="WebApplication_OLAP.Default" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="WebApplication_OLAP.Default" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Data Miner</title>
-    <link rel="Stylesheet" href="style.css" type="text/css" media="screen" />
+    <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="author" content="Radu Cantor" />
+    <meta name="description" content="Data Mining" />
+    <meta name="keywords" content="Data Mining" />
 </head>
 <body>
     <form id="form1" runat="server">
-    <div id="page">
-        <div id="header">
+    <div id="content">
+        <%-- Login --%>
+        <div id="top_info">
+            <p>
+                Bine ati venit la <b>Easy Data Miner</b> <span id="loginbutton"><a href="#" title="Log In">
+                    &nbsp;</a></span><br />
+                <b>Nu sunteti autentificat!</b> <a href="#">Autentificare</a> </p>
+        </div>
+        <%-- Logo --%>
+        <div id="logo">
             <h1>
-                <a href="#">Data Miner</a>
-            </h1>
-            <div class="description">
-                Data Mining software
-             </div>
+                <a href="#" title="Noi scoatem datele la lumina.">Easy Data Miner</a></h1>
+            <p id="slogan">
+                Noi scoatem datele la lumina.</p>
         </div>
-        <div id="mainarea">
-            <div id="contentarea">
-                <h2>
-                    WELCOME
-                </h2>
-                Greysleek is a CSS template that is free and fully standards compliant. <a href="http://www.free-css-templates.com/">
-                    Free CSS Templates</a> designed this template. This template is allowed for
-                all uses, including commercial use, as it is released under the <strong>Creative Commons
-                    Attributions 2.5</strong> license. The only stipulation to the use of this free
-                template is that the links appearing in the footer remain intact. Beyond that, simply
-                enjoy and have fun with it!
-                <br/>
-                <br/>
-                Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-                esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit.
-                <br/>
-                <br/>
-                Anim id est laborum adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                <br/>
-                <br/>
-                Lorem ipsum <a href="#">link</a> dolor sit amet, consectetur adipisicing elit, sed
-                do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                <br/>
-                <br/>
-                Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-                esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum adipisicing
-                elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
+        <%-- Tab links --%>
+        <ul id="tablist">
+            <li>
+                <a class="current" href="Default.aspx" accesskey="h"><span class="key">H</span>ome </a>
+            </li>
+            <li>
+                <a href="pages\SqlDataMining.aspx" accesskey="m"><span class="key">M</span>ining relational </a>
+            </li>
+            <li>
+                <a href="pages\OlapDataMining.aspx" accesskey="o"><span class="key">M</span>ining OLAP </a>
+            </li>
+            <li>
+                <a href="pages\SqlReporting.aspx" accesskey="e"><span class="key">R</span>aportare relationala </a>
+            </li>
+            <li>
+                <a href="pages\OlapReporting.aspx" accesskey="r"><span class="key">R</span>aportare OLAP </a>
+            </li>
+        </ul>
+        <%-- Topic list --%>
+        <div id="topics">
+            <div class="thirds">
+                <p>
+                    <br />
+                    Anunturi importante:</p>
             </div>
-            <div id="sidebar">
-                <div id="sidebarnav">
-                    <a class="active" href="Default.aspx"><span>Home</span></a>
-                    <asp:HyperLink ID="HyperLinkOlap" runat="server" 
-                        NavigateUrl="~/pages/OlapReporting.aspx" Visible="False"><span>Olap Report</span></asp:HyperLink>
-                    <asp:HyperLink ID="HyperLinkSql" runat="server" 
-                        NavigateUrl="~/pages/SqlReporting.aspx" Visible="False"><span>Sql Report</span></asp:HyperLink>
-                    <a href="#"><span>Contact Us</span></a>
-                </div>
-                <h2>
-                    Login
-                </h2>
-                User name:
-                <br />
-                <asp:TextBox ID="TextBoxUserName" runat="server"></asp:TextBox>
-                <br />
-                <br />
-                Password:
-                <br />
-                <asp:TextBox ID="TextBoxPassword" runat="server" TextMode="Password"></asp:TextBox>
-                <br />
-                <br />
-                <asp:Button ID="ButtonLogin" runat="server" Text="Login" 
-                    onclick="ButtonLogin_Click" />
-                <br />
-                <br />
-                <asp:Label ID="LabelLogin" runat="server" Text=""></asp:Label>
+            <div class="thirds">
+                <ul>
+                    <li><a href="#">Conducting a CMS Survey</a></li>
+                    <li><a href="#">Interests behind politics</a></li>
+                </ul>
+            </div>
+            <div class="thirds">
+                <ul>
+                    <li><a href="#">How stress affects your health</a></li>
+                    <li><a href="#">10 ways to buy a used car</a></li>
+                </ul>
             </div>
         </div>
+        <%-- Search form --%>
+        <div id="search">
+            <form method="post" action="?">
+            <p>
+                <input type="text" name="search" class="search" />
+                <input type="submit" value="Search" class="button" /></p>
+            </form>
+        </div>
+        <div id="left">
+            <%-- Content Area --%>
+            <div class="subheader">
+                <p>
+                    <a href="#">Lorem ipsum dolor</a> sit amet, consectetuer adipiscing elit, sed diam
+                    nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut
+                    wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis
+                    nisl ut aliquip ex.</p>
+            </div>
+            <div class="left_articles">
+                <h2>
+                    Bine ati venit la Easy Data Miner</h2>
+                <p class="date">
+                    Posted on 8th September</p>
+                <img class="bigimage" src="images/bigimage.gif" alt="Big Image" />
+                <p>
+                    <a href="#">Lorem ipsum dolor sit amet</a>, consectetuer adipiscing elit, sed diam
+                    nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. <a
+                        href="#">Ut wisi enim ad minim veniam</a>, quis nostrud exerci tation ullamcorper
+                    suscipit lobortis nisl ut aliquip ex.</p>
+                <p>
+                    <a href="#">Lorem ipsum dolor sit amet</a>, consectetuer adipiscing elit, sed diam
+                    nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. <a
+                        href="#">Ut wisi enim ad minim veniam</a>, quis nostrud exerci tation ullamcorper
+                    suscipit lobortis nisl ut aliquip ex.</p>
+            </div>
+            <div class="left_box">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
+                    euismod tincidunt ut laoreet dolore.</p>
+            </div>
+            <%-- Downpage boxes --%>
+            <div class="thirds">
+                <p>
+                    <b><a href="#" class="title">Web 2.0 business startup tips</a></b><br />
+                    Lorem ipsum dolor sit amet esta pa, consectetuer adipiscing elit, sed diam nonummy
+                    nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
+                    ad minim veniam, quis nostrud exerci. <a href="#">
+                        <img src="images/comment.gif" alt="Comment" /></a></p>
+            </div>
+            <div class="thirds">
+                <p>
+                    <b><a href="http://andreasviklund.com/templates/" class="title">Visualize your website</a></b><br />
+                    Lorem ipsum dolor sit amet esta pa, consectetuer adipiscing elit, sed diam nonummy
+                    nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
+                    ad minim veniam, quis nostrud exerci. <a href="#">
+                        <img src="images/comment.gif" alt="Comment" /></a></p>
+            </div>
+            <div class="thirds">
+                <p>
+                    <b><a href="http://snews.solucija.com/" class="title">Manage your content</a></b><br />
+                    Lorem ipsum dolor sit amet esta pa, consectetuer adipiscing elit, sed diam nonummy
+                    nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
+                    ad minim veniam, quis nostrud exerci. <a href="#">
+                        <img src="images/comment.gif" alt="Comment" /></a></p>
+            </div>
+        </div>
+        <%-- Right Side --%>
+        <div id="right">
+            <div class="right_articles">
+                <p>
+                    <img src="images/image.gif" alt="Image" title="Image" class="image" /><b>Lorem ipsum
+                        dolor sit amet</b><br />
+                    consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
+                    dolore magna aliquam <a href="#">erat volutpat</a>. Ut wisi enim ad minim veniam,
+                    quis nostrud exerci tation ullamcorper suscipit lobortis <a href="#">nisl ut aliquip
+                        ex</a>.</p>
+            </div>
+            <div class="right_articles">
+                <p>
+                    <img src="images/image.gif" alt="Image" title="Image" class="image" /><b>Lorem ipsum
+                        dolor sit amet</b><br />
+                    consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
+                    dolore magna aliquam <a href="#">erat volutpat</a>. Ut wisi enim ad minim veniam,
+                    quis nostrud exerci tation ullamcorper suscipit lobortis <a href="#">nisl ut aliquip
+                        ex</a>.</p>
+            </div>
+            <div class="right_articles">
+                <p>
+                    <img src="images/image.gif" alt="Image" title="Image" class="image" /><b>Lorem ipsum
+                        dolor sit amet</b><br />
+                    consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
+                    dolore magna aliquam <a href="#">erat volutpat</a>. Ut wisi enim ad minim veniam,
+                    quis nostrud exerci tation ullamcorper suscipit lobortis <a href="#">nisl ut aliquip
+                        ex</a>.</p>
+            </div>
+            <div class="notes">
+                <p>
+                    If you liked this template you might like some other CSS templates from <a href="http://www.solucija.com/">
+                        Solucija</a>.</p>
+            </div>
+        </div>
+        <%-- Footer --%>
         <div id="footer">
-            <a href="http://www.templatesold.com/" target="_blank">Website Templates</a> by
-            <a href="http://www.free-css-templates.com/" target="_blank">Free CSS Templates</a>
+            <p class="right">
+                &copy; 2011 Easy Data Mining, Design: Radu Cantor, <a title="Awsome Web Templates"
+                    href="http://www.solucija.com/">Solucija</a></p>
+            <p>
+                <a href="#">RSS Feed</a> &middot; <a href="#">Contact</a> &middot; <a href="#">Accessibility</a>
+                &middot; <a href="#">Products</a> &middot; <a href="#">Disclaimer</a> &middot; <a
+                    href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> and <a href="http://validator.w3.org/check?uri=referer">
+                        XHTML</a><br />
+            </p>
         </div>
     </div>
     </form>

@@ -16,9 +16,7 @@ namespace WebApplication_OLAP
 
         protected void ButtonLogin_Click(object sender, EventArgs e)
         {
-            LabelLogin.Text = "Login Success!";
-            HyperLinkOlap.Visible = true;
-            HyperLinkSql.Visible = true;
+            // Nothing here :)
         }
     }
 }
