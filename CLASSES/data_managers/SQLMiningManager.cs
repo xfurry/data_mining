@@ -19,6 +19,14 @@ namespace WebApplication_OLAP.classes.data_managers
         private string sStructureName = "MyMiningStructure";            // to be removed
         private string sModelName = "MyMiningModel";                    // to be removed
 
+        private string sMiningError = "";
+
+        public string SMiningError
+        {
+            get { return sMiningError; }
+            set { sMiningError = value; }
+        }
+
         public bool CreateMiningStructureIfCan()
         {
             try
@@ -51,6 +59,7 @@ namespace WebApplication_OLAP.classes.data_managers
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
+                SMiningError = e.StackTrace;
             }
 
             return false;
@@ -67,10 +76,10 @@ namespace WebApplication_OLAP.classes.data_managers
                 Database currentDB = GetCurrentDatabase(sCatalog);
 
                 // create a new mining structure
-                MiningStructure currentStructure = CreateCustomMiningStructure(currentDB, sStructureName, sTableName, sKeyColumn, inputColumns, predictColumns);
+                MiningStructure currentStructure = CreateCustomMiningStructure(currentDB, sStructureName, sTableName, sKeyColumn, inputColumns, predictColumns, sAlgorithm);
 
                 // create a mining model for the selected structure
-                CreateCustomModel(currentStructure, sAlgorithm, sStructureName, sKeyColumn);
+                CreateCustomModel(currentStructure, sAlgorithm, sStructureName, sKeyColumn, predictColumns);
 
                 // Process Database and structure
                 currentStructure.Process();
@@ -235,13 +244,15 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining structure with cusomt fields
          */
-        private MiningStructure CreateCustomMiningStructure(Database objDatabase, string sStructName, string sTableName, string sKeyColumn, List<string> lsInputColumns, List<string> lsPredictColumns)
+        private MiningStructure CreateCustomMiningStructure(Database objDatabase, string sStructName, string sTableName, string sKeyColumn, List<string> lsInputColumns, List<string> lsPredictColumns, string sAlgorithm)
         {
             // drop the existing structures with the same name
-            DropExistingStructures(objDatabase, sStructName);
+            MiningStructure currentMiningStruct = objDatabase.MiningStructures.FindByName(sStructName);
+            if (currentMiningStruct != null)
+                currentMiningStruct.Drop();
 
             // Initialize a new mining structure
-            MiningStructure currentMiningStruct = new MiningStructure(sStructName, sStructName);
+            currentMiningStruct = new MiningStructure(sStructName, sStructName);
             currentMiningStruct.Source = new DataSourceViewBinding("Adventure Works DW");
 
             // get data type for the selected column
@@ -281,12 +292,49 @@ namespace WebApplication_OLAP.classes.data_managers
                 // Generation column
                 ScalarMiningStructureColumn Input = new ScalarMiningStructureColumn(lsInputColumns[i], lsInputColumns[i]);
                 Input.Type = GetColumnStructureType(sDataType);
+                // for time series algorithm
+                if (sDataType == "datetime" && sAlgorithm == MiningModelAlgorithms.MicrosoftTimeSeries)
+                {
+                    Input.IsKey = true;
+                    Input.Content = MiningStructureColumnContents.KeyTime;
+                }
+                else
+                {
+                    if (Input.Type == MiningStructureColumnTypes.Long)
+                        Input.Content = MiningStructureColumnContents.Continuous;
+                    else
+                        Input.Content = MiningStructureColumnContents.Discrete;
+                }
+                // Add data binding to the column
+                Input.KeyColumns.Add("dbo_" + sTableName, lsInputColumns[i], GetColumnDataType(sDataType));
+                // Add the column to the mining structure
+                currentMiningStruct.Columns.Add(Input);
+
+                manager.CloseConnection();
+            }
+
+            // add predict columns
+            // input columns
+            for (int i = 0; i < lsPredictColumns.Count; i++)
+            {
+                // get data type for the selected column
+                sQueryText = "SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
+                    sTableName + "' AND COLUMN_NAME = '" + lsPredictColumns[i] + "'";
+
+                // get column data type
+                objTable = new DataTable();
+                objTable.Load(manager.GetQueryResult(sQueryText));
+                sDataType = objTable.Rows[0][0].ToString();
+
+                // Generation column
+                ScalarMiningStructureColumn Input = new ScalarMiningStructureColumn(lsPredictColumns[i] + "_Predict", lsPredictColumns[i] + "_Predict");
+                Input.Type = GetColumnStructureType(sDataType);
                 if (Input.Type == MiningStructureColumnTypes.Long)
                     Input.Content = MiningStructureColumnContents.Continuous;
                 else
                     Input.Content = MiningStructureColumnContents.Discrete;
                 // Add data binding to the column
-                Input.KeyColumns.Add("dbo_" + sTableName, lsInputColumns[i], GetColumnDataType(sDataType));
+                Input.KeyColumns.Add("dbo_" + sTableName, lsPredictColumns[i], GetColumnDataType(sDataType));
                 // Add the column to the mining structure
                 currentMiningStruct.Columns.Add(Input);
 
@@ -314,11 +362,12 @@ namespace WebApplication_OLAP.classes.data_managers
                     return MiningStructureColumnTypes.Long;
                 case "nvarchar":
                 case "nchar":
+                case "bit":                                 // this is not correct, but we are not expecting such values
                     return MiningStructureColumnTypes.Text;
                 case "datetime":
                     return MiningStructureColumnTypes.Date;
-                case "bit":                                 // this is not correct, but we are not expecting such values
-                    return MiningStructureColumnTypes.Text;
+                case "float":
+                    return MiningStructureColumnTypes.Double;
             }
 
             return null;
@@ -342,6 +391,8 @@ namespace WebApplication_OLAP.classes.data_managers
                     return OleDbType.WChar;
                 case "money":
                     return OleDbType.Currency;
+                case "float":
+                    return OleDbType.Double;
             }
 
             return OleDbType.Error;
@@ -350,22 +401,112 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining model with custom fields and algorithm
          */
-        private void CreateCustomModel(MiningStructure objStructure, string sAlgorithm, string sModelName, string sKeyColumn)
+        private void CreateCustomModel(MiningStructure objStructure, string sAlgorithm, string sModelName, string sKeyColumn, List<string> lPredictColumns)
         {
-            DropExistingMiningModels(objStructure, sModelName);
+            // drop existing model
+            if (objStructure.MiningModels.ContainsName(sModelName))
+                objStructure.MiningModels[sModelName].Drop();
+
+            // Detailed description of the model algorithms is here:
+            // http://msdn.microsoft.com/en-us/library/ms175595.aspx
+
+            // More customisation for these algorithms can be found here:
+            // http://msdn.microsoft.com/en-us/library/cc280427.aspx
+
+            // Also a model example can be found here:
+            // http://msdn.microsoft.com/en-us/library/ms345087(v=SQL.100).aspx
 
             switch (sAlgorithm)
             {
                 case MiningModelAlgorithms.MicrosoftClustering:
+                {
                     MiningModel ClusterModel;
 
                     ClusterModel = objStructure.CreateMiningModel(true, sModelName);
                     ClusterModel.Algorithm = sAlgorithm;
                     ClusterModel.AlgorithmParameters.Add("CLUSTER_COUNT", 0);
 
+                    // add optional predict columns
+                    if (lPredictColumns.Count != 0)
+                    {
+                        // predict columns
+                        for (int i = 0; i < lPredictColumns.Count; i++)
+                        {
+                            MiningModelColumn modelColumn = ClusterModel.Columns.Add(lPredictColumns[i] + "_Predict_Model");
+                            modelColumn.SourceColumnID = lPredictColumns[i] + "_Predict";
+                            modelColumn.Usage = MiningModelColumnUsages.Predict;
+                        }
+                    }
+
                     ClusterModel.Update();
 
                     break;
+                }
+                case MiningModelAlgorithms.MicrosoftTimeSeries:
+                {
+                    MiningModel TimeModel = objStructure.CreateMiningModel(true, sModelName);
+                    TimeModel.Algorithm = MiningModelAlgorithms.MicrosoftTimeSeries;
+                    TimeModel.AlgorithmParameters.Add("PERIODICITY_HINT", "{12}");              // {12} represents the number of months for prediction
+
+                    // predict columns
+                    for (int i = 0; i < lPredictColumns.Count; i++)
+                    {
+                        MiningModelColumn modelColumn = TimeModel.Columns.Add(lPredictColumns[i] + "_Predict_Model");
+                        modelColumn.SourceColumnID = lPredictColumns[i] + "_Predict";
+                        modelColumn.Usage = MiningModelColumnUsages.Predict;
+                    }
+
+                    // The model should also have a key but for some reason it doesn't work
+                    //MiningModelColumn keyColumn = TimeModel.Columns.Add(sKeyColumn + "_Key");
+                    //keyColumn.SourceColumnID = sKeyColumn;
+                    //keyColumn.Usage = MiningModelColumnUsages.Key;
+
+                    TimeModel.Update();
+
+                    break;
+                }
+                case MiningModelAlgorithms.MicrosoftNaiveBayes:
+                {
+                    MiningModel NaiveBayesModel = objStructure.CreateMiningModel(true, sModelName);
+                    NaiveBayesModel.Algorithm = MiningModelAlgorithms.MicrosoftNaiveBayes;
+
+                    // predict columns
+                    for (int i = 0; i < lPredictColumns.Count; i++)
+                    {
+                        MiningModelColumn modelColumn = NaiveBayesModel.Columns.Add(lPredictColumns[i] + "_Predict_Model");
+                        modelColumn.SourceColumnID = lPredictColumns[i] + "_Predict";
+                        modelColumn.Usage = MiningModelColumnUsages.Predict;
+                    }
+
+                    //MiningModelColumn keyColumn = NaiveBayesModel.Columns.Add(sKeyColumn);
+                    //keyColumn.SourceColumnID = sKeyColumn;
+                    //keyColumn.Usage = MiningModelColumnUsages.Key;
+
+                    NaiveBayesModel.Update();
+
+                    break;
+                }
+                case MiningModelAlgorithms.MicrosoftDecisionTrees:
+                {
+                    MiningModel TreeModel = objStructure.CreateMiningModel(true, sModelName);
+                    TreeModel.Algorithm = MiningModelAlgorithms.MicrosoftDecisionTrees;
+
+                    // predict columns
+                    for (int i = 0; i < lPredictColumns.Count; i++)
+                    {
+                        MiningModelColumn modelColumn = TreeModel.Columns.Add(lPredictColumns[i] + "_Predict_Model");
+                        modelColumn.SourceColumnID = lPredictColumns[i] + "_Predict";
+                        modelColumn.Usage = MiningModelColumnUsages.Predict;
+                    }
+
+                    //MiningModelColumn keyColumn = TreeModel.Columns.Add(sKeyColumn);
+                    //keyColumn.SourceColumnID = sKeyColumn;
+                    //keyColumn.Usage = MiningModelColumnUsages.Key;
+
+                    TreeModel.Update();
+
+                    break;
+                }
             }
         }
 

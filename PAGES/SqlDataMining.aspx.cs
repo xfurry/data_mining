@@ -160,12 +160,6 @@ namespace WebApplication_OLAP.pages
                     lsPredictItems.Add(objItem.Text);
             }
 
-            if (lsInputItems.Count == 0)
-            {
-                LabelStatus.Text = LabelStatus.Text + "Please select at least one input column!";
-                return;
-            }
-
             string sStructName = TextBoxName.Text;
             if (sStructName == "")
                 sStructName = "MyMiningStructure";
@@ -179,6 +173,25 @@ namespace WebApplication_OLAP.pages
                 objAlgorithm = MiningModelAlgorithms.MicrosoftDecisionTrees;
             else if (DropDownListAlgorithm.SelectedIndex == 2)
                 objAlgorithm = MiningModelAlgorithms.MicrosoftNaiveBayes;
+            else if (DropDownListAlgorithm.SelectedIndex == 3)
+                objAlgorithm = MiningModelAlgorithms.MicrosoftTimeSeries;
+
+            // warn at missing input column
+            if (lsInputItems.Count == 0)
+            {
+                LabelStatus.Text = LabelStatus.Text + "Please select at least one input column!";
+                return;
+            }
+
+            // warn at prediction column missing for naive bayes and decision trees
+            if (objAlgorithm == MiningModelAlgorithms.MicrosoftNaiveBayes || objAlgorithm == MiningModelAlgorithms.MicrosoftDecisionTrees)
+            {
+                if (lsInputItems.Count == 0 || lsPredictItems.Count == 0)
+                {
+                    LabelStatus.Text = LabelStatus.Text + "Please select at least one input column and at least one prediction column!";
+                    return;
+                }
+            }
 
             SQLMiningManager objMiningManager = new SQLMiningManager();
 
@@ -190,7 +203,7 @@ namespace WebApplication_OLAP.pages
                 LoadExistingStructures();
             }
             else
-                LabelStatus.Text = LabelStatus.Text + "Failed!";
+                LabelStatus.Text = LabelStatus.Text + "Failed!\r\n" + objMiningManager.SMiningError;
         }
 
         /*
