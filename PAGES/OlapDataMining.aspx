@@ -3,118 +3,141 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Data Miner</title>
+    <title>Easy Data Miner</title>
     <link rel="Stylesheet" href="../style.css" type="text/css" media="screen" />
 </head>
 <body>
     <form id="form1" runat="server">
-    <div id="page">
-        <div id="header">
-            <h1>
-                <a href="#">Data Miner</a></h1>
-            <div class="description">
-                Mining reporting</div>
+    <div id="content">
+        <%-- Login --%>
+        <div id="top_info">
+            <p>
+                Bine ati venit la <b>Easy Data Miner</b> <span id="loginbutton"><a href="#" title="Log In">
+                    &nbsp;</a></span><br />
+                <b>Nu sunteti autentificat!</b> <a href="#">Autentificare</a> </p>
         </div>
-        <div id="mainarea">
-            <div id="contentarea">
+        <%-- Logo --%>
+        <div id="logo">
+            <h1>
+                <a href="#" title="Noi scoatem datele la lumina.">Easy Data Miner</a></h1>
+            <p id="slogan">
+                Noi scoatem datele la lumina.</p>
+        </div>
+        <%-- Tab links --%>
+        <ul id="tablist">
+            <li>
+                <a href="../Default.aspx" accesskey="h"><span class="key">H</span>ome </a>
+            </li>
+            <li>
+                <a href="SqlDataMining.aspx" accesskey="m"><span class="key">M</span>ining relational </a>
+            </li>
+            <li>
+                <a class="current" href="OlapDataMining.aspx" accesskey="o"><span class="key">M</span>ining OLAP </a>
+            </li>
+            <li>
+                <a href="SqlReporting.aspx" accesskey="e"><span class="key">R</span>aportare relationala </a>
+            </li>
+            <li>
+                <a href="OlapReporting.aspx" accesskey="r"><span class="key">R</span>aportare OLAP </a>
+            </li>
+        </ul>
+        <%-- Topic list --%>
+        <div id="topics">
+            <div class="thirds">
+                <p>
+                    <br />
+                    Anunturi importante:</p>
+            </div>
+            <div class="thirds">
+                <ul>
+                    <li><a href="#">Conducting a CMS Survey</a></li>
+                    <li><a href="#">Interests behind politics</a></li>
+                </ul>
+            </div>
+            <div class="thirds">
+                <ul>
+                    <li><a href="#">How stress affects your health</a></li>
+                    <li><a href="#">10 ways to buy a used car</a></li>
+                </ul>
+            </div>
+        </div>
+        <%-- Search form --%>
+        <div id="search">
+            </div>
+            <p>
+                <input type="text" name="search" class="search" />
+                <input type="submit" value="Search" class="button" /></p>
+        </div>
+        <div id="left">
+            <%-- Content Area --%>
+            <div class="subheader">
+                <p>
+                    <asp:Button ID="ButtonStructure" runat="server" 
+                        Text="Creaza structura de mining" onclick="ButtonStructure_Click" />
+                    <asp:Label ID="LabelStatus" runat="server" Text="Rezultatul procesului:"></asp:Label>
+                </p>
+            </div>
+            <div class="left_articles">
                 <h2>
-                    WELCOME
-                </h2>
-                <asp:Button ID="Button2" runat="server" onclick="Button2_Click" Text="Button" />
-                <br />
-                <br />
-                <br />
-                <div style="width: 536px; height: 227px; overflow: auto;">
-                    <asp:GridView ID="GridView1" runat="server">
+                    Rezultatele procesului de mining</h2>
+                <p class="date">
+                    Posted on 8th September</p>
+                <div style="width: 600px; height: 230px; overflow: auto;">
+                    <asp:GridView ID="GridViewMain" runat="server" Height="225px" Width="595px">
                     </asp:GridView>
                 </div>
-                <br />
-                <br />
-                <br />
-                <br />
-                Greysleek is a CSS template that is free and fully standards compliant. <a href="http://www.free-css-templates.com/">
-                    Free CSS Templates</a> designed this template. This template is allowed for
-                all uses, including commercial use, as it is released under the <strong>Creative Commons
-                    Attributions 2.5</strong> license. The only stipulation to the use of this free
-                template is that the links appearing in the footer remain intact. Beyond that, simply
-                enjoy and have fun with it!
-                <br />
-                <br />
-                Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-                esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit.
-                <br />
-                <br />
-                Anim id est laborum adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                <br />
-                <br />
-                Lorem ipsum <a href="#">link</a> dolor sit amet, consectetur adipisicing elit, sed
-                do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                <br />
-                <br />
-                Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-                esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum adipisicing
-                elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
             </div>
-            <div id="sidebar">
-                <div id="sidebarnav">
-                    <a class="active" href="../Default.aspx"><span>Home</span></a>
-                    <a href="#"><span>Services</span></a>
-                    <a href="#"><span>Pricing</span></a>
-                    <a href="#"><span>Contact Us</span></a>
-                </div>
-                <h2>
-                    TESTIMONIALS</h2>
-                Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                <br />
-                <br />
-                Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                <br />
-                <br />
-                <strong>Joe Bloggs</strong>
-                <br />
-                <asp:ScriptManager ID="ScriptManager1" runat="server">
-                </asp:ScriptManager>
-                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-                    <ContentTemplate>
-                        <asp:Button ID="Button1" runat="server" Text="Button" onclick="Button1_Click" />
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-                <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
-                <br />
-                <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="UpdatePanel1">
-                    <ProgressTemplate>
-                        <strong>Please wait...</strong>
-                    </ProgressTemplate>
-                </asp:UpdateProgress>
+            <div class="left_box">
+                <p>
+                    Pentru interogari complexe va rugam sa folositi casuta de mai jos:
+                    &nbsp &nbsp &nbsp<asp:Button ID="ButtonExecute" runat="server" Text="Executa interogarea" />
+                </p>
+                <asp:TextBox ID="TextBoxQuery" runat="server" Height="70px" TextMode="MultiLine"
+                    Width="600px"></asp:TextBox>
+            </div>
+            <%-- Downpage boxes
+            <div class="thirds">
+                <p></p>
+            </div>
+            <div class="thirds">
+                <p></p>
+            </div>
+            <div class="thirds">
+                <p></p>
+            </div> --%>
+        </div>
+        </form>
+        <%-- Right Side --%>
+        <div id="right">
+            <div class="right_articles">
+                <p>
+                    Lista de cuburi: ToDo:</p>
+            </div>
+            <div class="right_articles">
+                <p>
+                    Lista de dimensiuni: ToDo:</p>
+            </div>
+            <div class="right_articles">
+                <p>
+                    Lista de membrii: ToDo:</p>
+            </div>
+            <div class="notes">
+                <p>
+                    If you liked this template you might like some other CSS templates from <a href="http://www.solucija.com/">
+                        Solucija</a>.</p>
             </div>
         </div>
+        <%-- Footer --%>
         <div id="footer">
-            <a href="http://www.templatesold.com/" target="_blank">Website Templates</a> by
-            <a href="http://www.free-css-templates.com/" target="_blank">Free CSS Templates</a>
+            <p class="right">
+                &copy; 2011 Easy Data Mining, Design: Radu Cantor, <a title="Awsome Web Templates"
+                    href="http://www.solucija.com/">Solucija</a></p>
+            <p>
+                <a href="#">RSS Feed</a> &middot; <a href="#">Contact</a> &middot; <a href="#">Accessibility</a>
+                &middot; <a href="#">Products</a> &middot; <a href="#">Disclaimer</a> &middot; <a
+                    href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> and <a href="http://validator.w3.org/check?uri=referer">
+                        XHTML</a><br />
+            </p>
         </div>
     </div>
     </form>

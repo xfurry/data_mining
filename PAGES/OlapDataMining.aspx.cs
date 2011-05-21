@@ -16,24 +16,16 @@ namespace WebApplication_OLAP.classes
             if (Session != null)
             {
                 DataTable objTable = (DataTable)Session["queryData"];
-                GridView1.DataSource = objTable;
-                GridView1.DataBind();
+                GridViewMain.DataSource = objTable;
+                GridViewMain.DataBind();
             }
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
+        protected void ButtonStructure_Click(object sender, EventArgs e)
         {
             MiningManager mining = new MiningManager();
             mining.AddMiningStructure();
-            Label1.Text = mining.SResult;
-
-            //System.Threading.Thread.Sleep(5000);
-        }
-
-        protected void Button2_Click(object sender, EventArgs e)
-        {
-            //CMeansAlgorithm miner = new CMeansAlgorithm();
-            //miner.Run(5);
+            LabelStatus.Text = mining.SResult;
         }
     }
 }
