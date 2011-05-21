@@ -132,8 +132,8 @@ namespace WebApplication_OLAP
             // close reader
             objDataReader.Close();
 
-            GridView1.DataSource = objTable;
-            GridView1.DataBind();
+            GridViewData.DataSource = objTable;
+            GridViewData.DataBind();
 
             // export TEST
             //ExportDataTableToExcel(objTable);

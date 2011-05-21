@@ -99,7 +99,7 @@ namespace WebApplication_OLAP
 
             ExcelManager em = new ExcelManager();
             if (em.ExcelExport(sInputTable, "RelationalReport_" + timeStamp + ".xls"))
-                Label1.Text = "Success!";
+                LabelStatus.Text = "Success!";
         }
 
         /*
@@ -242,8 +242,6 @@ namespace WebApplication_OLAP
             Session.Add("queryData", objTable);
             Session.Add("queryTable", ListBoxTables.SelectedItem.ToString());
             Session.Add("queryDB", DropDownListDatabases.SelectedItem.ToString());
-            // make mining link visible
-            HyperLinkMining.Visible = true;
         }
 
         /*
@@ -264,7 +262,7 @@ namespace WebApplication_OLAP
          */
         private void HandleQueryError()
         {
-            Label1.Text = "<h3 style='color:red'>There was an error with the SQL query or with the database connection. Please try again later!</h3>";
+            LabelStatus.Text = "<h3 style='color:red'>There was an error with the SQL query or with the database connection. Please try again later!</h3>";
         }
     }
 }

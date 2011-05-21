@@ -82,12 +82,12 @@
             </div>
             <div class="left_articles">
                 <h2>
-                    Resultatele raportului Easy Data Miner</h2>
+                    Resultatele raportului OLAP Easy Data Miner</h2>
                 <p class="date">
                     Posted on 8th September</p>
                     <%-- Result table --%>
-                <div style="width: 536px; height: 227px; overflow: auto;">
-                    <asp:GridView ID="GridView1" runat="server" Height="222px" Width="529px">
+                <div style="width: 600px; height: 230px; overflow: auto;">
+                    <asp:GridView ID="GridViewData" runat="server" Height="225px" Width="595px">
                     </asp:GridView>
                 </div>
             </div>
@@ -96,9 +96,9 @@
                 <p>
                     Pentru o interogare customizata va rog sa scrieti codul in casuta de mai jos</p>
                     <asp:TextBox ID="TextBoxQuery" runat="server" Height="70px" 
-                    TextMode="MultiLine" Width="603px"></asp:TextBox>
+                    TextMode="MultiLine" Width="600px"></asp:TextBox>
             </div>
-            <%-- Downpage boxes 
+            <%-- Downpage boxes
             <div class="thirds">
                 <p></p>
             </div>
