@@ -73,8 +73,9 @@
             <%-- Content Area --%>
             <div class="subheader">
                 <p>
-                    <asp:Button ID="ButtonStructure" runat="server" 
-                        Text="Creaza structura de mining" onclick="ButtonStructure_Click" />
+                    <asp:Button ID="ButtonStructure" runat="server" Text="Creaza structura de mining"
+                        OnClick="ButtonStructure_Click" />
+                    &nbsp &nbsp &nbsp
                     <asp:Label ID="LabelStatus" runat="server" Text="Rezultatul procesului:"></asp:Label>
                 </p>
             </div>

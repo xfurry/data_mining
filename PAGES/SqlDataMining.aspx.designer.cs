@@ -32,13 +32,40 @@ namespace WebApplication_OLAP.pages {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// Button1 control.
+        /// ButtonResult control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
+        protected global::System.Web.UI.WebControls.Button ButtonResult;
+        
+        /// <summary>
+        /// DropDownListStructures control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListStructures;
+        
+        /// <summary>
+        /// ButtonCreate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonCreate;
+        
+        /// <summary>
+        /// TextBoxName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBoxName;
         
         /// <summary>
         /// LabelStatus control.
@@ -50,15 +77,6 @@ namespace WebApplication_OLAP.pages {
         protected global::System.Web.UI.WebControls.Label LabelStatus;
         
         /// <summary>
-        /// GridViewData control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridViewData;
-        
-        /// <summary>
         /// GridViewResults control.
         /// </summary>
         /// <remarks>
@@ -68,15 +86,6 @@ namespace WebApplication_OLAP.pages {
         protected global::System.Web.UI.WebControls.GridView GridViewResults;
         
         /// <summary>
-        /// GridViewDistribution control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridViewDistribution;
-        
-        /// <summary>
         /// PanelViewer control.
         /// </summary>
         /// <remarks>
@@ -84,6 +93,15 @@ namespace WebApplication_OLAP.pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel PanelViewer;
+        
+        /// <summary>
+        /// GridViewDistribution control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView GridViewDistribution;
         
         /// <summary>
         /// ButtonQuery control.
@@ -104,15 +122,6 @@ namespace WebApplication_OLAP.pages {
         protected global::System.Web.UI.WebControls.TextBox TextBoxQuery;
         
         /// <summary>
-        /// TextBoxName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxName;
-        
-        /// <summary>
         /// DropDownListAlgorithm control.
         /// </summary>
         /// <remarks>
@@ -120,15 +129,6 @@ namespace WebApplication_OLAP.pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropDownListAlgorithm;
-        
-        /// <summary>
-        /// DropDownListSources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownListSources;
         
         /// <summary>
         /// DropDownListTables control.
@@ -183,23 +183,5 @@ namespace WebApplication_OLAP.pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListPredictColumns;
-        
-        /// <summary>
-        /// DropDownListStructures control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropDownListStructures;
-        
-        /// <summary>
-        /// Button2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
     }
 }

@@ -41,8 +41,8 @@ namespace WebApplication_OLAP.pages
                 if (Session["queryData"] != null)
                 {
                     objTable = (DataTable)Session["queryData"];
-                    GridViewData.DataSource = objTable;
-                    GridViewData.DataBind();
+                    //GridViewData.DataSource = objTable;
+                    //GridViewData.DataBind();
                     // initialize column list
                     //InitializeColumns(objTable);
                 }
@@ -137,6 +137,7 @@ namespace WebApplication_OLAP.pages
             objViewer.DataBind();
 
             PanelViewer.Controls.Add(objViewer);
+            PanelViewer.Visible = true;
         }
 
         /*
@@ -145,16 +146,16 @@ namespace WebApplication_OLAP.pages
         protected void Button1_Click(object sender, EventArgs e)
         {
             // execute mining from olap
-            if (DropDownListSources.SelectedIndex == 1)
-            {
-                MiningManager objMiner = new MiningManager();
-                if (objMiner.CreateCubeMiningStructure("OlapStruct", MiningModelAlgorithms.MicrosoftClustering, "Adventure Works", "Customer", ""))
-                    LabelStatus.Text += "Success!";
-                else
-                    LabelStatus.Text += "Failed!";
+            //if (DropDownListSources.SelectedIndex == 1)
+            //{
+            //    MiningManager objMiner = new MiningManager();
+            //    if (objMiner.CreateCubeMiningStructure("OlapStruct", MiningModelAlgorithms.MicrosoftClustering, "Adventure Works", "Customer", ""))
+            //        LabelStatus.Text += "Success!";
+            //    else
+            //        LabelStatus.Text += "Failed!";
 
-                return;
-            }
+            //    return;
+            //}
 
             // Create mining structure based on column and table selection
             List<string> lsInputItems = new List<string>();
@@ -313,6 +314,9 @@ namespace WebApplication_OLAP.pages
 
                     GridViewDistribution.DataSource = objTable;
                     GridViewDistribution.DataBind();
+                    // hide viewer panel and show grid table
+                    GridViewDistribution.Visible = true;
+                    PanelViewer.Visible = false;
 
                     // load the main table data
                     Session.Add("queryNode", objTable);
