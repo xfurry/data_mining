@@ -43,15 +43,15 @@ namespace WebApplication_OLAP
 
         private void LoadTree()
         {
-            TreeView1.DataSource = this.ObjMainTable;
-            TreeView1.DataBind();
+            TreeViewMembers.DataSource = this.ObjMainTable;
+            TreeViewMembers.DataBind();
             TreeNode treeNode = new TreeNode("Windows");
-            TreeView1.Nodes.Add(treeNode);
+            TreeViewMembers.Nodes.Add(treeNode);
             //
             // Another node following the first node.
             //
             treeNode = new TreeNode("Linux");
-            TreeView1.Nodes.Add(treeNode);
+            TreeViewMembers.Nodes.Add(treeNode);
             //
             // Create two child nodes and put them in an array.
             // ... Add the third node, and specify these as its children.
@@ -74,13 +74,13 @@ namespace WebApplication_OLAP
             objOlapManager.GetCubes();
 
             // clear items to avoid duplicates
-            DropDownList1.Items.Clear();
+            DropDownListCubes.Items.Clear();
 
             List<CubeDef> lCubeList = objOlapManager.LCubes;
             for (int i = 0; i < lCubeList.Count; i++)
             {
                 string myItem = lCubeList[i].Name;
-                DropDownList1.Items.Add(myItem);
+                DropDownListCubes.Items.Add(myItem);
             }
 
             objOlapManager.CloseConnection();
@@ -94,7 +94,7 @@ namespace WebApplication_OLAP
         private void ExecuteOlapQuery()
         {
             OlapManager objOlapManager = new OlapManager();
-            CellSet objCellSet = objOlapManager.GetQueryResult(TextBox1.Text);
+            CellSet objCellSet = objOlapManager.GetQueryResult(TextBoxQuery.Text);
 
             AdomdDataAdapter objDataAdaptor = new AdomdDataAdapter(objOlapManager.ObjCommand);
             AdomdDataReader objDataReader = objOlapManager.ObjCommand.ExecuteReader(CommandBehavior.CloseConnection);
@@ -148,8 +148,6 @@ namespace WebApplication_OLAP
         protected void Button1_Click(object sender, EventArgs e)
         {
             ExecuteOlapQuery();
-            HyperLinkMining.Visible = true;
-
             /*
             foreach (Position pRow in objCellSet.Axes[1].Positions)
             {
@@ -245,7 +243,7 @@ myReader.Close();*/
             OlapManager objOlapManager = new OlapManager();
 
             objOlapManager.GetCubes();
-            string selection = DropDownList1.SelectedItem.ToString();
+            string selection = DropDownListCubes.SelectedItem.ToString();
             List<CubeDef> lCubeList = objOlapManager.LCubes;
 
             // scan for selected cube
@@ -260,16 +258,16 @@ myReader.Close();*/
             }
 
             // clear items to avoid duplicates
-            ListBox1.Items.Clear();
+            ListBoxDimensions.Items.Clear();
             List<string> lDimensions = objOlapManager.LDim;
-            ListBox1.Rows = lDimensions.Count;
+            ListBoxDimensions.Rows = lDimensions.Count;
             for (int i = 0; i < lDimensions.Count; i++)
             {
                 string myItem = lDimensions[i];
-                ListBox1.Items.Add(myItem);
+                ListBoxDimensions.Items.Add(myItem);
             }
             // reload component
-            ListBox1.DataBind();
+            ListBoxDimensions.DataBind();
 
             objOlapManager.CloseConnection();
         }
@@ -294,7 +292,7 @@ myReader.Close();*/
 
             ExcelManager em = new ExcelManager();
             if (em.ExcelExport(sInputTable, "OlapReport_" + timeStamp + ".xls"))
-                Label3.Text = "Success!";
+                LabelStatus.Text = "Success!";
         }
 
         /*protected void btnMapLocation_OnClick(object sender, EventArgs e)
