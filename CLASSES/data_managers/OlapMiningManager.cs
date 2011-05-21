@@ -10,7 +10,8 @@ namespace WebApplication_OLAP.classes
     public class MiningManager
     {
         private const string sCatalog = "Adventure Works DW 2008";
-        private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        //private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        private const string sServer = "localhost";
         private string sResult = "Success!";
 
         public string SResult
@@ -18,6 +19,103 @@ namespace WebApplication_OLAP.classes
             get { return sResult; }
             set { sResult = value; }
         }
+
+        /*
+         * Create mining structures and models for olap
+         */
+        public bool CreateCubeMiningStructure(string sStructName, string sAlgorithm, string sCubeName, string sDimensionName, string sKeyColumn/*, List<string> lsInputColumns, List<string> lsPredictColumns*/)
+        {
+            try
+            {
+                // connect to cube
+                Server objServer = new Server();
+                objServer.Connect("DataSource=" + sServer + ";Initial Catalog=" + sCatalog);
+                Database objDb = objServer.Databases[sCatalog];
+                Cube objCube = objDb.Cubes[sCubeName];
+
+                // create mining structure
+                CubeDimension objDimension = objCube.Dimensions.GetByName(sDimensionName);
+                Microsoft.AnalysisServices.MiningStructure myMiningStructure = objDb.MiningStructures.Add(sStructName, sStructName);
+                myMiningStructure.Source = new CubeDimensionBinding(".", objCube.ID, objDimension.ID);
+
+
+                // create mining columns
+                CubeAttribute basketAttribute;
+                CubeAttribute itemAttribute;
+                basketAttribute = objCube.Dimensions.GetByName("Customer").Attributes[0];
+                itemAttribute = objCube.Dimensions.GetByName("Product").Attributes[0];
+
+                //basket structure column
+                ScalarMiningStructureColumn basket = CreateMiningStructureColumn(basketAttribute, true);
+                basket.Name = "Basket";
+                myMiningStructure.Columns.Add(basket);
+
+                //item structure column - nested table
+                ScalarMiningStructureColumn item = CreateMiningStructureColumn(itemAttribute, true);
+                item.Name = "Item";
+
+                MeasureGroup measureGroup = objCube.MeasureGroups[0];
+                TableMiningStructureColumn purchases = CreateMiningStructureColumn(measureGroup);
+
+                purchases.Name = "Purchases";
+                purchases.Columns.Add(item);
+                myMiningStructure.Columns.Add(purchases);
+
+                Microsoft.AnalysisServices.MiningModel myMiningModel = myMiningStructure.CreateMiningModel();
+                myMiningModel.Name = "MarketBasket";
+                myMiningModel.Columns["Purchases"].Usage = MiningModelColumnUsages.PredictOnly;
+                myMiningModel.Algorithm = MiningModelAlgorithms.MicrosoftAssociationRules;
+
+                myMiningStructure.Update(UpdateOptions.ExpandFull);
+                myMiningStructure.Process(ProcessType.ProcessFull);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return false;
+            }
+        }
+
+        /*
+         * Create Scalar mining column
+         */
+        public static ScalarMiningStructureColumn CreateMiningStructureColumn(CubeAttribute attribute, bool isKey)
+        {
+            ScalarMiningStructureColumn column = new
+            ScalarMiningStructureColumn();
+            column.Name = attribute.Attribute.Name;
+
+            //cube attribute is usually modeled as discrete except for key column
+            column.Content = (isKey ? MiningStructureColumnContents.Key : MiningStructureColumnContents.Discrete);
+            column.IsKey = isKey;
+
+            //bind column source to a cube dimension attribute
+            column.Source = new CubeAttributeBinding(attribute.ParentCube.ID,
+            ((CubeDimension)attribute.Parent).ID, attribute.Attribute.ID, AttributeBindingType.Name);
+
+            //Get the column data type from the attribute key column binding.
+            column.Type = MiningStructureColumnTypes.GetColumnType(attribute.Attribute.NameColumn.DataType);
+
+            return column;
+        }
+
+        /*
+         * Create table mining structure (for measuregroups)
+         */
+        public static TableMiningStructureColumn CreateMiningStructureColumn(MeasureGroup measureGroup)
+        {
+            TableMiningStructureColumn column = new TableMiningStructureColumn();
+            column.Name = measureGroup.Name;
+            column.SourceMeasureGroup = new MeasureGroupBinding(".", ((Cube)measureGroup.Parent).ID, measureGroup.ID);
+
+            return column;
+        }
+
+
+
+
 
         public void CreateAdomdMining()
         {
@@ -137,35 +235,6 @@ namespace WebApplication_OLAP.classes
                 this.sResult = e.StackTrace;
                 Console.WriteLine(e.StackTrace);
             }
-        }
-
-        public static ScalarMiningStructureColumn  CreateMiningStructureColumn(CubeAttribute attribute, bool isKey)
-        {
-            ScalarMiningStructureColumn column = new
-            ScalarMiningStructureColumn();
-            column.Name = attribute.Attribute.Name;
-
-            //cube attribute is usually modeled as discrete except for key column
-            column.Content = (isKey ? MiningStructureColumnContents.Key : MiningStructureColumnContents.Discrete);
-            column.IsKey = isKey;
-
-            //bind column source to a cube dimension attribute
-            column.Source = new CubeAttributeBinding(attribute.ParentCube.ID,
-            ((CubeDimension)attribute.Parent).ID, attribute.Attribute.ID, AttributeBindingType.Name);
-
-            //Get the column data type from the attribute key column binding.
-            column.Type = MiningStructureColumnTypes.GetColumnType (attribute.Attribute.NameColumn.DataType);
-
-            return column;
-        }
-
-        public static TableMiningStructureColumn CreateMiningStructureColumn(MeasureGroup measureGroup)
-        {
-            TableMiningStructureColumn column = new TableMiningStructureColumn();
-            column.Name = measureGroup.Name;
-            column.SourceMeasureGroup = new MeasureGroupBinding(".", ((Cube)measureGroup.Parent).ID, measureGroup.ID);
-
-            return column;
         }
 
         // Mining sample model

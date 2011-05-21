@@ -9,6 +9,7 @@ using WebApplication_OLAP.classes.data_managers;
 using Microsoft.AnalysisServices.DataMiningHtmlViewers;
 using Microsoft.AnalysisServices;
 using System.Data.OleDb;
+using WebApplication_OLAP.classes;
 
 namespace WebApplication_OLAP.pages
 {
@@ -143,6 +144,18 @@ namespace WebApplication_OLAP.pages
          */
         protected void Button1_Click(object sender, EventArgs e)
         {
+            // execute mining from olap
+            if (DropDownListSources.SelectedIndex == 1)
+            {
+                MiningManager objMiner = new MiningManager();
+                if (objMiner.CreateCubeMiningStructure("OlapStruct", MiningModelAlgorithms.MicrosoftClustering, "Adventure Works", "Customer", ""))
+                    LabelStatus.Text += "Success!";
+                else
+                    LabelStatus.Text += "Failed!";
+
+                return;
+            }
+
             // Create mining structure based on column and table selection
             List<string> lsInputItems = new List<string>();
             List<string> lsPredictItems = new List<string>();

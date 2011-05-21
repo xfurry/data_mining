@@ -88,6 +88,8 @@
                 </asp:DropDownList>
                 <p>Select Data Source</p>
                 <asp:DropDownList ID="DropDownListSources" runat="server">
+                    <asp:ListItem>Table</asp:ListItem>
+                    <asp:ListItem>Cube</asp:ListItem>
                 </asp:DropDownList>
                 <p>Select Input Table</p>
                 <asp:DropDownList ID="DropDownListTables" runat="server" AutoPostBack="True" 
