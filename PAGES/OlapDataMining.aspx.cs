@@ -84,19 +84,43 @@ namespace WebApplication_OLAP.classes
             // Create mining structure based on column and table selection
             List<string> lsInputItems = new List<string>();
             List<string> lsPredictItems = new List<string>();
+            List<string> lsInputMeasures = new List<string>();
+            List<string> lsPredictMeasures = new List<string>();
 
-            // add values to list
-            //foreach (ListItem objItem in CheckBoxListInput.Items)
-            //{
-            //    if (objItem.Selected)
-            //        lsInputItems.Add(objItem.Text);
-            //}
+            // input items
+            foreach (GridViewRow row in GridViewAttributes.Rows)
+            {
+                CheckBox cb = (CheckBox)row.FindControl("CheckBoxAtrInput");
 
-            //foreach (ListItem objItem in CheckBoxListPredict.Items)
-            //{
-            //    if (objItem.Selected)
-            //        lsPredictItems.Add(objItem.Text);
-            //}
+                if (cb != null && cb.Checked)
+                    lsInputItems.Add(row.Cells[2].Text);
+            }
+
+            foreach (GridViewRow row in GridViewMeasures.Rows)
+            {
+                CheckBox cb = (CheckBox)row.FindControl("CheckBoxMeasureInput");
+
+                if (cb != null && cb.Checked)
+                    lsInputMeasures.Add(row.Cells[2].Text);
+            }
+
+            // predict items
+            foreach (GridViewRow row in GridViewAttributes.Rows)
+            {
+                CheckBox cb = (CheckBox)row.FindControl("CheckBoxAtrPredict");
+
+                if (cb != null && cb.Checked)
+                    lsPredictItems.Add(row.Cells[2].Text);
+            }
+
+
+            foreach (GridViewRow row in GridViewMeasures.Rows)
+            {
+                CheckBox cb = (CheckBox)row.FindControl("CheckBoxMeasurePredict");
+
+                if (cb != null && cb.Checked)
+                    lsPredictMeasures.Add(row.Cells[2].Text);
+            }
 
             string sStructName = TextBoxName.Text;
             if (sStructName == "")
