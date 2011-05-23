@@ -248,13 +248,6 @@ namespace WebApplication_OLAP.classes
             SQLManager manager = new SQLManager("AdventureWorksDW");
             DataTable objTable = new DataTable();
 
-            // handle errors
-            //if (manager.GetQueryResult(sQueryText) == null)
-            //{
-            //    HandleQueryError();
-            //    return;
-            //}
-
             // exclude the key column
             string sQueryTextExclude = "SELECT COLUMN_NAME, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
                 DropDownListDimensions.SelectedItem.ToString() + "' AND COLUMN_NAME <> '" + DropDownListKey.SelectedItem.ToString() + " 'ORDER BY ORDINAL_POSITION";
@@ -544,50 +537,71 @@ namespace WebApplication_OLAP.classes
         }
 
         /*
-         * Init all table names into a listbox
+         * Init all dimension names into a listbox
          */
-        // ##################### ToDo: update!!!####################
         private void InitDimensionNames()
         {
-            // show DB tables
-            SQLManager manager = new SQLManager("AdventureWorksDW");
-            string sQuery = "Select name, id from sysobjects where xtype='U'";
+            MiningManager objMiningManager = new MiningManager();
 
-            // handle errors
-            //if (manager.GetQueryDataSet(sQuery) == null)
-            //{
-            //    HandleQueryError();
-            //    return;
-            //}
+            string sQuery = "SELECT DIMENSION_NAME FROM $system.mdschema_dimensions WHERE CUBE_NAME = '" +
+                DropDownListCubes.SelectedItem.Text + "'";
+            // display results
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objMiningData = objMiningManager.GetQueryResult(sQuery);
 
-            DataSet objSet = manager.GetQueryDataSet(sQuery);
-            DropDownListDimensions.DataSource = objSet;
-            DropDownListDimensions.DataTextField = "name";
-            DropDownListDimensions.DataValueField = "id";
+            List<string> sCubes = new List<string>();
+            try
+            {
+                while (objMiningData.Read())
+                {
+                    for (int i = 0; i < objMiningData.FieldCount; i++)
+                    {
+                        object value = objMiningData.GetValue(i);
+                        string strValue = (value == null) ? string.Empty : value.ToString();
+                        sCubes.Add(strValue);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+
+            DropDownListDimensions.DataSource = sCubes;
             DropDownListDimensions.DataBind();
-            manager.CloseConnection();
         }
 
         /*
          * Init all cubes
          */
-        // ##################### ToDo: update!!!####################
         private void InitCubes()
         {
-            OlapManager objOlapManager = new OlapManager();
-            objOlapManager.GetCubes();
+            MiningManager objMiningManager = new MiningManager();
 
-            // clear items to avoid duplicates
-            DropDownListCubes.Items.Clear();
+            string sQuery = "SELECT CUBE_NAME FROM $system.mdschema_cubes WHERE left(CUBE_NAME, 1) <> '$' AND len(BASE_CUBE_NAME) = 0";
+            // display results
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objMiningData = objMiningManager.GetQueryResult(sQuery);
 
-            List<Microsoft.AnalysisServices.AdomdClient.CubeDef> lCubeList = objOlapManager.LCubes;
-            for (int i = 0; i < lCubeList.Count; i++)
+            List<string> sCubes = new List<string>();
+            try
             {
-                string myItem = lCubeList[i].Name;
-                DropDownListCubes.Items.Add(myItem);
+                while (objMiningData.Read())
+                {
+                    for (int i = 0; i < objMiningData.FieldCount; i++)
+                    {
+                        object value = objMiningData.GetValue(i);
+                        string strValue = (value == null) ? string.Empty : value.ToString();
+                        sCubes.Add(strValue);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
             }
 
-            objOlapManager.CloseConnection();
+            DropDownListCubes.DataSource = sCubes;
+            DropDownListCubes.DataBind();
+
         }
     }
 }

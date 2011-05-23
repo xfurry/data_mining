@@ -151,19 +151,19 @@
                 <p>
                     Selecteaza cubul:
                 </p>
-                <asp:DropDownList ID="DropDownListCubes" runat="server" 
+                <asp:DropDownList ID="DropDownListCubes" runat="server" AutoPostBack="True" 
                     onselectedindexchanged="DropDownListCubes_SelectedIndexChanged">
                 </asp:DropDownList>
                 <p>
                     Selecteaza dimensiunea:
                 </p>
-                <asp:DropDownList ID="DropDownListDimensions" runat="server" 
+                <asp:DropDownList ID="DropDownListDimensions" runat="server" AutoPostBack="True" 
                     onselectedindexchanged="DropDownListDimensions_SelectedIndexChanged">
                 </asp:DropDownList>
                 <p>
                     Selecteaza atributul cheie:
                 </p>
-                <asp:DropDownList ID="DropDownListKey" runat="server" 
+                <asp:DropDownList ID="DropDownListKey" runat="server" AutoPostBack="True" 
                     onselectedindexchanged="DropDownListKey_SelectedIndexChanged">
                 </asp:DropDownList>
             </div>
