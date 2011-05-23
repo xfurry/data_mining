@@ -67,7 +67,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining structure based on selection
          */
-        public bool CreateMiningStructure(List<string> inputColumns, List<string> predictColumns, string sAlgorithm, string sTableName, string sKeyColumn, string sStructureName)
+        public string CreateMiningStructure(List<string> inputColumns, List<string> predictColumns, string sAlgorithm, string sTableName, string sKeyColumn, string sStructureName)
         {
             try
             {
@@ -83,14 +83,12 @@ namespace WebApplication_OLAP.classes.data_managers
                 // Process Database and structure
                 currentStructure.Process();
 
-                return true;
+                return "Success";
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                return e.StackTrace;
             }
-
-            return false;
         }
 
         /*

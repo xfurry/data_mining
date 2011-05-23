@@ -200,7 +200,7 @@ namespace WebApplication_OLAP.pages
             // warn at missing input column
             if (lsInputItems.Count == 0)
             {
-                LabelStatus.Text = LabelStatus.Text + "Please select at least one input column!";
+                LabelStatus.Text = "Please select at least one input column!";
                 return;
             }
 
@@ -209,7 +209,7 @@ namespace WebApplication_OLAP.pages
             {
                 if (lsInputItems.Count == 0 || lsPredictItems.Count == 0)
                 {
-                    LabelStatus.Text = LabelStatus.Text + "Please select at least one input column and at least one prediction column!";
+                    LabelStatus.Text = "Please select at least one input column and at least one prediction column!";
                     return;
                 }
             }
@@ -217,14 +217,15 @@ namespace WebApplication_OLAP.pages
             SQLMiningManager objMiningManager = new SQLMiningManager();
 
             // Create mining query from the existing results
-            if (objMiningManager.CreateMiningStructure(lsInputItems, lsPredictItems, objAlgorithm,
-                DropDownListTables.SelectedItem.Text, DropDownListKey.SelectedItem.Text, sStructName))
+            string sResult = objMiningManager.CreateMiningStructure(lsInputItems, lsPredictItems, objAlgorithm,
+                DropDownListTables.SelectedItem.Text, DropDownListKey.SelectedItem.Text, sStructName);
+            if (sResult == "Success")
             {
-                LabelStatus.Text = LabelStatus.Text + "Success!";
+                LabelStatus.Text = "Rezultatul procesului: Success!";
                 LoadExistingStructures();
             }
             else
-                LabelStatus.Text = LabelStatus.Text + "Failed!\r\n" + objMiningManager.SMiningError;
+                LabelStatus.Text = "Rezultatul procesului: " + sResult;
         }
 
         /*

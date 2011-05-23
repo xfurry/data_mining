@@ -24,7 +24,8 @@ namespace WebApplication_OLAP.classes
         /*
          * Create mining structures and models for olap
          */
-        public bool CreateCubeMiningStructure(string sStructName, string sAlgorithm, string sCubeName, string sDimensionName, string sKeyColumn/*, List<string> lsInputColumns, List<string> lsPredictColumns*/)
+        public string CreateCubeMiningStructure(string sStructName, string sAlgorithm, string sCubeName, string sDimensionName, string sKeyColumn,
+            List<string> lsInputColumns, List<string> lsPredictColumns, List<string> lsMeasureInput, List<string> lsMeasurePredict)
         {
             try
             {
@@ -70,12 +71,11 @@ namespace WebApplication_OLAP.classes
                 myMiningStructure.Update(UpdateOptions.ExpandFull);
                 myMiningStructure.Process(ProcessType.ProcessFull);
 
-                return true;
+                return "Success";
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                return false;
+                return e.StackTrace;
             }
         }
 

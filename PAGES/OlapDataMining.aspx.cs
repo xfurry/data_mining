@@ -157,15 +157,17 @@ namespace WebApplication_OLAP.classes
 
             MiningManager objMiningManager = new MiningManager();
 
-            //// Create mining query from the existing results
-            //if (objMiningManager.CreateMiningStructure(lsInputItems, lsPredictItems, objAlgorithm,
-            //    DropDownListTables.SelectedItem.Text, DropDownListKey.SelectedItem.Text, sStructName))
-            //{
-            //    LabelStatus.Text = LabelStatus.Text + "Success!";
-            //    LoadExistingStructures();
-            //}
-            //else
-            //    LabelStatus.Text = LabelStatus.Text + "Failed!\r\n" + objMiningManager.SMiningError;
+            // Create mining query from the existing results
+            string sResult = objMiningManager.CreateCubeMiningStructure(sStructName, objAlgorithm, DropDownListCubes.SelectedItem.Text, DropDownListDimensions.SelectedItem.Text,
+                DropDownListKey.SelectedItem.Text, lsInputItems, lsPredictItems, lsInputMeasures, lsPredictMeasures);
+
+            if (sResult == "Success")
+            {
+                LabelStatus.Text = "Rezultatul procesului: Success!";
+                LoadExistingStructures();
+            }
+            else
+                LabelStatus.Text = "Rezultatul procesului: " + sResult;
 
 
 
