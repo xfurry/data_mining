@@ -41,7 +41,7 @@ namespace WebApplication_OLAP.classes
                 myMiningStructure.Source = new CubeDimensionBinding(".", objCube.ID, objDimension.ID);
 
                 // key column
-                CubeAttribute objKey = objCube.Dimensions.GetByName(sDimensionName).Attributes[sKeyColumn];
+                CubeAttribute objKey = objCube.Dimensions.GetByName(sDimensionName).Attributes[0];
                 ScalarMiningStructureColumn objKeyColumn = CreateMiningStructureColumn(objKey, true);
                 objKeyColumn.Name = sKeyColumn;
                 myMiningStructure.Columns.Add(objKeyColumn);
@@ -51,7 +51,7 @@ namespace WebApplication_OLAP.classes
                 {
                     // get attribute
                     CubeAttribute objAttribute = new CubeAttribute();
-                    objAttribute = objCube.Dimensions.GetByName(sDimensionName).Attributes[lsInputColumns[i]];
+                    objAttribute = objCube.Dimensions.GetByName(sDimensionName).Attributes[0];
 
                     // create mining column
                     ScalarMiningStructureColumn objColumn = CreateMiningStructureColumn(objAttribute, false);
@@ -75,7 +75,7 @@ namespace WebApplication_OLAP.classes
                 {
                     // get attribute
                     CubeAttribute objAttribute = new CubeAttribute();
-                    objAttribute = objCube.Dimensions.GetByName(sDimensionName).Attributes[lsPredictColumns[i]];
+                    objAttribute = objCube.Dimensions.GetByName(sDimensionName).Attributes[0];
 
                     // create mining column
                     ScalarMiningStructureColumn objColumn = CreateMiningStructureColumn(objAttribute, false);
