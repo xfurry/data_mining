@@ -34,16 +34,16 @@
                 <a class="current" href="Default.aspx" accesskey="h"><span class="key">H</span>ome </a>
             </li>
             <li>
-                <a href="pages\SqlDataMining.aspx" accesskey="m"><span class="key">M</span>ining relational </a>
+                <a href="pages/SqlDataMining.aspx" accesskey="m"><span class="key">M</span>ining relational </a>
             </li>
             <li>
-                <a href="pages\OlapDataMining.aspx" accesskey="o"><span class="key">M</span>ining OLAP </a>
+                <a href="pages/OlapDataMining.aspx" accesskey="o"><span class="key">M</span>ining OLAP </a>
             </li>
             <li>
-                <a href="pages\SqlReporting.aspx" accesskey="e"><span class="key">R</span>aportare relationala </a>
+                <a href="pages/SqlReporting.aspx" accesskey="e"><span class="key">R</span>aportare relationala </a>
             </li>
             <li>
-                <a href="pages\OlapReporting.aspx" accesskey="r"><span class="key">R</span>aportare OLAP </a>
+                <a href="pages/OlapReporting.aspx" accesskey="r"><span class="key">R</span>aportare OLAP </a>
             </li>
         </ul>
         <%-- Topic list --%>

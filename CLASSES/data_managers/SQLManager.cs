@@ -10,8 +10,8 @@ namespace WebApplication_OLAP
     public class SQLManager
     {
         private string sCatalog = "AdventureWorksDW";
-        //private const string sServer = "CLARITY-7HYGMQM\\ANA";
-        private const string sServer = "localhost";
+        private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        //private const string sServer = "localhost";
 
         private SqlConnection objSqlConnection = null;
 

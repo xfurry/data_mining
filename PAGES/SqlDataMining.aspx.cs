@@ -16,54 +16,61 @@ namespace WebApplication_OLAP.pages
     public partial class SqlDataMining : System.Web.UI.Page
     {
         //private const string sCatalog = "Adventure Works DW 2008";
-        //private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        private const string sServer = "CLARITY-7HYGMQM\\ANA";
         private const string sCatalog = "Adventure Works DW 2008";
-        private const string sServer = "localhost";
+        //private const string sServer = "localhost";
 
         private List<string> lNodesNames = new List<string>();
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // load existing mining structures
-            if (!Page.IsPostBack)
+            try
             {
-                LoadExistingStructures();
-                InitTableNames();
-                InitColumnsControlls();
+                // load existing mining structures
+                if (!Page.IsPostBack)
+                {
+                    LoadExistingStructures();
+                    InitTableNames();
+                    InitColumnsControlls();
+                }
+
+                // get from session
+                if (Session != null)
+                {
+                    // initial query data
+                    DataTable objTable = new DataTable();
+
+                    if (Session["queryData"] != null)
+                    {
+                        objTable = (DataTable)Session["queryData"];
+                        //GridViewData.DataSource = objTable;
+                        //GridViewData.DataBind();
+                        // initialize column list
+                        //InitializeColumns(objTable);
+                    }
+
+                    // mining query data
+                    if (Session["queryMining"] != null)
+                    {
+                        objTable = (DataTable)Session["queryMining"];
+                        GridViewResults.DataSource = objTable;
+                        GridViewResults.DataBind();
+                        // load viewer for the current model
+                        LoadViewer();
+                    }
+
+                    // node query data
+                    if (Session["queryNode"] != null)
+                    {
+                        objTable = (DataTable)Session["queryNode"];
+                        GridViewDistribution.DataSource = objTable;
+                        GridViewDistribution.DataBind();
+                    }
+                }
             }
-
-            // get from session
-            if (Session != null)
+            catch (Exception ex)
             {
-                // initial query data
-                DataTable objTable = new DataTable();
-
-                if (Session["queryData"] != null)
-                {
-                    objTable = (DataTable)Session["queryData"];
-                    //GridViewData.DataSource = objTable;
-                    //GridViewData.DataBind();
-                    // initialize column list
-                    //InitializeColumns(objTable);
-                }
-
-                // mining query data
-                if (Session["queryMining"] != null)
-                {
-                    objTable = (DataTable)Session["queryMining"];
-                    GridViewResults.DataSource = objTable;
-                    GridViewResults.DataBind();
-                    // load viewer for the current model
-                    LoadViewer();
-                }
-
-                // node query data
-                if (Session["queryNode"] != null)
-                {
-                    objTable = (DataTable)Session["queryNode"];
-                    GridViewDistribution.DataSource = objTable;
-                    GridViewDistribution.DataBind();
-                }
+                Console.WriteLine(ex.StackTrace);
             }
 
             // register event

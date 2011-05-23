@@ -11,10 +11,9 @@ namespace WebApplication_OLAP.classes.data_managers
 {
     public class SQLMiningManager
     {
-        //private const string sCatalog = "Adventure Works DW 2008";
-        //private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        private const string sServer = "CLARITY-7HYGMQM\\ANA";
         private const string sCatalog = "Adventure Works DW 2008";
-        private const string sServer = "localhost";
+        //private const string sServer = "localhost";
 
         private string sStructureName = "MyMiningStructure";            // to be removed
         private string sModelName = "MyMiningModel";                    // to be removed
@@ -389,9 +388,10 @@ namespace WebApplication_OLAP.classes.data_managers
                 case "nvarchar":
                 case "nchar":
                     return OleDbType.WChar;
-                case "money":
-                    return OleDbType.Currency;
+                //case "money":
+                //    return OleDbType.Currency;
                 case "float":
+                case "money":                   // Add this to integer because currency is not supported
                     return OleDbType.Double;
             }
 

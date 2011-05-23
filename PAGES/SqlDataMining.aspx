@@ -77,11 +77,7 @@
             <div class="subheader">
                 <p>
                     <asp:Button ID="ButtonResult" runat="server" OnClick="Button2_Click" Text="Afiseaza continutul structurii" />
-                    &nbsp &nbsp &nbsp
-                    &nbsp &nbsp &nbsp
-                    &nbsp &nbsp &nbsp
-                    &nbsp &nbsp &nbsp
-                    &nbsp
+                    &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
                     <asp:DropDownList ID="DropDownListStructures" runat="server">
                     </asp:DropDownList>
                 </p>

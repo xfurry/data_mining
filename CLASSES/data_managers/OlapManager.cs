@@ -10,9 +10,9 @@ namespace WebApplication_OLAP
     public class OlapManager
     {
         private const string sCatalog = "Adventure Works DW 2008";
-        //private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        private const string sServer = "CLARITY-7HYGMQM\\ANA";
         //private const string sCatalog = "Adventure Works DW";
-        private const string sServer = "localhost";
+        //private const string sServer = "localhost";
 
         private AdomdConnection objConnection = null;
         private AdomdCommand objCommand = null;

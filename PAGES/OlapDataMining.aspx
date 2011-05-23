@@ -73,8 +73,16 @@
             <%-- Content Area --%>
             <div class="subheader">
                 <p>
-                    <asp:Button ID="ButtonStructure" runat="server" Text="Creaza structura de mining"
+                    <asp:Button ID="ButtonResult" runat="server" Text="Afiseaza continutul structurii" />
+                    &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                    <asp:DropDownList ID="DropDownListStructures" runat="server">
+                    </asp:DropDownList>
+                </p>
+                <p>
+                    <asp:Button ID="ButtonStructure" runat="server" Text="Creaza structura de mining cu numele:"
                         OnClick="ButtonStructure_Click" />
+                    &nbsp &nbsp &nbsp
+                    <asp:TextBox ID="TextBoxName" runat="server"></asp:TextBox>
                     &nbsp &nbsp &nbsp
                     <asp:Label ID="LabelStatus" runat="server" Text="Rezultatul procesului:"></asp:Label>
                 </p>
@@ -86,6 +94,17 @@
                     Posted on 8th September</p>
                 <div style="width: 600px; height: 230px; overflow: auto;">
                     <asp:GridView ID="GridViewMain" runat="server" Height="225px" Width="595px">
+                    </asp:GridView>
+                </div>
+            </div>
+            <div class="left_articles">
+            <h2>
+                    Rezultatele detaliate</h2>
+                <div style="width: 600px; height: 230px; overflow: auto;">
+                    <asp:Panel ID="PanelViewer" runat="server" Height="225px" Width="595px">
+                    </asp:Panel>
+                    <asp:GridView ID="GridViewDistribution" runat="server" Height="150px" Width="595px"
+                        Visible="false">
                     </asp:GridView>
                 </div>
             </div>
@@ -112,15 +131,46 @@
         <div id="right">
             <div class="right_articles">
                 <p>
-                    Lista de cuburi: ToDo:</p>
+                    Selecteaza algoritmul
+                </p>
+                <asp:DropDownList ID="DropDownListAlgorithm" runat="server">
+                    <asp:ListItem>Clustering</asp:ListItem>
+                    <asp:ListItem>Decision Trees</asp:ListItem>
+                    <asp:ListItem>Naive Bayes</asp:ListItem>
+                    <asp:ListItem>Time Series</asp:ListItem>
+                </asp:DropDownList>
+                <p>
+                    Selecteaza dimensiunea:
+                </p>
+                <asp:DropDownList ID="DropDownListDimensions" runat="server">
+                </asp:DropDownList>
+                <p>
+                    Selecteaza atributul cheie:
+                </p>
+                <asp:DropDownList ID="DropDownListKey" runat="server">
+                </asp:DropDownList>
             </div>
             <div class="right_articles">
                 <p>
-                    Lista de dimensiuni: ToDo:</p>
+                    Selecteaza atributele de intrare:
+                    <br />
+                    <asp:Button ID="ButtonInput" runat="server" Text="Check All" />
+                </p>
+                <div style="width: 250px; height: 190px; overflow: auto;">
+                    <asp:CheckBoxList ID="CheckBoxListInput" runat="server">
+                    </asp:CheckBoxList>
+                </div>
             </div>
             <div class="right_articles">
                 <p>
-                    Lista de membrii: ToDo:</p>
+                    Selecteaza atributele de predictie:
+                    <br />
+                    <asp:Button ID="ButtonPredict" runat="server" Text="Check All" />
+                </p>
+                <div style="width: 250px; height: 190px; overflow: auto;">
+                    <asp:CheckBoxList ID="CheckBoxListPredict" runat="server">
+                    </asp:CheckBoxList>
+                </div>
             </div>
             <div class="notes">
                 <p>

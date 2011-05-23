@@ -10,8 +10,8 @@ namespace WebApplication_OLAP.classes
     public class MiningManager
     {
         private const string sCatalog = "Adventure Works DW 2008";
-        //private const string sServer = "CLARITY-7HYGMQM\\ANA";
-        private const string sServer = "localhost";
+        private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        //private const string sServer = "localhost";
         private string sResult = "Success!";
 
         public string SResult
