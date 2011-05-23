@@ -86,17 +86,17 @@ namespace WebApplication_OLAP.classes
             List<string> lsPredictItems = new List<string>();
 
             // add values to list
-            foreach (ListItem objItem in CheckBoxListInput.Items)
-            {
-                if (objItem.Selected)
-                    lsInputItems.Add(objItem.Text);
-            }
+            //foreach (ListItem objItem in CheckBoxListInput.Items)
+            //{
+            //    if (objItem.Selected)
+            //        lsInputItems.Add(objItem.Text);
+            //}
 
-            foreach (ListItem objItem in CheckBoxListPredict.Items)
-            {
-                if (objItem.Selected)
-                    lsPredictItems.Add(objItem.Text);
-            }
+            //foreach (ListItem objItem in CheckBoxListPredict.Items)
+            //{
+            //    if (objItem.Selected)
+            //        lsPredictItems.Add(objItem.Text);
+            //}
 
             string sStructName = TextBoxName.Text;
             if (sStructName == "")
@@ -156,7 +156,10 @@ namespace WebApplication_OLAP.classes
                 return;
 
             // init input columns
-            InitCheckboxFields();
+            string sQuery = "SELECT HIERARCHY_NAME FROM $system.mdschema_hierarchies WHERE CUBE_NAME = '" +
+                DropDownListCubes.SelectedItem.Text + "' AND [DIMENSION_UNIQUE_NAME] = '[" +
+                DropDownListDimensions.SelectedItem.Text + "]' AND HIERARCHY_NAME <> '" + DropDownListKey.SelectedItem.Text + "'";
+            InitAttributeAndMeasures(sQuery, GridViewAttributes);
         }
 
         /*
@@ -169,30 +172,6 @@ namespace WebApplication_OLAP.classes
 
             // init column controlls
             InitAttributes();
-        }
-
-        /*
-         * Check / uncheck all fields
-         */
-        protected void ButtonInput_Click(object sender, EventArgs e)
-        {
-            ChangeState(CheckBoxListInput);
-            if (ButtonInput.Text == "Check All")
-                ButtonInput.Text = "Uncheck All";
-            else
-                ButtonInput.Text = "Check All";
-        }
-
-        /*
-         * Check / uncheck all fields
-         */
-        protected void ButtonPredict_Click(object sender, EventArgs e)
-        {
-            ChangeState(CheckBoxListPredict);
-            if (ButtonPredict.Text == "Check All")
-                ButtonPredict.Text = "Uncheck All";
-            else
-                ButtonPredict.Text = "Check All";
         }
 
         /*
@@ -233,78 +212,54 @@ namespace WebApplication_OLAP.classes
         }
 
         /*
-         * Init checkbox fields to exclude the key attribute
-         */
-        // ##################### ToDo: update!!!####################
-        void InitCheckboxFields()
-        {
-            CheckBoxListInput.DataSource = null;
-            CheckBoxListInput.DataBind();
-
-            CheckBoxListPredict.DataSource = null;
-            CheckBoxListPredict.DataBind();
-
-            // execute query
-            SQLManager manager = new SQLManager("AdventureWorksDW");
-            DataTable objTable = new DataTable();
-
-            // exclude the key column
-            string sQueryTextExclude = "SELECT COLUMN_NAME, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
-                DropDownListDimensions.SelectedItem.ToString() + "' AND COLUMN_NAME <> '" + DropDownListKey.SelectedItem.ToString() + " 'ORDER BY ORDINAL_POSITION";
-
-            objTable.Load(manager.GetQueryResult(sQueryTextExclude));
-
-            CheckBoxListInput.DataSource = objTable;
-            CheckBoxListInput.DataTextField = "COLUMN_NAME";
-            CheckBoxListInput.DataValueField = "ORDINAL_POSITION";
-            CheckBoxListInput.DataBind();
-
-            CheckBoxListPredict.DataSource = objTable;
-            CheckBoxListPredict.DataTextField = "COLUMN_NAME";
-            CheckBoxListPredict.DataValueField = "ORDINAL_POSITION";
-            CheckBoxListPredict.DataBind();
-
-            manager.CloseConnection();
-        }
-
-        /*
          * Init all attributes
          */
-        // ##################### ToDo: update!!!####################
         private void InitAttributes()
         {
             // clear current query
             DropDownListKey.DataSource = null;
             DropDownListKey.DataBind();
 
-            // list selected table: to be removed
-            //Label1.Text = ListBoxTables.SelectedItem.ToString();
+            MiningManager objMiningManager = new MiningManager();
 
-            string sQueryText = "SELECT COLUMN_NAME, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
-                DropDownListDimensions.SelectedItem.ToString() + "'ORDER BY ORDINAL_POSITION";
+            string sQuery = "SELECT HIERARCHY_NAME FROM $system.mdschema_hierarchies WHERE CUBE_NAME = '" +
+                DropDownListCubes.SelectedItem.Text + "' AND [DIMENSION_UNIQUE_NAME] = '[" +
+                DropDownListDimensions.SelectedItem.Text + "]'";
+            // display results
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objMiningData = objMiningManager.GetQueryResult(sQuery);
 
-            // execute query
-            SQLManager manager = new SQLManager("AdventureWorksDW");
-            DataTable objTable = new DataTable();
+            List<string> sCubes = new List<string>();
 
-            // handle errors
-            //if (manager.GetQueryResult(sQueryText) == null)
-            //{
-            //    HandleQueryError();
-            //    return;
-            //}
+            try
+            {
+                while (objMiningData.Read())
+                {
+                    for (int i = 0; i < objMiningData.FieldCount; i++)
+                    {
+                        object value = objMiningData.GetValue(i);
+                        string strValue = (value == null) ? string.Empty : value.ToString();
+                        sCubes.Add(strValue);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
 
-            objTable.Load(manager.GetQueryResult(sQueryText));
-
-            DropDownListKey.DataSource = objTable;
-            DropDownListKey.DataTextField = "COLUMN_NAME";
-            DropDownListKey.DataValueField = "ORDINAL_POSITION";
+            DropDownListKey.DataSource = sCubes;
             DropDownListKey.DataBind();
 
-            manager.CloseConnection();
-
             // init input columns
-            InitCheckboxFields();
+            sQuery = "SELECT HIERARCHY_NAME FROM $system.mdschema_hierarchies WHERE CUBE_NAME = '" +
+                DropDownListCubes.SelectedItem.Text + "' AND [DIMENSION_UNIQUE_NAME] = '[" +
+                DropDownListDimensions.SelectedItem.Text + "]' AND HIERARCHY_NAME <> '" + DropDownListKey.SelectedItem.Text + "'";
+            InitAttributeAndMeasures(sQuery, GridViewAttributes);
+
+            // init measures
+            sQuery = "SELECT MEASURE_NAME FROM $system.mdschema_measures WHERE CUBE_NAME = '" +
+                DropDownListCubes.SelectedItem.Text + "'";
+            InitAttributeAndMeasures(sQuery, GridViewMeasures);
         }
 
         /*
@@ -602,6 +557,38 @@ namespace WebApplication_OLAP.classes
             DropDownListCubes.DataSource = sCubes;
             DropDownListCubes.DataBind();
 
+        }
+
+        /*
+         * Init checkbox fields to exclude the key attribute
+         */
+        void InitAttributeAndMeasures(string sQuery, GridView objGrid)
+        {
+            MiningManager objMiningManager = new MiningManager();
+
+            // display results
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objMiningData = objMiningManager.GetQueryResult(sQuery);
+
+            List<string> sAtributes = new List<string>();
+            try
+            {
+                while (objMiningData.Read())
+                {
+                    for (int i = 0; i < objMiningData.FieldCount; i++)
+                    {
+                        object value = objMiningData.GetValue(i);
+                        string strValue = (value == null) ? string.Empty : value.ToString();
+                        sAtributes.Add(strValue);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+
+            objGrid.DataSource = sAtributes;
+            objGrid.DataBind();
         }
     }
 }

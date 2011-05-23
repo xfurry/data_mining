@@ -149,39 +149,21 @@ namespace WebApplication_OLAP.classes {
         protected global::System.Web.UI.WebControls.DropDownList DropDownListKey;
         
         /// <summary>
-        /// ButtonInput control.
+        /// GridViewAttributes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonInput;
+        protected global::System.Web.UI.WebControls.GridView GridViewAttributes;
         
         /// <summary>
-        /// CheckBoxListInput control.
+        /// GridViewMeasures control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListInput;
-        
-        /// <summary>
-        /// ButtonPredict control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonPredict;
-        
-        /// <summary>
-        /// CheckBoxListPredict control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxListPredict;
+        protected global::System.Web.UI.WebControls.GridView GridViewMeasures;
     }
 }

@@ -169,26 +169,44 @@
             </div>
             <div class="right_articles">
                 <p>
-                    Selecteaza atributele de intrare:
-                    <br />
-                    <asp:Button ID="ButtonInput" runat="server" Text="Check All" 
-                        onclick="ButtonInput_Click" />
+                    Selecteaza atributele:
                 </p>
                 <div style="width: 250px; height: 190px; overflow: auto;">
-                    <asp:CheckBoxList ID="CheckBoxListInput" runat="server">
-                    </asp:CheckBoxList>
+                    <asp:GridView ID="GridViewAttributes" runat="server">
+                        <Columns>
+                            <asp:TemplateField HeaderText="Intrare">
+                                <ItemTemplate>
+                                    <asp:CheckBox ID="CheckBoxAtrInput" runat="server" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Predictie">
+                                <ItemTemplate>
+                                    <asp:CheckBox ID="CheckBoxAtrPredict" runat="server" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                    </asp:GridView>
                 </div>
             </div>
             <div class="right_articles">
                 <p>
-                    Selecteaza atributele de predictie:
-                    <br />
-                    <asp:Button ID="ButtonPredict" runat="server" Text="Check All" 
-                        onclick="ButtonPredict_Click" />
+                    Selecteaza grupurile de masuri:
                 </p>
                 <div style="width: 250px; height: 190px; overflow: auto;">
-                    <asp:CheckBoxList ID="CheckBoxListPredict" runat="server">
-                    </asp:CheckBoxList>
+                    <asp:GridView ID="GridViewMeasures" runat="server">
+                        <Columns>
+                            <asp:TemplateField HeaderText="Intrare">
+                                <ItemTemplate>
+                                    <asp:CheckBox ID="CheckBoxMeasureInput" runat="server" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Predictie">
+                                <ItemTemplate>
+                                    <asp:CheckBox ID="CheckBoxMeasurePredict" runat="server" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                    </asp:GridView>
                 </div>
             </div>
             <div class="notes">
