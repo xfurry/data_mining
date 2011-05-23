@@ -73,7 +73,8 @@
             <%-- Content Area --%>
             <div class="subheader">
                 <p>
-                    <asp:Button ID="ButtonResult" runat="server" Text="Afiseaza continutul structurii" />
+                    <asp:Button ID="ButtonResult" runat="server" 
+                        Text="Afiseaza continutul structurii" onclick="ButtonResult_Click" />
                     &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
                     <asp:DropDownList ID="DropDownListStructures" runat="server">
                     </asp:DropDownList>
@@ -111,7 +112,8 @@
             <div class="left_box">
                 <p>
                     Pentru interogari complexe va rugam sa folositi casuta de mai jos:
-                    &nbsp &nbsp &nbsp<asp:Button ID="ButtonExecute" runat="server" Text="Executa interogarea" />
+                    &nbsp &nbsp &nbsp<asp:Button ID="ButtonExecute" runat="server" 
+                        Text="Executa interogarea" onclick="ButtonExecute_Click" />
                 </p>
                 <asp:TextBox ID="TextBoxQuery" runat="server" Height="70px" TextMode="MultiLine"
                     Width="600px"></asp:TextBox>
@@ -142,19 +144,22 @@
                 <p>
                     Selecteaza dimensiunea:
                 </p>
-                <asp:DropDownList ID="DropDownListDimensions" runat="server">
+                <asp:DropDownList ID="DropDownListDimensions" runat="server" 
+                    onselectedindexchanged="DropDownListDimensions_SelectedIndexChanged">
                 </asp:DropDownList>
                 <p>
                     Selecteaza atributul cheie:
                 </p>
-                <asp:DropDownList ID="DropDownListKey" runat="server">
+                <asp:DropDownList ID="DropDownListKey" runat="server" 
+                    onselectedindexchanged="DropDownListKey_SelectedIndexChanged">
                 </asp:DropDownList>
             </div>
             <div class="right_articles">
                 <p>
                     Selecteaza atributele de intrare:
                     <br />
-                    <asp:Button ID="ButtonInput" runat="server" Text="Check All" />
+                    <asp:Button ID="ButtonInput" runat="server" Text="Check All" 
+                        onclick="ButtonInput_Click" />
                 </p>
                 <div style="width: 250px; height: 190px; overflow: auto;">
                     <asp:CheckBoxList ID="CheckBoxListInput" runat="server">
@@ -165,7 +170,8 @@
                 <p>
                     Selecteaza atributele de predictie:
                     <br />
-                    <asp:Button ID="ButtonPredict" runat="server" Text="Check All" />
+                    <asp:Button ID="ButtonPredict" runat="server" Text="Check All" 
+                        onclick="ButtonPredict_Click" />
                 </p>
                 <div style="width: 250px; height: 190px; overflow: auto;">
                     <asp:CheckBoxList ID="CheckBoxListPredict" runat="server">
