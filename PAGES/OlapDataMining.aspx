@@ -94,7 +94,14 @@
                 <p class="date">
                     Posted on 8th September</p>
                 <div style="width: 600px; height: 230px; overflow: auto;">
-                    <asp:GridView ID="GridViewMain" runat="server" Height="225px" Width="595px">
+                    <asp:GridView ID="GridViewResults" runat="server" OnRowCommand="GridViewResults_RowCommand" Height="225px" Width="595px">
+                        <Columns>
+                            <asp:TemplateField HeaderText="View Node">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="LinkButtonNode" runat="server" CommandName="NodeView" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>">View Node</asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
                     </asp:GridView>
                 </div>
             </div>
@@ -140,6 +147,12 @@
                     <asp:ListItem>Decision Trees</asp:ListItem>
                     <asp:ListItem>Naive Bayes</asp:ListItem>
                     <asp:ListItem>Time Series</asp:ListItem>
+                </asp:DropDownList>
+                <p>
+                    Selecteaza cubul:
+                </p>
+                <asp:DropDownList ID="DropDownListCubes" runat="server" 
+                    onselectedindexchanged="DropDownListCubes_SelectedIndexChanged">
                 </asp:DropDownList>
                 <p>
                     Selecteaza dimensiunea:

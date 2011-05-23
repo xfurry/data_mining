@@ -68,13 +68,13 @@ namespace WebApplication_OLAP.classes {
         protected global::System.Web.UI.WebControls.Label LabelStatus;
         
         /// <summary>
-        /// GridViewMain control.
+        /// GridViewResults control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridViewMain;
+        protected global::System.Web.UI.WebControls.GridView GridViewResults;
         
         /// <summary>
         /// PanelViewer control.
@@ -120,6 +120,15 @@ namespace WebApplication_OLAP.classes {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList DropDownListAlgorithm;
+        
+        /// <summary>
+        /// DropDownListCubes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListCubes;
         
         /// <summary>
         /// DropDownListDimensions control.

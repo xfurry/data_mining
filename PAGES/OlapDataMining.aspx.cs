@@ -5,20 +5,75 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
+using Microsoft.AnalysisServices.DataMiningHtmlViewers;
+using Microsoft.AnalysisServices;
+using System.Data.OleDb;
+using WebApplication_OLAP.classes.data_managers;
 
 namespace WebApplication_OLAP.classes
 {
     public partial class DataMining : System.Web.UI.Page
     {
+        private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        private const string sCatalog = "Adventure Works DW 2008";
+        //private const string sServer = "localhost";
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            // get from session
-            if (Session != null)
+            try
             {
-                DataTable objTable = (DataTable)Session["queryData"];
-                GridViewMain.DataSource = objTable;
-                GridViewMain.DataBind();
+                // load existing mining structures
+                if (!Page.IsPostBack)
+                {
+                    LoadExistingStructures();
+                    InitCubes();
+                    InitDimensionNames();
+                    InitAttributes();
+                }
+
+                // get from session
+                if (Session != null)
+                {
+                    // initial query data
+                    DataTable objTable = new DataTable();
+
+                    if (Session["queryData"] != null)
+                    {
+                        objTable = (DataTable)Session["queryData"];
+                        //GridViewData.DataSource = objTable;
+                        //GridViewData.DataBind();
+                        // initialize column list
+                        //InitializeColumns(objTable);
+                    }
+
+                    // mining query data
+                    if (Session["queryMining"] != null)
+                    {
+                        objTable = (DataTable)Session["queryMining"];
+                        GridViewResults.DataSource = objTable;
+                        GridViewResults.DataBind();
+                        // load viewer for the current model
+                        LoadViewer();
+                    }
+
+                    // node query data
+                    if (Session["queryNode"] != null)
+                    {
+                        objTable = (DataTable)Session["queryNode"];
+                        GridViewDistribution.DataSource = objTable;
+                        GridViewDistribution.DataBind();
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+
+            // register event
+            DropDownListCubes.SelectedIndexChanged += new EventHandler(DropDownListCubes_SelectedIndexChanged);
+            DropDownListDimensions.SelectedIndexChanged += new EventHandler(DropDownListDimensions_SelectedIndexChanged);
+            DropDownListKey.SelectedIndexChanged += new EventHandler(DropDownListKey_SelectedIndexChanged);
         }
 
         /*
@@ -26,9 +81,70 @@ namespace WebApplication_OLAP.classes
          */
         protected void ButtonStructure_Click(object sender, EventArgs e)
         {
-            MiningManager mining = new MiningManager();
-            mining.AddMiningStructure();
-            LabelStatus.Text = mining.SResult;
+            // Create mining structure based on column and table selection
+            List<string> lsInputItems = new List<string>();
+            List<string> lsPredictItems = new List<string>();
+
+            // add values to list
+            foreach (ListItem objItem in CheckBoxListInput.Items)
+            {
+                if (objItem.Selected)
+                    lsInputItems.Add(objItem.Text);
+            }
+
+            foreach (ListItem objItem in CheckBoxListPredict.Items)
+            {
+                if (objItem.Selected)
+                    lsPredictItems.Add(objItem.Text);
+            }
+
+            string sStructName = TextBoxName.Text;
+            if (sStructName == "")
+                sStructName = "MyMiningStructure";
+
+            string objAlgorithm = null;
+
+            // create mining structure
+            if (DropDownListAlgorithm.SelectedIndex == 0)
+                objAlgorithm = MiningModelAlgorithms.MicrosoftClustering;
+            else if (DropDownListAlgorithm.SelectedIndex == 1)
+                objAlgorithm = MiningModelAlgorithms.MicrosoftDecisionTrees;
+            else if (DropDownListAlgorithm.SelectedIndex == 2)
+                objAlgorithm = MiningModelAlgorithms.MicrosoftNaiveBayes;
+            else if (DropDownListAlgorithm.SelectedIndex == 3)
+                objAlgorithm = MiningModelAlgorithms.MicrosoftTimeSeries;
+
+            // warn at missing input column
+            if (lsInputItems.Count == 0)
+            {
+                LabelStatus.Text = LabelStatus.Text + "Please select at least one input column!";
+                return;
+            }
+
+            // warn at prediction column missing for naive bayes and decision trees
+            if (objAlgorithm == MiningModelAlgorithms.MicrosoftNaiveBayes || objAlgorithm == MiningModelAlgorithms.MicrosoftDecisionTrees)
+            {
+                if (lsInputItems.Count == 0 || lsPredictItems.Count == 0)
+                {
+                    LabelStatus.Text = LabelStatus.Text + "Please select at least one input column and at least one prediction column!";
+                    return;
+                }
+            }
+
+            MiningManager objMiningManager = new MiningManager();
+
+            //// Create mining query from the existing results
+            //if (objMiningManager.CreateMiningStructure(lsInputItems, lsPredictItems, objAlgorithm,
+            //    DropDownListTables.SelectedItem.Text, DropDownListKey.SelectedItem.Text, sStructName))
+            //{
+            //    LabelStatus.Text = LabelStatus.Text + "Success!";
+            //    LoadExistingStructures();
+            //}
+            //else
+            //    LabelStatus.Text = LabelStatus.Text + "Failed!\r\n" + objMiningManager.SMiningError;
+
+
+
         }
 
         /*
@@ -36,7 +152,11 @@ namespace WebApplication_OLAP.classes
          */
         protected void DropDownListKey_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (DropDownListKey.SelectedIndex <= 0)
+                return;
 
+            // init input columns
+            InitCheckboxFields();
         }
 
         /*
@@ -44,7 +164,11 @@ namespace WebApplication_OLAP.classes
          */
         protected void DropDownListDimensions_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (DropDownListDimensions.SelectedIndex <= 0)
+                return;
 
+            // init column controlls
+            InitAttributes();
         }
 
         /*
@@ -52,7 +176,11 @@ namespace WebApplication_OLAP.classes
          */
         protected void ButtonInput_Click(object sender, EventArgs e)
         {
-
+            ChangeState(CheckBoxListInput);
+            if (ButtonInput.Text == "Check All")
+                ButtonInput.Text = "Uncheck All";
+            else
+                ButtonInput.Text = "Check All";
         }
 
         /*
@@ -60,7 +188,25 @@ namespace WebApplication_OLAP.classes
          */
         protected void ButtonPredict_Click(object sender, EventArgs e)
         {
+            ChangeState(CheckBoxListPredict);
+            if (ButtonPredict.Text == "Check All")
+                ButtonPredict.Text = "Uncheck All";
+            else
+                ButtonPredict.Text = "Check All";
+        }
 
+        /*
+         * Modify the state of the selected
+         */
+        private void ChangeState(CheckBoxList objList)
+        {
+            foreach (ListItem objItem in objList.Items)
+            {
+                if (objItem.Selected)
+                    objItem.Selected = false;
+                else
+                    objItem.Selected = true;
+            }
         }
 
         /*
@@ -68,7 +214,13 @@ namespace WebApplication_OLAP.classes
          */
         protected void ButtonResult_Click(object sender, EventArgs e)
         {
-
+            // Query uses mining model name!
+            string sQuery = "select NODE_NAME, NODE_TYPE, ATTRIBUTE_NAME, " +
+                "[PARENT_UNIQUE_NAME], [CHILDREN_CARDINALITY], NODE_PROBABILITY, MARGINAL_PROBABILITY, NODE_SUPPORT, " +
+                "MSOLAP_MODEL_COLUMN, MSOLAP_NODE_SCORE from [" + DropDownListStructures.SelectedItem.ToString() + "].CONTENT";
+            InitDataTable(sQuery);
+            // load viewer for the current model
+            LoadViewer();
         }
 
         /*
@@ -76,7 +228,366 @@ namespace WebApplication_OLAP.classes
          */
         protected void ButtonExecute_Click(object sender, EventArgs e)
         {
+            string sQuery = TextBoxQuery.Text;
+            InitDataTable(sQuery);
+        }
 
+        /*
+         * Init checkbox fields to exclude the key attribute
+         */
+        // ##################### ToDo: update!!!####################
+        void InitCheckboxFields()
+        {
+            CheckBoxListInput.DataSource = null;
+            CheckBoxListInput.DataBind();
+
+            CheckBoxListPredict.DataSource = null;
+            CheckBoxListPredict.DataBind();
+
+            // execute query
+            SQLManager manager = new SQLManager("AdventureWorksDW");
+            DataTable objTable = new DataTable();
+
+            // handle errors
+            //if (manager.GetQueryResult(sQueryText) == null)
+            //{
+            //    HandleQueryError();
+            //    return;
+            //}
+
+            // exclude the key column
+            string sQueryTextExclude = "SELECT COLUMN_NAME, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
+                DropDownListDimensions.SelectedItem.ToString() + "' AND COLUMN_NAME <> '" + DropDownListKey.SelectedItem.ToString() + " 'ORDER BY ORDINAL_POSITION";
+
+            objTable.Load(manager.GetQueryResult(sQueryTextExclude));
+
+            CheckBoxListInput.DataSource = objTable;
+            CheckBoxListInput.DataTextField = "COLUMN_NAME";
+            CheckBoxListInput.DataValueField = "ORDINAL_POSITION";
+            CheckBoxListInput.DataBind();
+
+            CheckBoxListPredict.DataSource = objTable;
+            CheckBoxListPredict.DataTextField = "COLUMN_NAME";
+            CheckBoxListPredict.DataValueField = "ORDINAL_POSITION";
+            CheckBoxListPredict.DataBind();
+
+            manager.CloseConnection();
+        }
+
+        /*
+         * Init all attributes
+         */
+        // ##################### ToDo: update!!!####################
+        private void InitAttributes()
+        {
+            // clear current query
+            DropDownListKey.DataSource = null;
+            DropDownListKey.DataBind();
+
+            // list selected table: to be removed
+            //Label1.Text = ListBoxTables.SelectedItem.ToString();
+
+            string sQueryText = "SELECT COLUMN_NAME, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
+                DropDownListDimensions.SelectedItem.ToString() + "'ORDER BY ORDINAL_POSITION";
+
+            // execute query
+            SQLManager manager = new SQLManager("AdventureWorksDW");
+            DataTable objTable = new DataTable();
+
+            // handle errors
+            //if (manager.GetQueryResult(sQueryText) == null)
+            //{
+            //    HandleQueryError();
+            //    return;
+            //}
+
+            objTable.Load(manager.GetQueryResult(sQueryText));
+
+            DropDownListKey.DataSource = objTable;
+            DropDownListKey.DataTextField = "COLUMN_NAME";
+            DropDownListKey.DataValueField = "ORDINAL_POSITION";
+            DropDownListKey.DataBind();
+
+            manager.CloseConnection();
+
+            // init input columns
+            InitCheckboxFields();
+        }
+
+        /*
+         * Refresh dimensions
+         */
+        protected void DropDownListCubes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DropDownListCubes.SelectedIndex <= 0)
+                return;
+
+            // init dimensions
+            InitDimensionNames();
+        }
+
+        /*
+         * Load mining viewer for the selected structure
+         */
+        private void LoadViewer()
+        {
+            if (DropDownListStructures.SelectedItem == null)
+                return;
+
+            // clear all the controls in order to avoid adding the same control twice
+            PanelViewer.Controls.Clear();
+
+            // define objects
+            DMHtmlViewer objViewer = null;
+            Microsoft.AnalysisServices.AdomdClient.MiningModel objModel = null;
+            Microsoft.AnalysisServices.AdomdClient.MiningService objService = null;
+
+            string sConnString = "Data Source=" + sServer + "; Initial Catalog=" + sCatalog;
+            Microsoft.AnalysisServices.AdomdClient.AdomdConnection objConn = new Microsoft.AnalysisServices.AdomdClient.AdomdConnection(sConnString);
+
+            objConn.Open();
+            objModel = objConn.MiningModels[DropDownListStructures.SelectedItem.ToString()];
+            objService = objConn.MiningServices[objModel.Algorithm];
+
+            // switch mining service
+            switch (objService.ViewerType)
+            {
+                case "Microsoft_Cluster_Viewer":
+                    objViewer = new DMClusterViewer();
+                    break;
+                case "Microsoft_Tree_Viewer":
+                    objViewer = new DMDecisionTreeViewer();
+                    break;
+                case "Microsoft_NaiveBayesian_Viewer":
+                    objViewer = new DMNaiveBayesViewer();
+                    break;
+                default:
+                    // if none of the above then return
+                    return;
+            }
+
+            // init data for the current viewer type
+            objViewer.Server = sServer;
+            objViewer.Database = sCatalog;
+            objViewer.Model = DropDownListStructures.SelectedItem.ToString();
+            objViewer.DataBind();
+
+            PanelViewer.Controls.Add(objViewer);
+            PanelViewer.Visible = true;
+        }
+
+        /*
+         * Load all the current mining structures
+         */
+        private void LoadExistingStructures()
+        {
+            // reset list
+            DropDownListStructures.DataSource = null;
+            DropDownListStructures.DataBind();
+
+            SQLMiningManager objMiningManager = new SQLMiningManager();
+
+            List<string> lStructs = objMiningManager.GetExistingStructures(sCatalog);
+
+            for (int i = 0; i < lStructs.Count; i++)
+                DropDownListStructures.Items.Add(lStructs[i].ToString());
+
+            DropDownListStructures.DataBind();
+        }
+
+        /*
+         * Show distribution node for selected row
+         */
+        private void DisplayDistributionNode(string sNodeName)
+        {
+            SQLMiningManager objMiningManager = new SQLMiningManager();
+
+            string sQuery = "select NODE_DISTRIBUTION from [" + DropDownListStructures.SelectedItem.ToString() + "].CONTENT where NODE_NAME ='" + sNodeName + "'";
+            // display results
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objMiningData = objMiningManager.GetMiningResults(sQuery);
+
+            // return for invalid data
+            if (objMiningData == null)
+                return;
+
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objNode = null;
+
+            // output the rows in the DataReader
+            while (objMiningData.Read())
+            {
+                for (int j = 0; j < objMiningData.FieldCount; j++)
+                {
+                    objNode = (Microsoft.AnalysisServices.AdomdClient.AdomdDataReader)objMiningData[j];
+
+                    // table defines
+                    DataTable objTable = new DataTable();
+                    DataColumn myColumn = new DataColumn();
+                    DataRow myRow = null;
+
+                    // Get the node meta
+                    DataTable objSchemaTable = objNode.GetSchemaTable();
+                    List<string> lMeta = new List<string>();
+
+                    // init meta values
+                    for (int i = 0; i < objSchemaTable.Rows.Count; i++)
+                        lMeta.Add(objSchemaTable.Rows[i][0].ToString());
+
+                    // add columns and column captions
+                    for (int i = 0; i < objNode.FieldCount; i++)
+                    {
+                        myColumn = new DataColumn(lMeta[i]);
+                        objTable.Columns.Add(myColumn);
+                    }
+
+                    // read the node
+                    while (objNode.Read())
+                    {
+                        // new row
+                        myRow = objTable.NewRow();
+                        // set the row values
+                        for (int i = 0; i < objNode.FieldCount; i++)
+                            myRow[i] = objNode[i];
+
+                        // add row to the table
+                        objTable.Rows.Add(myRow);
+                    }
+                    // close reader
+                    objNode.Close();
+
+                    GridViewDistribution.DataSource = objTable;
+                    GridViewDistribution.DataBind();
+                    // hide viewer panel and show grid table
+                    GridViewDistribution.Visible = true;
+                    PanelViewer.Visible = false;
+
+                    // load the main table data
+                    Session.Add("queryNode", objTable);
+                }
+            }
+            // close reader
+            objMiningData.Close();
+        }
+
+        /*
+         * Get selected table row
+         */
+        protected void GridViewResults_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "NodeView")
+            {
+                // Convert the row index stored in the CommandArgument
+                // property to an Integer.
+                int index = Convert.ToInt32(e.CommandArgument);
+
+                // Retrieve the row that contains the button clicked
+                // name is always on index = 1
+                GridViewRow row = GridViewResults.Rows[index];
+                DisplayDistributionNode(row.Cells[1].Text);
+            }
+        }
+
+        /*
+         * Execute query
+         */
+        private void InitDataTable(string sQuery)
+        {
+            SQLMiningManager objMiningManager = new SQLMiningManager();
+
+            // clear node table
+            GridViewDistribution.DataSource = null;
+            GridViewDistribution.DataBind();
+
+            // display results
+            Microsoft.AnalysisServices.AdomdClient.AdomdDataReader objMiningData = objMiningManager.GetMiningResults(sQuery);
+
+            if (objMiningData == null)
+                return;
+
+            DataTable objTable = new DataTable();
+            DataColumn myColumn = new DataColumn();
+            DataRow myRow = null;
+
+            DataTable objSchemaTable = objMiningData.GetSchemaTable();
+            List<string> lMeta = new List<string>();
+
+            // init meta values
+            for (int i = 0; i < objSchemaTable.Rows.Count; i++)
+                lMeta.Add(objSchemaTable.Rows[i][0].ToString());
+
+            // add columns and column captions
+            for (int i = 0; i < objMiningData.FieldCount; i++)
+            {
+                myColumn = new DataColumn(lMeta[i]);
+                objTable.Columns.Add(myColumn);
+            }
+
+            // output the rows in the DataReader
+            while (objMiningData.Read())
+            {
+                // new row
+                myRow = objTable.NewRow();
+                // set the row values
+                for (int i = 0; i < objMiningData.FieldCount; i++)
+                    myRow[i] = objMiningData[i];
+
+                // add row to the table
+                objTable.Rows.Add(myRow);
+            }
+            // close reader
+            objMiningData.Close();
+
+            GridViewResults.DataSource = objTable;
+            GridViewResults.DataBind();
+
+            // load the main table data
+            Session.Add("queryMining", objTable);
+        }
+
+        /*
+         * Init all table names into a listbox
+         */
+        // ##################### ToDo: update!!!####################
+        private void InitDimensionNames()
+        {
+            // show DB tables
+            SQLManager manager = new SQLManager("AdventureWorksDW");
+            string sQuery = "Select name, id from sysobjects where xtype='U'";
+
+            // handle errors
+            //if (manager.GetQueryDataSet(sQuery) == null)
+            //{
+            //    HandleQueryError();
+            //    return;
+            //}
+
+            DataSet objSet = manager.GetQueryDataSet(sQuery);
+            DropDownListDimensions.DataSource = objSet;
+            DropDownListDimensions.DataTextField = "name";
+            DropDownListDimensions.DataValueField = "id";
+            DropDownListDimensions.DataBind();
+            manager.CloseConnection();
+        }
+
+        /*
+         * Init all cubes
+         */
+        // ##################### ToDo: update!!!####################
+        private void InitCubes()
+        {
+            OlapManager objOlapManager = new OlapManager();
+            objOlapManager.GetCubes();
+
+            // clear items to avoid duplicates
+            DropDownListCubes.Items.Clear();
+
+            List<Microsoft.AnalysisServices.AdomdClient.CubeDef> lCubeList = objOlapManager.LCubes;
+            for (int i = 0; i < lCubeList.Count; i++)
+            {
+                string myItem = lCubeList[i].Name;
+                DropDownListCubes.Items.Add(myItem);
+            }
+
+            objOlapManager.CloseConnection();
         }
     }
 }
