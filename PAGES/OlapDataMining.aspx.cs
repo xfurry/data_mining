@@ -141,7 +141,7 @@ namespace WebApplication_OLAP.classes
             // warn at missing input column
             if (lsInputItems.Count == 0)
             {
-                LabelStatus.Text = LabelStatus.Text + "Please select at least one input column!";
+                LabelStatus.Text = "Please select at least one input column!";
                 return;
             }
 
@@ -150,7 +150,7 @@ namespace WebApplication_OLAP.classes
             {
                 if (lsInputItems.Count == 0 || lsPredictItems.Count == 0)
                 {
-                    LabelStatus.Text = LabelStatus.Text + "Please select at least one input column and at least one prediction column!";
+                    LabelStatus.Text = "Please select at least one input column and at least one prediction column!";
                     return;
                 }
             }
@@ -167,10 +167,7 @@ namespace WebApplication_OLAP.classes
                 LoadExistingStructures();
             }
             else
-                LabelStatus.Text = "Rezultatul procesului: " + sResult;
-
-
-
+                LabelStatus.Text = "Rezultatul procesului: Eroare - " + sResult;
         }
 
         /*

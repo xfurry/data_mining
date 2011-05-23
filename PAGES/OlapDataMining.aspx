@@ -171,6 +171,9 @@
                 <p>
                     Selecteaza atributele:
                 </p>
+                Intrare
+                &nbsp &nbsp
+                Predictie
                 <div style="width: 250px; height: 190px; overflow: auto;">
                     <asp:GridView ID="GridViewAttributes" runat="server">
                         <Columns>
@@ -192,6 +195,9 @@
                 <p>
                     Selecteaza grupurile de masuri:
                 </p>
+                Intrare
+                &nbsp &nbsp
+                Predictie
                 <div style="width: 250px; height: 190px; overflow: auto;">
                     <asp:GridView ID="GridViewMeasures" runat="server">
                         <Columns>

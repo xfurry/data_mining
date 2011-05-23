@@ -40,36 +40,57 @@ namespace WebApplication_OLAP.classes
                 Microsoft.AnalysisServices.MiningStructure myMiningStructure = objDb.MiningStructures.Add(sStructName, sStructName);
                 myMiningStructure.Source = new CubeDimensionBinding(".", objCube.ID, objDimension.ID);
 
+                // key column
+                CubeAttribute objKey = objCube.Dimensions.GetByName(sDimensionName).Attributes[sKeyColumn];
+                ScalarMiningStructureColumn objKeyColumn = CreateMiningStructureColumn(objKey, true);
+                objKeyColumn.Name = sKeyColumn;
+                myMiningStructure.Columns.Add(objKeyColumn);
 
                 // create mining columns
-                CubeAttribute basketAttribute;
-                CubeAttribute itemAttribute;
-                basketAttribute = objCube.Dimensions.GetByName("Customer").Attributes[0];
-                itemAttribute = objCube.Dimensions.GetByName("Product").Attributes[0];
+                for (int i = 0; i < lsInputColumns.Count; i++)
+                {
+                    // get attribute
+                    CubeAttribute objAttribute = new CubeAttribute();
+                    objAttribute = objCube.Dimensions.GetByName(sDimensionName).Attributes[lsInputColumns[i]];
 
-                //basket structure column
-                ScalarMiningStructureColumn basket = CreateMiningStructureColumn(basketAttribute, true);
-                basket.Name = "Basket";
-                myMiningStructure.Columns.Add(basket);
+                    // create mining column
+                    ScalarMiningStructureColumn objColumn = CreateMiningStructureColumn(objAttribute, false);
+                    objColumn.Name = lsInputColumns[i];
+                    myMiningStructure.Columns.Add(objColumn);
 
-                //item structure column - nested table
-                ScalarMiningStructureColumn item = CreateMiningStructureColumn(itemAttribute, true);
-                item.Name = "Item";
+                    // create mining columns for measures
+                    for (int j = 0; j < lsMeasureInput.Count; j++)
+                    {
+                        MeasureGroup objMeasureGroup = objCube.MeasureGroups[lsMeasureInput[j]];
+                        TableMiningStructureColumn objMeasure = CreateMiningStructureColumn(objMeasureGroup);
 
-                MeasureGroup measureGroup = objCube.MeasureGroups[0];
-                TableMiningStructureColumn purchases = CreateMiningStructureColumn(measureGroup);
+                        objMeasure.Name = lsMeasureInput[j];
+                        objMeasure.Columns.Add(objColumn);
+                        myMiningStructure.Columns.Add(objMeasure);
+                    }
+                }
 
-                purchases.Name = "Purchases";
-                purchases.Columns.Add(item);
-                myMiningStructure.Columns.Add(purchases);
+                // create mining columns
+                for (int i = 0; i < lsPredictColumns.Count; i++)
+                {
+                    // get attribute
+                    CubeAttribute objAttribute = new CubeAttribute();
+                    objAttribute = objCube.Dimensions.GetByName(sDimensionName).Attributes[lsPredictColumns[i]];
 
-                Microsoft.AnalysisServices.MiningModel myMiningModel = myMiningStructure.CreateMiningModel();
-                myMiningModel.Name = "MarketBasket";
-                myMiningModel.Columns["Purchases"].Usage = MiningModelColumnUsages.PredictOnly;
-                myMiningModel.Algorithm = MiningModelAlgorithms.MicrosoftAssociationRules;
+                    // create mining column
+                    ScalarMiningStructureColumn objColumn = CreateMiningStructureColumn(objAttribute, false);
+                    objColumn.Name = lsPredictColumns[i] + "_Predict";
+                    myMiningStructure.Columns.Add(objColumn);
+                }
 
-                myMiningStructure.Update(UpdateOptions.ExpandFull);
-                myMiningStructure.Process(ProcessType.ProcessFull);
+                // update
+                myMiningStructure.Update();
+
+                // create mining models
+                CreateMiningModel(myMiningStructure, sStructName, sAlgorithm, lsPredictColumns, lsMeasurePredict);
+
+                // process
+                myMiningStructure.Process();
 
                 return "Success";
             }
@@ -80,9 +101,83 @@ namespace WebApplication_OLAP.classes
         }
 
         /*
+         * Create mining model
+         */
+        private void CreateMiningModel(Microsoft.AnalysisServices.MiningStructure objStructure, string sName, string sAlgorithm,
+            List<string> lsAtrPredict, List<string> lsMeasurePredict)
+        {
+            Microsoft.AnalysisServices.MiningModel myMiningModel = objStructure.CreateMiningModel(true, sName);
+
+            switch (sAlgorithm)
+            {
+                case MiningModelAlgorithms.MicrosoftClustering:
+                {
+                    myMiningModel.Algorithm = MiningModelAlgorithms.MicrosoftClustering;
+                    myMiningModel.Algorithm = sAlgorithm;
+
+                    // add optional predict columns
+                    if (lsAtrPredict.Count != 0)
+                    {
+                        // predict columns
+                        for (int i = 0; i < lsAtrPredict.Count; i++)
+                        {
+                            Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.Add(lsAtrPredict[i] + "_Predict_Model");
+                            modelColumn.SourceColumnID = lsAtrPredict[i] + "_Predict";
+                            modelColumn.Usage = MiningModelColumnUsages.Predict;
+                        }
+                    }
+                    break;
+                }
+                case MiningModelAlgorithms.MicrosoftTimeSeries:
+                {
+                    myMiningModel.Algorithm = MiningModelAlgorithms.MicrosoftTimeSeries;
+                    myMiningModel.AlgorithmParameters.Add("PERIODICITY_HINT", "{12}");              // {12} represents the number of months for prediction
+
+                    // predict columns
+                    for (int i = 0; i < lsAtrPredict.Count; i++)
+                    {
+                        Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.Add(lsAtrPredict[i] + "_Predict_Model");
+                        modelColumn.SourceColumnID = lsAtrPredict[i] + "_Predict";
+                        modelColumn.Usage = MiningModelColumnUsages.Predict;
+                    }
+                    break;
+                }
+                case MiningModelAlgorithms.MicrosoftNaiveBayes:
+                {
+                    myMiningModel.Algorithm = MiningModelAlgorithms.MicrosoftNaiveBayes;
+
+                    // predict columns
+                    for (int i = 0; i < lsAtrPredict.Count; i++)
+                    {
+                        Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.Add(lsAtrPredict[i] + "_Predict_Model");
+                        modelColumn.SourceColumnID = lsAtrPredict[i] + "_Predict";
+                        modelColumn.Usage = MiningModelColumnUsages.Predict;
+                    }
+
+                    break;
+                }
+                case MiningModelAlgorithms.MicrosoftDecisionTrees:
+                {
+                    myMiningModel.Algorithm = MiningModelAlgorithms.MicrosoftDecisionTrees;
+
+                    // predict columns
+                    for (int i = 0; i < lsAtrPredict.Count; i++)
+                    {
+                        Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.Add(lsAtrPredict[i] + "_Predict_Model");
+                        modelColumn.SourceColumnID = lsAtrPredict[i] + "_Predict";
+                        modelColumn.Usage = MiningModelColumnUsages.Predict;
+                    }
+                    break;
+                }
+            }
+
+            myMiningModel.Update();
+        }
+
+        /*
          * Create Scalar mining column
          */
-        public static ScalarMiningStructureColumn CreateMiningStructureColumn(CubeAttribute attribute, bool isKey)
+        private ScalarMiningStructureColumn CreateMiningStructureColumn(CubeAttribute attribute, bool isKey)
         {
             ScalarMiningStructureColumn column = new
             ScalarMiningStructureColumn();
@@ -105,7 +200,7 @@ namespace WebApplication_OLAP.classes
         /*
          * Create table mining structure (for measuregroups)
          */
-        public static TableMiningStructureColumn CreateMiningStructureColumn(MeasureGroup measureGroup)
+        private TableMiningStructureColumn CreateMiningStructureColumn(MeasureGroup measureGroup)
         {
             TableMiningStructureColumn column = new TableMiningStructureColumn();
             column.Name = measureGroup.Name;

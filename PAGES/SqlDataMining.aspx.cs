@@ -225,7 +225,7 @@ namespace WebApplication_OLAP.pages
                 LoadExistingStructures();
             }
             else
-                LabelStatus.Text = "Rezultatul procesului: " + sResult;
+                LabelStatus.Text = "Rezultatul procesului: Eroare - " + sResult;
         }
 
         /*
