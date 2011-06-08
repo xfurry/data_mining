@@ -55,14 +55,18 @@
             </div>
             <div class="thirds">
                 <ul>
-                    <li><a href="#">Conducting a CMS Survey</a></li>
-                    <li><a href="#">Interests behind politics</a></li>
+                    <li><a href="http://dataminingarticles.com/data-mining-classification.html">
+                        Data Mining Classification</a></li>
+                    <li><a href="http://www.nag.co.uk/IndustryArticles/DMinFinancialApps.pdf">
+                        Data Mining in financial applications</a></li>
                 </ul>
             </div>
             <div class="thirds">
                 <ul>
-                    <li><a href="#">How stress affects your health</a></li>
-                    <li><a href="#">10 ways to buy a used car</a></li>
+                    <li><a href="http://www.nag.co.uk/IndustryArticles/UnleashingDMpotential.pdf">
+                        Data Mining full potential</a></li>
+                    <li><a href="http://www.dataminingarticles.com/Grab-Bag-Frequently-Asked-Data-Mining-Questions.html">
+                        FAQ</a></li>
                 </ul>
             </div>
         </div>
@@ -78,87 +82,84 @@
             <%-- Content Area --%>
             <div class="subheader">
                 <p>
-                    <a href="#">Lorem ipsum dolor</a> sit amet, consectetuer adipiscing elit, sed diam
-                    nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut
-                    wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis
-                    nisl ut aliquip ex.</p>
+                    Data mining permite unei afaceri a colecta informatii dintr-o varietate de surse,
+                    analiza de date folosind datele-mining software, de incarcare de informatii intr-o baza
+                    de date, stocheaza informatiile, si sa furnizeze informatii analizate intr-un format util,
+                    cum ar fi un raport, tabel, sau un grafic. Care se refera la prognoza analiza de business si
+                    de afaceri, informatiile analizate este clasificata de a determina modelele importante si relatii.</p>
             </div>
             <div class="left_articles">
                 <h2>
                     Bine ati venit la Easy Data Miner</h2>
                 <p class="date">
-                    Posted on 8th September</p>
-                <img class="bigimage" src="images/bigimage.gif" alt="Big Image" />
+                    6th June 2011</p>
+                <%--<img class="bigimage" src="images/bigimage.gif" alt="Big Image" />--%>
                 <p>
-                    <a href="#">Lorem ipsum dolor sit amet</a>, consectetuer adipiscing elit, sed diam
-                    nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. <a
-                        href="#">Ut wisi enim ad minim veniam</a>, quis nostrud exerci tation ullamcorper
-                    suscipit lobortis nisl ut aliquip ex.</p>
-                <p>
-                    <a href="#">Lorem ipsum dolor sit amet</a>, consectetuer adipiscing elit, sed diam
-                    nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. <a
-                        href="#">Ut wisi enim ad minim veniam</a>, quis nostrud exerci tation ullamcorper
-                    suscipit lobortis nisl ut aliquip ex.</p>
+                    Solutiile noastre de data management au ca scop schimbul de informatii corecte intre
+                    bazele de date si canale de comunicare prin standardizarea si automatizarea transferului
+                    de date. Companiile acorda o atentie din ce in ce mai mare datelor despre clienti
+                    pentru a analiza comportamentul acestora. Comportamentul consumatorilor nu este
+                    singurul motiv pentru a gandi o strategie de managementul datelor din interiorul
+                    companiei. Companiile se confrunta cu o noua provocare actuala. Datele importante
+                    despre clienti, produse, furnizori si locatii sunt raspandite in sisteme disparate,
+                    canalele de vanzare, unitati comerciale, baze de date ale departamentelor si alte
+                    locatii. Solutiile de data managemant reunesc aceste date si le mentin intr-un mod
+                    centralizat. Acestea au ca scop schimbul de informatii corecte intre bazele de date
+                    si canale de comunicare prin standardizarea si automatizarea transferului de date.
+                    Astfel, se imbunatatesc procesele de afaceri, avand ca efect cresterea profitabilitatii,
+                    o gestionare eficienta a inventarului, si cresterea cotei de vanzari. Produsele,
+                    clientii si furnizorii sunt cele trei entitati care sunt implicate in procesul de
+                    analiza si gestionare a sistemelor de managemant a datelor.</p>
             </div>
             <div class="left_box">
                 <p>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
-                    euismod tincidunt ut laoreet dolore.</p>
+                    Atunci cand o afacere beneficiaza de puterea data mining, ei sunt capabili de a dobandi cunostinte importante care ii vor ajuta sa nu dezvolte strategii eficiente de marketing numai duc la decizii mai bune in afaceri, dar va ajuta la identificarea tendintelor viitoare, in special industria lor. Data mining a devenit un instrument esential pentru a ajuta afacerile castiga un avantaj competitiv</p>
             </div>
             <%-- Downpage boxes --%>
-            <div class="thirds">
+<%--            <div class="thirds">
                 <p>
-                    <b><a href="#" class="title">Web 2.0 business startup tips</a></b><br />
-                    Lorem ipsum dolor sit amet esta pa, consectetuer adipiscing elit, sed diam nonummy
-                    nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
-                    ad minim veniam, quis nostrud exerci. <a href="#">
-                        <img src="images/comment.gif" alt="Comment" /></a></p>
+                    Privit în ansamblu, o soluţie de data managemant reprezintă o gestionare a validărilor
+                    şi a modalităţii în care este efectuată prelucrarea efectivă a datelor la nivelul
+                    creării, editării şi ştergerii obiectelor implicate în proces. Din punctul de vedere
+                    al beneficiilor pe care o soluţie de data managemant le oferă acestea sunt multiple
+                    şi pornesc de la identificarea şi eliminarea în timp real a erorilor, înainte ca
+                    acestea să fie înregistrate în baza de date a companiei şi identificare surselor
+                    de eroare</p>
             </div>
             <div class="thirds">
                 <p>
-                    <b><a href="http://andreasviklund.com/templates/" class="title">Visualize your website</a></b><br />
-                    Lorem ipsum dolor sit amet esta pa, consectetuer adipiscing elit, sed diam nonummy
-                    nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
-                    ad minim veniam, quis nostrud exerci. <a href="#">
-                        <img src="images/comment.gif" alt="Comment" /></a></p>
+                    De asemenea, se creează un set optim de interfeţe care elimină redundanţele de date
+                    apărute în grilele bazei de date a companiei. Un alt avantaj este reprezentat de
+                    uşurinţa cu care se realizează comunicarea eficientă cu informaţiile aflate pe suport
+                    extern. Accelerarea vitezei de procesare a datelor este de asemenea unul din avantajele
+                    oferite de soluţiile de managemant a datelor. Aceasta se obţine prin eliminarea
+                    redundanţei informaţionale şi prin înglobarea tuturor informaţiilor externe necesare
+                    într-o bază de date</p>
             </div>
             <div class="thirds">
                 <p>
-                    <b><a href="http://snews.solucija.com/" class="title">Manage your content</a></b><br />
-                    Lorem ipsum dolor sit amet esta pa, consectetuer adipiscing elit, sed diam nonummy
-                    nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
-                    ad minim veniam, quis nostrud exerci. <a href="#">
-                        <img src="images/comment.gif" alt="Comment" /></a></p>
-            </div>
+                    De asemenea, prin utilizarea unor astfel de soluţii se optimizează şi se automatizează
+                    metodelele de comunicare, respectiv mail-uri automate către alte departamente, gestiune
+                    a task-urilor, notificări automate. Un avantaj major este reprezentat de posibilitatea
+                    corectării erorilor atât prin procese automate cât şi prin operaţiuni de responsabilizare
+                    validare, decizie managerială, etc. Nu în ultimul rând, soluţiile de managemant
+                    a datelor oferă posibilitatea de reducere a muncii manuale şi integrarea ei într-un
+                    proces eficient pe baza de validare la nivel de user.</p>
+            </div>--%>
         </div>
         <%-- Right Side --%>
         <div id="right">
             <div class="right_articles">
                 <p>
-                    <img src="images/image.gif" alt="Image" title="Image" class="image" /><b>Lorem ipsum
-                        dolor sit amet</b><br />
-                    consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
-                    dolore magna aliquam <a href="#">erat volutpat</a>. Ut wisi enim ad minim veniam,
-                    quis nostrud exerci tation ullamcorper suscipit lobortis <a href="#">nisl ut aliquip
-                        ex</a>.</p>
+                    Data mining este cea mai mare parte folosite de catre companii, cu un accent puternic pe obiceiurile de cumparaturi ale consumatorilor, cum informatii, analize financiare, de marketing evaluari, etc </p>
             </div>
             <div class="right_articles">
                 <p>
-                    <img src="images/image.gif" alt="Image" title="Image" class="image" /><b>Lorem ipsum
-                        dolor sit amet</b><br />
-                    consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
-                    dolore magna aliquam <a href="#">erat volutpat</a>. Ut wisi enim ad minim veniam,
-                    quis nostrud exerci tation ullamcorper suscipit lobortis <a href="#">nisl ut aliquip
-                        ex</a>.</p>
+                    Privit in ansamblu, o solutie de data managemant reprezinta o gestionare a validarilor si a modalitatii in care este efectuata prelucrarea efectiva a datelor la nivelul crearii, editarii si stergerii obiectelor implicate in proces</p>
             </div>
             <div class="right_articles">
                 <p>
-                    <img src="images/image.gif" alt="Image" title="Image" class="image" /><b>Lorem ipsum
-                        dolor sit amet</b><br />
-                    consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
-                    dolore magna aliquam <a href="#">erat volutpat</a>. Ut wisi enim ad minim veniam,
-                    quis nostrud exerci tation ullamcorper suscipit lobortis <a href="#">nisl ut aliquip
-                        ex</a>.</p>
+                    Accelerarea vitezei de procesare a datelor este de asemenea unul din avantajele oferite de solutiile de managemant a datelor. Aceasta se obtine prin eliminarea redundantei informationale si prin inglobarea tuturor informatiilor externe necesare intr-o baza de date</p>
             </div>
             <div class="notes">
                 <p>

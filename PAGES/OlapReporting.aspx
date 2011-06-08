@@ -50,14 +50,18 @@
             </div>
             <div class="thirds">
                 <ul>
-                    <li><a href="#">Conducting a CMS Survey</a></li>
-                    <li><a href="#">Interests behind politics</a></li>
+                    <li><a href="http://dataminingarticles.com/data-mining-classification.html">
+                        Data Mining Classification</a></li>
+                    <li><a href="http://www.nag.co.uk/IndustryArticles/DMinFinancialApps.pdf">
+                        Data Mining in financial applications</a></li>
                 </ul>
             </div>
             <div class="thirds">
                 <ul>
-                    <li><a href="#">How stress affects your health</a></li>
-                    <li><a href="#">10 ways to buy a used car</a></li>
+                    <li><a href="http://www.nag.co.uk/IndustryArticles/UnleashingDMpotential.pdf">
+                        Data Mining full potential</a></li>
+                    <li><a href="http://www.dataminingarticles.com/Grab-Bag-Frequently-Asked-Data-Mining-Questions.html">
+                        FAQ</a></li>
                 </ul>
             </div>
         </div>
@@ -84,7 +88,7 @@
                 <h2>
                     Resultatele raportului OLAP Easy Data Miner</h2>
                 <p class="date">
-                    Posted on 8th September</p>
+                    6th June 2011</p>
                     <%-- Result table --%>
                 <div style="width: 600px; height: 230px; overflow: auto;">
                     <asp:GridView ID="GridViewData" runat="server" Height="225px" Width="595px">

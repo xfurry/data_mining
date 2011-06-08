@@ -180,7 +180,7 @@ namespace WebApplication_OLAP
             }
 
             // Execute query
-            string sQuery = "Select top 1000" + objBuilder.ToString() + " from " + ListBoxTables.SelectedItem.ToString() + ";";
+            string sQuery = "Select " + objBuilder.ToString() + " from " + ListBoxTables.SelectedItem.ToString() + ";";
             ExecuteRelationalQuery(sQuery);
 
             // list column names; for remove

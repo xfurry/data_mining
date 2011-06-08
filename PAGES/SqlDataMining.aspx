@@ -53,14 +53,18 @@
             </div>
             <div class="thirds">
                 <ul>
-                    <li><a href="#">Conducting a CMS Survey</a></li>
-                    <li><a href="#">Interests behind politics</a></li>
+                    <li><a href="http://dataminingarticles.com/data-mining-classification.html">
+                        Data Mining Classification</a></li>
+                    <li><a href="http://www.nag.co.uk/IndustryArticles/DMinFinancialApps.pdf">
+                        Data Mining in financial applications</a></li>
                 </ul>
             </div>
             <div class="thirds">
                 <ul>
-                    <li><a href="#">How stress affects your health</a></li>
-                    <li><a href="#">10 ways to buy a used car</a></li>
+                    <li><a href="http://www.nag.co.uk/IndustryArticles/UnleashingDMpotential.pdf">
+                        Data Mining full potential</a></li>
+                    <li><a href="http://www.dataminingarticles.com/Grab-Bag-Frequently-Asked-Data-Mining-Questions.html">
+                        FAQ</a></li>
                 </ul>
             </div>
         </div>
@@ -92,7 +96,7 @@
                 <h2>
                     Rezultatele procesului de mining</h2>
                 <p class="date">
-                    Posted on 8th September</p>
+                    6th June 2011</p>
                 <div style="width: 600px; height: 230px; overflow: auto;">
                     <asp:GridView ID="GridViewResults" runat="server" OnRowCommand="GridViewResults_RowCommand" Height="225px" Width="595px">
                         <Columns>
@@ -142,9 +146,9 @@
                 </p>
                 <asp:DropDownList ID="DropDownListAlgorithm" runat="server">
                     <asp:ListItem>Clustering</asp:ListItem>
-                    <asp:ListItem>Decision Trees</asp:ListItem>
+                    <%--<asp:ListItem>Decision Trees</asp:ListItem>--%>
                     <asp:ListItem>Naive Bayes</asp:ListItem>
-                    <asp:ListItem>Time Series</asp:ListItem>
+                    <%--<asp:ListItem>Time Series</asp:ListItem>--%>
                 </asp:DropDownList>
                 <p>Selecteaza tabelul cu datele de intrare</p>
                 <asp:DropDownList ID="DropDownListTables" runat="server" AutoPostBack="True" 
