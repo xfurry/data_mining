@@ -35,6 +35,7 @@ namespace WebApplication_OLAP.classes
                 objServer.Connect("DataSource=" + sServer + ";Initial Catalog=" + sCatalog);
                 Database objDb = objServer.Databases[sCatalog];
                 Cube objCube = objDb.Cubes[sCubeName];
+                DataSourceView myView = objDb.DataSourceViews[0];
 
                 // create mining structure
                 CubeDimension objDimension = objCube.Dimensions.GetByName(sDimensionName);
@@ -138,9 +139,9 @@ namespace WebApplication_OLAP.classes
             {
                 case MiningModelAlgorithms.MicrosoftClustering:
                     break;
-                case MiningModelAlgorithms.MicrosoftTimeSeries:
-                    myMiningModel.AlgorithmParameters.Add("PERIODICITY_HINT", "{12}");              // {12} represents the number of months for prediction
-                    break;
+                //case MiningModelAlgorithms.MicrosoftTimeSeries:
+                //    myMiningModel.AlgorithmParameters.Add("PERIODICITY_HINT", "{12}");              // {12} represents the number of months for prediction
+                //    break;
                 case MiningModelAlgorithms.MicrosoftNaiveBayes:
                     break;
                 case MiningModelAlgorithms.MicrosoftDecisionTrees:

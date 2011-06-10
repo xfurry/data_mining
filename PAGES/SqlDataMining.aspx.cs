@@ -452,7 +452,7 @@ namespace WebApplication_OLAP.pages
         private void InitTableNames()
         {
             // show DB tables
-            SQLManager manager = new SQLManager("AdventureWorksDW");
+            SQLManager manager = new SQLManager("MyDataBase");
             string sQuery = "Select name, id from sysobjects where xtype='U'";
 
             // handle errors
@@ -545,7 +545,7 @@ namespace WebApplication_OLAP.pages
             CheckBoxListPredictColumns.DataBind();
 
             // execute query
-            SQLManager manager = new SQLManager("AdventureWorksDW");
+            SQLManager manager = new SQLManager(sCatalog);
             DataTable objTable = new DataTable();
 
             // handle errors

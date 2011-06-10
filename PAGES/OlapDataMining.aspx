@@ -150,7 +150,7 @@
                     <asp:ListItem>Clustering</asp:ListItem>
                     <asp:ListItem>Decision Trees</asp:ListItem>
                     <asp:ListItem>Naive Bayes</asp:ListItem>
-                    <asp:ListItem>Time Series</asp:ListItem>
+                    <%--<asp:ListItem>Time Series</asp:ListItem>--%>
                 </asp:DropDownList>
                 <p>
                     Selecteaza cubul:
