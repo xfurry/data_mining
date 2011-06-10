@@ -15,7 +15,8 @@ namespace WebApplication_OLAP.classes
     public partial class DataMining : System.Web.UI.Page
     {
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
-        private const string sCatalog = "Adventure Works DW 2008";
+        //private const string sCatalog = "Adventure Works DW 2008";
+        private const string sCatalog = "MyDataBase";
         //private const string sServer = "localhost";
 
         protected void Page_Load(object sender, EventArgs e)

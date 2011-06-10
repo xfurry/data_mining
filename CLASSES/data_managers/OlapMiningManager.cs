@@ -10,8 +10,9 @@ namespace WebApplication_OLAP.classes
 {
     public class MiningManager
     {
-        private const string sCatalog = "Adventure Works DW 2008";
+        //private const string sCatalog = "Adventure Works DW 2008";
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
+        private const string sCatalog = "MyDataBase";
         //private const string sServer = "localhost";
         private string sResult = "Success!";
 
@@ -37,15 +38,25 @@ namespace WebApplication_OLAP.classes
 
                 // create mining structure
                 CubeDimension objDimension = objCube.Dimensions.GetByName(sDimensionName);
+
+                // drop the existing structures with the same name
+                Microsoft.AnalysisServices.MiningStructure currentMiningStruct = objDb.MiningStructures.FindByName(sStructName);
+                if (currentMiningStruct != null)
+                    currentMiningStruct.Drop();
+
                 Microsoft.AnalysisServices.MiningStructure myMiningStructure = objDb.MiningStructures.Add(sStructName, sStructName);
                 myMiningStructure.Source = new CubeDimensionBinding(".", objCube.ID, objDimension.ID);
 
+
+                /***************** Key column *****************/
                 // key column
                 CubeAttribute objKey = objCube.Dimensions.GetByName(sDimensionName).Attributes[0];
                 ScalarMiningStructureColumn objKeyColumn = CreateMiningStructureColumn(objKey, true);
                 objKeyColumn.Name = sKeyColumn;
                 myMiningStructure.Columns.Add(objKeyColumn);
 
+
+                /***************** Other columns *****************/
                 // create mining columns
                 for (int i = 0; i < lsInputColumns.Count; i++)
                 {
@@ -58,6 +69,8 @@ namespace WebApplication_OLAP.classes
                     objColumn.Name = lsInputColumns[i];
                     myMiningStructure.Columns.Add(objColumn);
 
+
+                    /***************** Measure column *****************/
                     // create mining columns for measures
                     for (int j = 0; j < lsMeasureInput.Count; j++)
                     {
@@ -70,6 +83,8 @@ namespace WebApplication_OLAP.classes
                     }
                 }
 
+
+                /***************** Columns for prediction - will be updated in model *****************/
                 // create mining columns
                 for (int i = 0; i < lsPredictColumns.Count; i++)
                 {
@@ -79,13 +94,15 @@ namespace WebApplication_OLAP.classes
 
                     // create mining column
                     ScalarMiningStructureColumn objColumn = CreateMiningStructureColumn(objAttribute, false);
-                    objColumn.Name = lsPredictColumns[i] + "_Predict";
+                    objColumn.Name = lsPredictColumns[i];
                     myMiningStructure.Columns.Add(objColumn);
                 }
 
                 // update
                 myMiningStructure.Update();
 
+
+                /***************** Mining model *****************/
                 // create mining models
                 CreateMiningModel(myMiningStructure, sStructName, sAlgorithm, lsPredictColumns, lsMeasurePredict);
 
@@ -108,66 +125,41 @@ namespace WebApplication_OLAP.classes
         {
             Microsoft.AnalysisServices.MiningModel myMiningModel = objStructure.CreateMiningModel(true, sName);
 
+            /* Notes:
+             * Each mining column must have its' input and predict columns
+             * Input and key columns are added automatically when they are created in the mining structure
+             * Predict columns can be added in the mining model
+             * An input column can be also a predict column
+             */
+
+            myMiningModel.Algorithm = sAlgorithm;
+
             switch (sAlgorithm)
             {
                 case MiningModelAlgorithms.MicrosoftClustering:
-                {
-                    myMiningModel.Algorithm = MiningModelAlgorithms.MicrosoftClustering;
-                    myMiningModel.Algorithm = sAlgorithm;
-
-                    // add optional predict columns
-                    if (lsAtrPredict.Count != 0)
-                    {
-                        // predict columns
-                        for (int i = 0; i < lsAtrPredict.Count; i++)
-                        {
-                            Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.Add(lsAtrPredict[i] + "_Predict_Model");
-                            modelColumn.SourceColumnID = lsAtrPredict[i] + "_Predict";
-                            modelColumn.Usage = MiningModelColumnUsages.Predict;
-                        }
-                    }
                     break;
-                }
                 case MiningModelAlgorithms.MicrosoftTimeSeries:
-                {
-                    myMiningModel.Algorithm = MiningModelAlgorithms.MicrosoftTimeSeries;
                     myMiningModel.AlgorithmParameters.Add("PERIODICITY_HINT", "{12}");              // {12} represents the number of months for prediction
-
-                    // predict columns
-                    for (int i = 0; i < lsAtrPredict.Count; i++)
-                    {
-                        Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.Add(lsAtrPredict[i] + "_Predict_Model");
-                        modelColumn.SourceColumnID = lsAtrPredict[i] + "_Predict";
-                        modelColumn.Usage = MiningModelColumnUsages.Predict;
-                    }
                     break;
-                }
                 case MiningModelAlgorithms.MicrosoftNaiveBayes:
-                {
-                    myMiningModel.Algorithm = MiningModelAlgorithms.MicrosoftNaiveBayes;
-
-                    // predict columns
-                    for (int i = 0; i < lsAtrPredict.Count; i++)
-                    {
-                        Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.Add(lsAtrPredict[i] + "_Predict_Model");
-                        modelColumn.SourceColumnID = lsAtrPredict[i] + "_Predict";
-                        modelColumn.Usage = MiningModelColumnUsages.Predict;
-                    }
-
                     break;
-                }
                 case MiningModelAlgorithms.MicrosoftDecisionTrees:
-                {
-                    myMiningModel.Algorithm = MiningModelAlgorithms.MicrosoftDecisionTrees;
-
-                    // predict columns
-                    for (int i = 0; i < lsAtrPredict.Count; i++)
-                    {
-                        Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.Add(lsAtrPredict[i] + "_Predict_Model");
-                        modelColumn.SourceColumnID = lsAtrPredict[i] + "_Predict";
-                        modelColumn.Usage = MiningModelColumnUsages.Predict;
-                    }
                     break;
+            }
+
+
+            /***************** Predict columns *****************/
+            // add optional predict columns
+            if (lsAtrPredict.Count != 0)
+            {
+                // predict columns
+                for (int i = 0; i < lsAtrPredict.Count; i++)
+                {
+                    Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.GetByName(lsAtrPredict[i]);
+                    modelColumn.SourceColumnID = lsAtrPredict[i];
+
+                    // ToDo: check if this is only predict column or both predict and input
+                    modelColumn.Usage = MiningModelColumnUsages.Predict;
                 }
             }
 

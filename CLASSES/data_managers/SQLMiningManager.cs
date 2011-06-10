@@ -12,7 +12,8 @@ namespace WebApplication_OLAP.classes.data_managers
     public class SQLMiningManager
     {
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
-        private const string sCatalog = "Adventure Works DW 2008";
+        //private const string sCatalog = "Adventure Works DW 2008";
+        private const string sCatalog = "MyDataBase";
         //private const string sServer = "localhost";
 
         private string sStructureName = "MyMiningStructure";            // to be removed

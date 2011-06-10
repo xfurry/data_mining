@@ -17,7 +17,8 @@ namespace WebApplication_OLAP.pages
     {
         //private const string sCatalog = "Adventure Works DW 2008";
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
-        private const string sCatalog = "Adventure Works DW 2008";
+        //private const string sCatalog = "Adventure Works DW 2008";
+        private const string sCatalog = "MyDataBase";
         //private const string sServer = "localhost";
 
         private List<string> lNodesNames = new List<string>();
@@ -497,7 +498,7 @@ namespace WebApplication_OLAP.pages
                 DropDownListTables.SelectedItem.ToString() + "'ORDER BY ORDINAL_POSITION";
 
             // execute query
-            SQLManager manager = new SQLManager("AdventureWorksDW");
+            SQLManager manager = new SQLManager(sCatalog);
             DataTable objTable = new DataTable();
 
             // handle errors
