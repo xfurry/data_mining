@@ -88,7 +88,7 @@ namespace WebApplication_OLAP.classes.data_managers
             }
             catch (Exception e)
             {
-                return e.StackTrace;
+                return e.Message;
             }
         }
 

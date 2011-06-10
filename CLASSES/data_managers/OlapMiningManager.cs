@@ -114,7 +114,7 @@ namespace WebApplication_OLAP.classes
             }
             catch (Exception e)
             {
-                return e.StackTrace;
+                return e.Message;
             }
         }
 
