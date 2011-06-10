@@ -25,7 +25,7 @@ namespace WebApplication_OLAP.classes
         /*
          * Create mining structures and models for olap
          */
-        public string CreateCubeMiningStructure(string sStructName, string sAlgorithm, string sCubeName, string sDimensionName, string sKeyColumn,
+        public string CreateCubeMiningStructure(string sStructName, string sAlgorithm, int sCubeName, string sDimensionName, string sKeyColumn,
             List<string> lsInputColumns, List<string> lsPredictColumns, List<string> lsMeasureInput, List<string> lsMeasurePredict)
         {
             try
@@ -94,9 +94,8 @@ namespace WebApplication_OLAP.classes
                     objAttribute = objCube.Dimensions.GetByName(sDimensionName).Attributes[0];
 
                     // check if column already exists and skip if already exists
-                    Microsoft.AnalysisServices.MiningStructureColumn myColumn = myMiningStructure.Columns[lsPredictColumns[i]];
-                    if (myColumn != null)
-                        continue;
+                    //if (myMiningStructure.Columns[lsPredictColumns[i]] != null)
+                    //    continue;
 
                     // create mining column
                     ScalarMiningStructureColumn objColumn = CreateMiningStructureColumn(objAttribute, false);

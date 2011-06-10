@@ -325,12 +325,12 @@ namespace WebApplication_OLAP.classes.data_managers
                 sDataType = objTable.Rows[0][0].ToString();
 
                 // check if column already exists and skip if already exists
-                MiningStructureColumn myColumn = currentMiningStruct.Columns[lsPredictColumns[i]];
-                if (myColumn != null)
-                {
-                    manager.CloseConnection();
-                    continue;
-                }
+                //MiningStructureColumn myColumn = currentMiningStruct.Columns[lsPredictColumns[i]];
+                //if (myColumn != null)
+                //{
+                //    manager.CloseConnection();
+                //    continue;
+                //}
 
                 // Generation column
                 ScalarMiningStructureColumn Input = new ScalarMiningStructureColumn(lsPredictColumns[i], lsPredictColumns[i]);

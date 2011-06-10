@@ -159,7 +159,7 @@ namespace WebApplication_OLAP.classes
             MiningManager objMiningManager = new MiningManager();
 
             // Create mining query from the existing results
-            string sResult = objMiningManager.CreateCubeMiningStructure(sStructName, objAlgorithm, DropDownListCubes.SelectedItem.Text, DropDownListDimensions.SelectedItem.Text,
+            string sResult = objMiningManager.CreateCubeMiningStructure(sStructName, objAlgorithm, DropDownListCubes.SelectedIndex, DropDownListDimensions.SelectedItem.Text,
                 DropDownListKey.SelectedItem.Text, lsInputItems, lsPredictItems, lsInputMeasures, lsPredictMeasures);
 
             if (sResult == "Success")
