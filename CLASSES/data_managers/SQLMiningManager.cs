@@ -291,12 +291,12 @@ namespace WebApplication_OLAP.classes.data_managers
                 ScalarMiningStructureColumn Input = new ScalarMiningStructureColumn(lsInputColumns[i], lsInputColumns[i]);
                 Input.Type = GetColumnStructureType(sDataType);
                 // for time series algorithm
-                if (sDataType == "datetime" && sAlgorithm == MiningModelAlgorithms.MicrosoftTimeSeries)
-                {
-                    Input.IsKey = true;
-                    Input.Content = MiningStructureColumnContents.KeyTime;
-                }
-                else
+                //if (sDataType == "datetime" && sAlgorithm == MiningModelAlgorithms.MicrosoftTimeSeries)
+                //{
+                //    Input.IsKey = true;
+                //    Input.Content = MiningStructureColumnContents.KeyTime;
+                //}
+                //else
                 {
                     if (Input.Type == MiningStructureColumnTypes.Long)
                         Input.Content = MiningStructureColumnContents.Continuous;
@@ -323,6 +323,14 @@ namespace WebApplication_OLAP.classes.data_managers
                 objTable = new DataTable();
                 objTable.Load(manager.GetQueryResult(sQueryText));
                 sDataType = objTable.Rows[0][0].ToString();
+
+                // check if column already exists and skip if already exists
+                MiningStructureColumn myColumn = currentMiningStruct.Columns[lsPredictColumns[i]];
+                if (myColumn != null)
+                {
+                    manager.CloseConnection();
+                    continue;
+                }
 
                 // Generation column
                 ScalarMiningStructureColumn Input = new ScalarMiningStructureColumn(lsPredictColumns[i], lsPredictColumns[i]);

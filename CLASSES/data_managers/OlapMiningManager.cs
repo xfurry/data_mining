@@ -93,6 +93,11 @@ namespace WebApplication_OLAP.classes
                     CubeAttribute objAttribute = new CubeAttribute();
                     objAttribute = objCube.Dimensions.GetByName(sDimensionName).Attributes[0];
 
+                    // check if column already exists and skip if already exists
+                    Microsoft.AnalysisServices.MiningStructureColumn myColumn = myMiningStructure.Columns[lsPredictColumns[i]];
+                    if (myColumn != null)
+                        continue;
+
                     // create mining column
                     ScalarMiningStructureColumn objColumn = CreateMiningStructureColumn(objAttribute, false);
                     objColumn.Name = lsPredictColumns[i];
