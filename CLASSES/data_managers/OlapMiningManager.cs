@@ -26,7 +26,7 @@ namespace WebApplication_OLAP.classes
          * Create mining structures and models for olap
          */
         public string CreateCubeMiningStructure(string sStructName, string sAlgorithm, int sCubeName, string sDimensionName, string sKeyColumn,
-            List<string> lsInputColumns, List<string> lsPredictColumns, List<string> lsMeasureInput, List<string> lsMeasurePredict)
+            List<string> lsInputColumns, List<string> lsPredictColumns, List<string> lsMeasureInput, List<string> lsMeasurePredict, List<bool> lbPredictItems)
         {
             try
             {
@@ -93,14 +93,16 @@ namespace WebApplication_OLAP.classes
                     CubeAttribute objAttribute = new CubeAttribute();
                     objAttribute = objCube.Dimensions.GetByName(sDimensionName).Attributes[0];
 
-                    // check if column already exists and skip if already exists
-                    //if (myMiningStructure.Columns[lsPredictColumns[i]] != null)
-                    //    continue;
-
-                    // create mining column
-                    ScalarMiningStructureColumn objColumn = CreateMiningStructureColumn(objAttribute, false);
-                    objColumn.Name = lsPredictColumns[i];
-                    myMiningStructure.Columns.Add(objColumn);
+                    // if value = false (input & predict) then skip
+                    if (lbPredictItems[i] == false)
+                        continue;
+                    else
+                    {
+                        // create mining column
+                        ScalarMiningStructureColumn objColumn = CreateMiningStructureColumn(objAttribute, false);
+                        objColumn.Name = lsPredictColumns[i];
+                        myMiningStructure.Columns.Add(objColumn);
+                    }
                 }
 
                 // update
@@ -109,7 +111,7 @@ namespace WebApplication_OLAP.classes
 
                 /***************** Mining model *****************/
                 // create mining models
-                CreateMiningModel(myMiningStructure, sStructName, sAlgorithm, lsPredictColumns, lsMeasurePredict);
+                CreateMiningModel(myMiningStructure, sStructName, sAlgorithm, lsPredictColumns, lsMeasurePredict, lbPredictItems);
 
                 // process
                 myMiningStructure.Process();
@@ -126,7 +128,7 @@ namespace WebApplication_OLAP.classes
          * Create mining model
          */
         private void CreateMiningModel(Microsoft.AnalysisServices.MiningStructure objStructure, string sName, string sAlgorithm,
-            List<string> lsAtrPredict, List<string> lsMeasurePredict)
+            List<string> lsAtrPredict, List<string> lsMeasurePredict, List<bool> lbPredictItems)
         {
             Microsoft.AnalysisServices.MiningModel myMiningModel = objStructure.CreateMiningModel(true, sName);
 
@@ -163,8 +165,10 @@ namespace WebApplication_OLAP.classes
                     Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.GetByName(lsAtrPredict[i]);
                     modelColumn.SourceColumnID = lsAtrPredict[i];
 
-                    // ToDo: check if this is only predict column or both predict and input
-                    modelColumn.Usage = MiningModelColumnUsages.Predict;
+                    if (lbPredictItems[i] == true)
+                        modelColumn.Usage = MiningModelColumnUsages.PredictOnly;
+                    else
+                        modelColumn.Usage = MiningModelColumnUsages.Predict;
                 }
             }
 

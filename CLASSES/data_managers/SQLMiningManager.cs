@@ -68,7 +68,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining structure based on selection
          */
-        public string CreateMiningStructure(List<string> inputColumns, List<string> predictColumns, string sAlgorithm, string sTableName, string sKeyColumn, string sStructureName)
+        public string CreateMiningStructure(List<string> inputColumns, List<string> predictColumns, string sAlgorithm, string sTableName, string sKeyColumn, string sStructureName, List<bool> lbPredictItems)
         {
             try
             {
@@ -76,10 +76,10 @@ namespace WebApplication_OLAP.classes.data_managers
                 Database currentDB = GetCurrentDatabase(sCatalog);
 
                 // create a new mining structure
-                MiningStructure currentStructure = CreateCustomMiningStructure(currentDB, sStructureName, sTableName, sKeyColumn, inputColumns, predictColumns, sAlgorithm);
+                MiningStructure currentStructure = CreateCustomMiningStructure(currentDB, sStructureName, sTableName, sKeyColumn, inputColumns, predictColumns, sAlgorithm, lbPredictItems);
 
                 // create a mining model for the selected structure
-                CreateCustomModel(currentStructure, sAlgorithm, sStructureName, sKeyColumn, predictColumns);
+                CreateCustomModel(currentStructure, sAlgorithm, sStructureName, sKeyColumn, predictColumns, lbPredictItems);
 
                 // Process Database and structure
                 currentStructure.Process();
@@ -242,7 +242,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining structure with cusomt fields
          */
-        private MiningStructure CreateCustomMiningStructure(Database objDatabase, string sStructName, string sTableName, string sKeyColumn, List<string> lsInputColumns, List<string> lsPredictColumns, string sAlgorithm)
+        private MiningStructure CreateCustomMiningStructure(Database objDatabase, string sStructName, string sTableName, string sKeyColumn, List<string> lsInputColumns, List<string> lsPredictColumns, string sAlgorithm, List<bool> lbPredictColumns)
         {
             // drop the existing structures with the same name
             MiningStructure currentMiningStruct = objDatabase.MiningStructures.FindByName(sStructName);
@@ -290,19 +290,12 @@ namespace WebApplication_OLAP.classes.data_managers
                 // Generation column
                 ScalarMiningStructureColumn Input = new ScalarMiningStructureColumn(lsInputColumns[i], lsInputColumns[i]);
                 Input.Type = GetColumnStructureType(sDataType);
-                // for time series algorithm
-                //if (sDataType == "datetime" && sAlgorithm == MiningModelAlgorithms.MicrosoftTimeSeries)
-                //{
-                //    Input.IsKey = true;
-                //    Input.Content = MiningStructureColumnContents.KeyTime;
-                //}
-                //else
-                {
-                    if (Input.Type == MiningStructureColumnTypes.Long)
-                        Input.Content = MiningStructureColumnContents.Continuous;
-                    else
-                        Input.Content = MiningStructureColumnContents.Discrete;
-                }
+
+                if (Input.Type == MiningStructureColumnTypes.Long)
+                    Input.Content = MiningStructureColumnContents.Continuous;
+                else
+                    Input.Content = MiningStructureColumnContents.Discrete;
+
                 // Add data binding to the column
                 Input.KeyColumns.Add("dbo_" + sTableName, lsInputColumns[i], GetColumnDataType(sDataType));
                 // Add the column to the mining structure
@@ -315,6 +308,11 @@ namespace WebApplication_OLAP.classes.data_managers
             // input columns
             for (int i = 0; i < lsPredictColumns.Count; i++)
             {
+                // if value = false (input & predict) then skip
+                if (lbPredictColumns[i] == false)
+                    continue;
+
+
                 // get data type for the selected column
                 sQueryText = "SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" +
                     sTableName + "' AND COLUMN_NAME = '" + lsPredictColumns[i] + "'";
@@ -324,21 +322,16 @@ namespace WebApplication_OLAP.classes.data_managers
                 objTable.Load(manager.GetQueryResult(sQueryText));
                 sDataType = objTable.Rows[0][0].ToString();
 
-                // check if column already exists and skip if already exists
-                //MiningStructureColumn myColumn = currentMiningStruct.Columns[lsPredictColumns[i]];
-                //if (myColumn != null)
-                //{
-                //    manager.CloseConnection();
-                //    continue;
-                //}
-
                 // Generation column
                 ScalarMiningStructureColumn Input = new ScalarMiningStructureColumn(lsPredictColumns[i], lsPredictColumns[i]);
                 Input.Type = GetColumnStructureType(sDataType);
-                if (Input.Type == MiningStructureColumnTypes.Long)
+
+                // for double and long set to continous, else is discrete
+                if (Input.Type == MiningStructureColumnTypes.Long || Input.Type == MiningStructureColumnTypes.Double)
                     Input.Content = MiningStructureColumnContents.Continuous;
                 else
                     Input.Content = MiningStructureColumnContents.Discrete;
+
                 // Add data binding to the column
                 Input.KeyColumns.Add("dbo_" + sTableName, lsPredictColumns[i], GetColumnDataType(sDataType));
                 // Add the column to the mining structure
@@ -408,7 +401,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining model with custom fields and algorithm
          */
-        private void CreateCustomModel(MiningStructure objStructure, string sAlgorithm, string sModelName, string sKeyColumn, List<string> lPredictColumns)
+        private void CreateCustomModel(MiningStructure objStructure, string sAlgorithm, string sModelName, string sKeyColumn, List<string> lPredictColumns, List<bool> lbPredictColumns)
         {
             // drop existing model
             if (objStructure.MiningModels.ContainsName(sModelName))
@@ -451,8 +444,10 @@ namespace WebApplication_OLAP.classes.data_managers
                     Microsoft.AnalysisServices.MiningModelColumn modelColumn = myMiningModel.Columns.GetByName(lPredictColumns[i]);
                     modelColumn.SourceColumnID = lPredictColumns[i];
 
-                    // ToDo: check if this is only predict column or both predict and input
-                    modelColumn.Usage = MiningModelColumnUsages.Predict;
+                    if (lbPredictColumns[i] == true)
+                        modelColumn.Usage = MiningModelColumnUsages.PredictOnly;
+                    else
+                        modelColumn.Usage = MiningModelColumnUsages.Predict;
                 }
             }
 

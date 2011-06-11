@@ -168,6 +168,7 @@ namespace WebApplication_OLAP.pages
             // Create mining structure based on column and table selection
             List<string> lsInputItems = new List<string>();
             List<string> lsPredictItems = new List<string>();
+            List<bool> lbPredictItems = new List<bool>();
 
             // add values to list
             foreach (ListItem objItem in CheckBoxListInputColumns.Items)
@@ -179,7 +180,23 @@ namespace WebApplication_OLAP.pages
             foreach (ListItem objItem in CheckBoxListPredictColumns.Items)
             {
                 if (objItem.Selected)
+                {
+                    // check input column
+                    bool bIsPredictOnly = true;
+
+                    // iterate input list and if the item is found in the list then set bool to false
+                    for (int i = 0; i < lsInputItems.Count; i++)
+                    {
+                        if (lsInputItems[i] == objItem.Text)
+                        {
+                            bIsPredictOnly = false;
+                            break;
+                        }
+                    }
+
                     lsPredictItems.Add(objItem.Text);
+                    lbPredictItems.Add(bIsPredictOnly);
+                }
             }
 
             string sStructName = TextBoxName.Text;
@@ -219,7 +236,7 @@ namespace WebApplication_OLAP.pages
 
             // Create mining query from the existing results
             string sResult = objMiningManager.CreateMiningStructure(lsInputItems, lsPredictItems, objAlgorithm,
-                DropDownListTables.SelectedItem.Text, DropDownListKey.SelectedItem.Text, sStructName);
+                DropDownListTables.SelectedItem.Text, DropDownListKey.SelectedItem.Text, sStructName, lbPredictItems);
             if (sResult == "Success")
             {
                 LabelStatus.Text = "Rezultatul procesului: Success!";

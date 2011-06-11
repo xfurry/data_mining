@@ -87,6 +87,9 @@ namespace WebApplication_OLAP.classes
             List<string> lsPredictItems = new List<string>();
             List<string> lsInputMeasures = new List<string>();
             List<string> lsPredictMeasures = new List<string>();
+            List<bool> lbPredictItems = new List<bool>();
+
+            //Dictionary<string /* column name */, bool /* only predict = true; predict = false*/> objPredictItems = new Dictionary<string, bool>();
 
             // input items
             foreach (GridViewRow row in GridViewAttributes.Rows)
@@ -111,7 +114,23 @@ namespace WebApplication_OLAP.classes
                 CheckBox cb = (CheckBox)row.FindControl("CheckBoxAtrPredict");
 
                 if (cb != null && cb.Checked)
+                {
+                    // check input column
+                    bool bIsPredictOnly = true;
+
+                    // iterate input list and if the item is found in the list then set bool to false
+                    for (int i = 0; i < lsInputItems.Count; i++)
+                    {
+                        if (lsInputItems[i] == row.Cells[2].Text)
+                        {
+                            bIsPredictOnly = false;
+                            break;
+                        }
+                    }
+
                     lsPredictItems.Add(row.Cells[2].Text);
+                    lbPredictItems.Add(bIsPredictOnly);
+                }
             }
 
 
@@ -160,7 +179,7 @@ namespace WebApplication_OLAP.classes
 
             // Create mining query from the existing results
             string sResult = objMiningManager.CreateCubeMiningStructure(sStructName, objAlgorithm, DropDownListCubes.SelectedIndex, DropDownListDimensions.SelectedItem.Text,
-                DropDownListKey.SelectedItem.Text, lsInputItems, lsPredictItems, lsInputMeasures, lsPredictMeasures);
+                DropDownListKey.SelectedItem.Text, lsInputItems, lsPredictItems, lsInputMeasures, lsPredictMeasures, lbPredictItems);
 
             if (sResult == "Success")
             {
