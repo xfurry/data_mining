@@ -199,17 +199,40 @@ namespace WebApplication_OLAP.pages
                 }
             }
 
+            // check clustering parameter
+            try
+            {
+                int x = Convert.ToInt32(TextBoxCount.Text);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                LabelStatus.Text = "Please make sure that the parameter is a number!";
+            }
+
             string sStructName = TextBoxName.Text;
             if (sStructName == "")
                 sStructName = "MyMiningStructure";
 
             string objAlgorithm = null;
 
+            // parameters
+            int parOne = 0;
+            int parTwo = 0;
+
             // create mining structure
             if (DropDownListAlgorithm.SelectedIndex == 0)
+            {
                 objAlgorithm = MiningModelAlgorithms.MicrosoftClustering;
+                parOne = DropDownListMethod.SelectedIndex + 1;
+                parTwo = Convert.ToInt32(TextBoxCount.Text);
+            }
             else if (DropDownListAlgorithm.SelectedIndex == 1)
+            {
                 objAlgorithm = MiningModelAlgorithms.MicrosoftDecisionTrees;
+                parOne = DropDownListScore.SelectedIndex + 1;
+                parTwo = DropDownListSplit.SelectedIndex + 1;
+            }
             else if (DropDownListAlgorithm.SelectedIndex == 2)
                 objAlgorithm = MiningModelAlgorithms.MicrosoftNaiveBayes;
             else if (DropDownListAlgorithm.SelectedIndex == 3)
@@ -236,7 +259,7 @@ namespace WebApplication_OLAP.pages
 
             // Create mining query from the existing results
             string sResult = objMiningManager.CreateMiningStructure(lsInputItems, lsPredictItems, objAlgorithm,
-                DropDownListTables.SelectedItem.Text, DropDownListKey.SelectedItem.Text, sStructName, lbPredictItems);
+                DropDownListTables.SelectedItem.Text, DropDownListKey.SelectedItem.Text, sStructName, lbPredictItems, parOne, parTwo);
             if (sResult == "Success")
             {
                 LabelStatus.Text = "Rezultatul procesului: Success!";
@@ -627,6 +650,99 @@ namespace WebApplication_OLAP.pages
                 ButtonPredict.Text = "Uncheck All";
             else
                 ButtonPredict.Text = "Check All";
+        }
+
+        /*
+         * Customize algorithm
+         */
+        protected void DropDownListAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (DropDownListAlgorithm.SelectedIndex >= 0)
+                LoadCustomization();
+        }
+
+        /*
+         * Load customization fields
+         */
+        void LoadCustomization()
+        {
+            switch (DropDownListAlgorithm.SelectedIndex)
+            {
+                case 0:
+                    // clustering
+                    LabelScore.Visible = false;
+                    DropDownListScore.Visible = false;
+                    LabelSplit.Visible = false;
+                    DropDownListSplit.Visible = false;
+
+
+                    LabelMethod.Visible = true;
+                    DropDownListMethod.Visible = true;
+                    LabelCount.Visible = true;
+                    TextBoxCount.Visible = true;
+                    break;
+                case 1:
+                    // decision trees
+                    LabelMethod.Visible = false;
+                    DropDownListMethod.Visible = false;
+                    LabelCount.Visible = false;
+                    TextBoxCount.Visible = false;
+
+
+                    LabelScore.Visible = true;
+                    DropDownListScore.Visible = true;
+                    LabelSplit.Visible = true;
+                    DropDownListSplit.Visible = true;
+                    break;
+                case 2:
+                    // naive bayes
+                    LabelMethod.Visible = false;
+                    DropDownListMethod.Visible = false;
+                    LabelCount.Visible = false;
+                    TextBoxCount.Visible = false;
+                    LabelScore.Visible = false;
+                    DropDownListScore.Visible = false;
+                    LabelSplit.Visible = false;
+                    DropDownListSplit.Visible = false;
+
+                    break;
+            }
+
+        }
+
+        /*
+         * Export report to excel
+         */
+        protected void ButtonExport_Click(object sender, EventArgs e)
+        {
+            // get from session
+            if (Session != null)
+            {
+                DataTable objTable = (DataTable)Session["queryMining"];
+                if (objTable == null)
+                    return;
+
+                DataTable objTableNodes = (DataTable)Session["queryNode"];
+
+                ExportDataTableToExcel(objTable, objTableNodes);
+            }
+        }
+
+        /*
+         * Exports the selected query data to excel; use random file name by timestamp
+         */
+        private void ExportDataTableToExcel(DataTable sInputTable, DataTable objNodeTable)
+        {
+            // export to Excel
+            // create random timestamp
+            TimeSpan sTime = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0);
+            string timeStamp = ((long)sTime.TotalMilliseconds).ToString();
+
+            ExcelManager em = new ExcelManager();
+            if (em.ExcelExport(sInputTable, objNodeTable, "MiningReport_" + timeStamp + ".xls"))
+                LabelStatus.Text = "Success!";
+            else
+                LabelStatus.Text = "Failed!";
         }
     }
 }

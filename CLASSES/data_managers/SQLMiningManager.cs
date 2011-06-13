@@ -68,7 +68,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining structure based on selection
          */
-        public string CreateMiningStructure(List<string> inputColumns, List<string> predictColumns, string sAlgorithm, string sTableName, string sKeyColumn, string sStructureName, List<bool> lbPredictItems)
+        public string CreateMiningStructure(List<string> inputColumns, List<string> predictColumns, string sAlgorithm, string sTableName, string sKeyColumn, string sStructureName, List<bool> lbPredictItems, int parOne, int parTwo)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace WebApplication_OLAP.classes.data_managers
                 MiningStructure currentStructure = CreateCustomMiningStructure(currentDB, sStructureName, sTableName, sKeyColumn, inputColumns, predictColumns, sAlgorithm, lbPredictItems);
 
                 // create a mining model for the selected structure
-                CreateCustomModel(currentStructure, sAlgorithm, sStructureName, sKeyColumn, predictColumns, lbPredictItems);
+                CreateCustomModel(currentStructure, sAlgorithm, sStructureName, sKeyColumn, predictColumns, lbPredictItems, parOne, parTwo);
 
                 // Process Database and structure
                 currentStructure.Process();
@@ -401,7 +401,7 @@ namespace WebApplication_OLAP.classes.data_managers
         /*
          * Create mining model with custom fields and algorithm
          */
-        private void CreateCustomModel(MiningStructure objStructure, string sAlgorithm, string sModelName, string sKeyColumn, List<string> lPredictColumns, List<bool> lbPredictColumns)
+        private void CreateCustomModel(MiningStructure objStructure, string sAlgorithm, string sModelName, string sKeyColumn, List<string> lPredictColumns, List<bool> lbPredictColumns, int parOne, int parTwo)
         {
             // drop existing model
             if (objStructure.MiningModels.ContainsName(sModelName))
@@ -422,7 +422,8 @@ namespace WebApplication_OLAP.classes.data_managers
             switch (sAlgorithm)
             {
                 case MiningModelAlgorithms.MicrosoftClustering:
-                    myMiningModel.AlgorithmParameters.Add("CLUSTER_COUNT", 0);
+                    myMiningModel.AlgorithmParameters.Add("CLUSTERING_METHOD", parOne);
+                    myMiningModel.AlgorithmParameters.Add("CLUSTER_COUNT", parTwo);
                     break;
                 //case MiningModelAlgorithms.MicrosoftTimeSeries:
                 //    myMiningModel.AlgorithmParameters.Add("PERIODICITY_HINT", "{12}");              // {12} represents the number of months for prediction
@@ -430,6 +431,8 @@ namespace WebApplication_OLAP.classes.data_managers
                 case MiningModelAlgorithms.MicrosoftNaiveBayes:
                     break;
                 case MiningModelAlgorithms.MicrosoftDecisionTrees:
+                    myMiningModel.AlgorithmParameters.Add("SCORE_METHOD", parOne);
+                    myMiningModel.AlgorithmParameters.Add("SPLIT_METHOD", parTwo);
                     break;
             }
 

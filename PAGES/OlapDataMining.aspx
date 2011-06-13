@@ -255,7 +255,7 @@
                     <br />
                     <asp:Label ID="LabelCount" runat="server" Text="Cluster Count" Visible="False"></asp:Label>
                     <br />
-                    <asp:TextBox ID="TextBoxCount" runat="server" Visible="False">10</asp:TextBox>
+                    <asp:TextBox ID="TextBoxCount" runat="server" Visible="False" ToolTip="Test">10</asp:TextBox>
                     
                 </div>
             </div>
