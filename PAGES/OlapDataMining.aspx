@@ -181,7 +181,7 @@
                 </p>
                 Intrare
                 &nbsp &nbsp
-                Predictie
+                Tinta
                 <div style="width: 250px; height: 190px; overflow: auto;">
                     <asp:GridView ID="GridViewAttributes" runat="server">
                         <Columns>
@@ -190,7 +190,7 @@
                                     <asp:CheckBox ID="CheckBoxAtrInput" runat="server" />
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Predictie">
+                            <asp:TemplateField HeaderText="Tinta">
                                 <ItemTemplate>
                                     <asp:CheckBox ID="CheckBoxAtrPredict" runat="server" />
                                 </ItemTemplate>
@@ -205,7 +205,7 @@
                 </p>
                 Intrare
                 &nbsp &nbsp
-                Predictie
+                Tinta
                 <div style="width: 250px; height: 190px; overflow: auto;">
                     <asp:GridView ID="GridViewMeasures" runat="server">
                         <Columns>
@@ -214,7 +214,7 @@
                                     <asp:CheckBox ID="CheckBoxMeasureInput" runat="server" />
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:TemplateField HeaderText="Predictie">
+                            <asp:TemplateField HeaderText="Tinta">
                                 <ItemTemplate>
                                     <asp:CheckBox ID="CheckBoxMeasurePredict" runat="server" />
                                 </ItemTemplate>
@@ -228,7 +228,7 @@
                     Customizare:
                 </p>
                 <div style="width: 250px; height: 200px; overflow: auto;">
-                    <asp:Label ID="LabelScore" runat="server" Text="Score Method" Visible="False"></asp:Label>
+                    <asp:Label ID="LabelScore" runat="server" Text="Metoda de clasificare" Visible="False"></asp:Label>
                     <br />
                     <asp:DropDownList ID="DropDownListScore" runat="server" Visible="False">
                         <asp:ListItem>Entropy</asp:ListItem>
@@ -236,7 +236,7 @@
                         <asp:ListItem Selected="True">Bayesian Dirichlet Equivalent </asp:ListItem>
                     </asp:DropDownList>
                     <br />
-                    <asp:Label ID="LabelSplit" runat="server" Text="Split Method" Visible="False"></asp:Label>
+                    <asp:Label ID="LabelSplit" runat="server" Text="Metoda de impartire" Visible="False"></asp:Label>
                     <br />
                     <asp:DropDownList ID="DropDownListSplit" runat="server" Visible="False">
                         <asp:ListItem>Binary</asp:ListItem>
@@ -244,16 +244,16 @@
                         <asp:ListItem Selected="True">Both</asp:ListItem>
                     </asp:DropDownList>
                     <br />
-                    <asp:Label ID="LabelMethod" runat="server" Text="Clustering Method" Visible="False"></asp:Label>
+                    <asp:Label ID="LabelMethod" runat="server" Text="Metoda" Visible="False"></asp:Label>
                     <br />
-                    <asp:DropDownList ID="DropDownListMethod" runat="server" Visible="False">
+                    <asp:DropDownList ID="DropDownListMethod" runat="server" Visible="False" ToolTip="">
                         <asp:ListItem Selected="True">Scalable EM</asp:ListItem>
                         <asp:ListItem>Non-Scalable EM</asp:ListItem>
                         <asp:ListItem>Scalable K-Means</asp:ListItem>
                         <asp:ListItem>Non-Scalable K-Means</asp:ListItem>
                     </asp:DropDownList>
                     <br />
-                    <asp:Label ID="LabelCount" runat="server" Text="Cluster Count" Visible="False"></asp:Label>
+                    <asp:Label ID="LabelCount" runat="server" Text="Nr. de clusteri" Visible="False"></asp:Label>
                     <br />
                     <asp:TextBox ID="TextBoxCount" runat="server" Visible="False" ToolTip="Test">10</asp:TextBox>
                     
