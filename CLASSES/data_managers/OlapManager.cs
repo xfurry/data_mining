@@ -11,7 +11,7 @@ namespace WebApplication_OLAP
     {
         //private const string sCatalog = "Adventure Works DW 2008";
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
-        private const string sCatalog = "MyDataBase";
+        private const string sCatalog = "MyFinalDataBase";
         //private const string sServer = "localhost";
 
         private AdomdConnection objConnection = null;

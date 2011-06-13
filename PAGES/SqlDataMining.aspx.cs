@@ -18,7 +18,7 @@ namespace WebApplication_OLAP.pages
         //private const string sCatalog = "Adventure Works DW 2008";
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
         //private const string sCatalog = "Adventure Works DW 2008";
-        private const string sCatalog = "MyDataBase";
+        private const string sCatalog = "MyFinalDataBase";
         //private const string sServer = "localhost";
 
         private List<string> lNodesNames = new List<string>();
@@ -492,7 +492,7 @@ namespace WebApplication_OLAP.pages
         private void InitTableNames()
         {
             // show DB tables
-            SQLManager manager = new SQLManager("MyDataBase");
+            SQLManager manager = new SQLManager(sCatalog);
             string sQuery = "Select name, id from sysobjects where xtype='U'";
 
             // handle errors
@@ -515,7 +515,7 @@ namespace WebApplication_OLAP.pages
          */
         protected void DropDownListTables_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (DropDownListTables.SelectedIndex <= 0)
+            if (DropDownListTables.SelectedIndex < 0)
                 return;
 
             // init column controlls
@@ -566,7 +566,7 @@ namespace WebApplication_OLAP.pages
          */
         protected void DropDownListKey_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (DropDownListKey.SelectedIndex <= 0)
+            if (DropDownListKey.SelectedIndex < 0)
                 return;
 
             // init input columns

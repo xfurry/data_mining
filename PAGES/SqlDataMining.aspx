@@ -100,7 +100,7 @@
                     Rezultatele procesului de mining</h2>
                 <p class="date">
                     6th June 2011</p>
-                <div style="width: 600px; height: 230px; overflow: auto;">
+                <div style="width: 600px; height: 400px; overflow: auto;">
                     <asp:GridView ID="GridViewResults" runat="server" OnRowCommand="GridViewResults_RowCommand" Height="225px" Width="595px">
                         <Columns>
                             <asp:TemplateField HeaderText="View Node">
@@ -115,7 +115,7 @@
             <div class="left_articles">
             <h2>
                     Rezultatele detaliate</h2>
-                <div style="width: 600px; height: 230px; overflow: auto;">
+                <div style="width: 600px; height: 400px; overflow: auto;">
                     <asp:Panel ID="PanelViewer" runat="server" Height="225px" Width="595px">
                     </asp:Panel>
                     <asp:GridView ID="GridViewDistribution" runat="server" Height="150px" Width="595px"
@@ -176,7 +176,7 @@
             </div>
             <div class="right_articles">
                 <p>
-                    Selecteaza coloana cheie:
+                    Selecteaza coloana tinta:
                     <br />
                     <asp:Button ID="ButtonPredict" runat="server" Text="Check All" OnClick="ButtonPredict_Click" />
                 </p>

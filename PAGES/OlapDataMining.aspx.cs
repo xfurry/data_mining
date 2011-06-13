@@ -16,7 +16,7 @@ namespace WebApplication_OLAP.classes
     {
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
         //private const string sCatalog = "Adventure Works DW 2008";
-        private const string sCatalog = "MyDataBase";
+        private const string sCatalog = "MyFinalDataBase";
         //private const string sServer = "localhost";
 
         protected void Page_Load(object sender, EventArgs e)
@@ -221,7 +221,7 @@ namespace WebApplication_OLAP.classes
          */
         protected void DropDownListKey_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (DropDownListKey.SelectedIndex <= 0)
+            if (DropDownListKey.SelectedIndex < 0)
                 return;
 
             // init input columns
@@ -236,7 +236,7 @@ namespace WebApplication_OLAP.classes
          */
         protected void DropDownListDimensions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (DropDownListDimensions.SelectedIndex <= 0)
+            if (DropDownListDimensions.SelectedIndex < 0)
                 return;
 
             // init column controlls
@@ -336,11 +336,14 @@ namespace WebApplication_OLAP.classes
          */
         protected void DropDownListCubes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (DropDownListCubes.SelectedIndex <= 0)
+            if (DropDownListCubes.SelectedIndex < 0)
                 return;
 
             // init dimensions
             InitDimensionNames();
+
+            // init column controlls
+            InitAttributes();
         }
 
         /*
