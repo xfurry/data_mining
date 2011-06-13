@@ -84,7 +84,7 @@
                     </asp:DropDownList>
                     &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
                     <asp:Button ID="ButtonExport" runat="server" Text="Exporta Raport" 
-                        onclick="ButtonExport_Click" />
+                        onclick="ButtonExport_Click" ToolTip="Exporta datele in Excel"/>
                 </p>
                 <p>
                     <asp:Button ID="ButtonStructure" runat="server" Text="Creaza structura de mining cu numele:"
@@ -93,6 +93,9 @@
                     <asp:TextBox ID="TextBoxName" runat="server"></asp:TextBox>
                     &nbsp &nbsp &nbsp
                     <asp:Label ID="LabelStatus" runat="server" Text="Rezultatul procesului:"></asp:Label>
+                </p>
+                <p>
+                    <strong><asp:Label ID="LabelInstructions" runat="server" Text="Metoda"></asp:Label></strong>
                 </p>
             </div>
             <div class="left_articles">
@@ -150,7 +153,7 @@
                     Selecteaza algoritmul
                 </p>
                 <asp:DropDownList ID="DropDownListAlgorithm" runat="server" AutoPostBack="True" 
-                    onselectedindexchanged="DropDownListAlgorithm_SelectedIndexChanged">
+                    onselectedindexchanged="DropDownListAlgorithm_SelectedIndexChanged" ToolTip="Algoritmii de data mining">
                     <asp:ListItem>Clustering</asp:ListItem>
                     <asp:ListItem>Decision Trees</asp:ListItem>
                     <asp:ListItem>Naive Bayes</asp:ListItem>
@@ -160,19 +163,19 @@
                     Selecteaza cubul:
                 </p>
                 <asp:DropDownList ID="DropDownListCubes" runat="server" AutoPostBack="True" 
-                    onselectedindexchanged="DropDownListCubes_SelectedIndexChanged">
+                    onselectedindexchanged="DropDownListCubes_SelectedIndexChanged" ToolTip="Cubul pe care se va realiza procesul de mining">
                 </asp:DropDownList>
                 <p>
                     Selecteaza dimensiunea:
                 </p>
                 <asp:DropDownList ID="DropDownListDimensions" runat="server" AutoPostBack="True" 
-                    onselectedindexchanged="DropDownListDimensions_SelectedIndexChanged">
+                    onselectedindexchanged="DropDownListDimensions_SelectedIndexChanged" ToolTip="Dimensiunea folosita in procesul de mining">
                 </asp:DropDownList>
                 <p>
                     Selecteaza atributul cheie:
                 </p>
                 <asp:DropDownList ID="DropDownListKey" runat="server" AutoPostBack="True" 
-                    onselectedindexchanged="DropDownListKey_SelectedIndexChanged">
+                    onselectedindexchanged="DropDownListKey_SelectedIndexChanged" ToolTip="Atributul cheie">
                 </asp:DropDownList>
             </div>
             <div class="right_articles">
@@ -187,12 +190,12 @@
                         <Columns>
                             <asp:TemplateField HeaderText="Intrare">
                                 <ItemTemplate>
-                                    <asp:CheckBox ID="CheckBoxAtrInput" runat="server" />
+                                    <asp:CheckBox ID="CheckBoxAtrInput" runat="server" ToolTip="Atributul folosit pentru intrare"/>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Tinta">
                                 <ItemTemplate>
-                                    <asp:CheckBox ID="CheckBoxAtrPredict" runat="server" />
+                                    <asp:CheckBox ID="CheckBoxAtrPredict" runat="server" ToolTip="Atributul tinta"/>
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>

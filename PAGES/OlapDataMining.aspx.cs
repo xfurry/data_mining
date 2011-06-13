@@ -680,6 +680,8 @@ namespace WebApplication_OLAP.classes
             switch (DropDownListAlgorithm.SelectedIndex)
             {
                 case 0:
+                    LabelInstructions.Text = "Pentru a un proces de mining bazat pe clusterizare trebuie sa alegeti o dimensiune pe care vreti sa aplicati clusterizarea "
+                        + "impreuna cu un atribut care va fi folosit ca si o cheie de clusterizare. Pentru clusterizare este suficient sa alegeti atributele de intare dupa care se va face impartirea pe clusteri. Atributele tinta nu sunt necesare.";
                     // clustering
                     LabelScore.Visible = false;
                     DropDownListScore.Visible = false;
@@ -693,6 +695,9 @@ namespace WebApplication_OLAP.classes
                     TextBoxCount.Visible = true;
                     break;
                 case 1:
+                    LabelInstructions.Text = "Pentru a un proces de mining bazat pe arbori de decizie trebuie sa alegeti o dimensiune pe care vreti sa aplicati procesul de impartire in arbori "
+                        + "impreuna cu un atribut care va fi folosit ca si o cheie de clasificare. Trebuie alese coloanele de intrare si o coloana tinta dupa care sa se faca estimarile si sa se construiasca arborele.";
+
                     // decision trees
                     LabelMethod.Visible = false;
                     DropDownListMethod.Visible = false;
@@ -706,6 +711,9 @@ namespace WebApplication_OLAP.classes
                     DropDownListSplit.Visible = true;
                     break;
                 case 2:
+                    LabelInstructions.Text = "Pentru a un proces de mining bazat pe arbori de decizie trebuie sa alegeti o dimensiune pe care vreti sa aplicati procesul de clasificare bayesiana "
+                        + "impreuna cu un atribut care va fi folosit ca si o cheie de clasificare. Trebuie alese coloanele de intrare si o coloana tinta dupa care sa se faca estimarile si sa se construiasca modelul de mining.";
+
                     // naive bayes
                     LabelMethod.Visible = false;
                     DropDownListMethod.Visible = false;
