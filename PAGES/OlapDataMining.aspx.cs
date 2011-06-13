@@ -726,19 +726,20 @@ namespace WebApplication_OLAP.classes
             // get from session
             if (Session != null)
             {
-                DataTable objTable = (DataTable)Session["queryData"];
-                // call export method
-                ExportDataTableToExcel(objTable, "D5");
+                DataTable objTable = (DataTable)Session["queryMining"];
+                if (objTable == null)
+                    return;
 
-                objTable = (DataTable)Session["queryNode"];
-                ExportDataTableToExcel(objTable, "R5");
+                DataTable objTableNodes = (DataTable)Session["queryNode"];
+
+                ExportDataTableToExcel(objTable, objTableNodes);
             }
         }
 
         /*
          * Exports the selected query data to excel; use random file name by timestamp
          */
-        private void ExportDataTableToExcel(DataTable sInputTable, string inputCell)
+        private void ExportDataTableToExcel(DataTable sInputTable, DataTable objNodeTable)
         {
             // export to Excel
             // create random timestamp
@@ -746,8 +747,10 @@ namespace WebApplication_OLAP.classes
             string timeStamp = ((long)sTime.TotalMilliseconds).ToString();
 
             ExcelManager em = new ExcelManager();
-            if (em.ExcelExport(sInputTable, "MiningReport_" + timeStamp + ".xls", inputCell))
+            if (em.ExcelExport(sInputTable, objNodeTable, "MiningReport_" + timeStamp + ".xls"))
                 LabelStatus.Text = "Success!";
+            else
+                LabelStatus.Text = "Failed!";
         }
     }
 }

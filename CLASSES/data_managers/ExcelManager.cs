@@ -12,32 +12,44 @@ namespace WebApplication_OLAP
     public class ExcelManager
     {
         // load data to excel
-        public bool ExcelExport(System.Data.DataTable objTable, string sFileName, string sStartCell)
+        public bool ExcelExport(System.Data.DataTable objTable, System.Data.DataTable objTableNodes, string sFileName)
         {
             ExcelFile ef = new ExcelFile();
 
-            CreateExcelFile(sFileName);
-            // Load Excel file.
-            ef.LoadXls(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + sFileName);
+            try
+            {
+                CreateExcelFile(sFileName);
 
-            // Select the first worksheet from the file.
-            ExcelWorksheet ws = ef.Worksheets[0];
+                // Load Excel file.
+                ef.LoadXls(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + sFileName);
 
-            // Extract the data from the worksheet to the DataTable.
-            // Data is extracted starting at first row and first column for 10 rows or until the first empty row appears.
-            // ws.ExtractToDataTable(objTable, 10, ExtractDataOptions.StopAtFirstEmptyRow, ws.Rows[0], ws.Columns[0]);
+                // Select the first worksheet from the file.
+                ExcelWorksheet ws = ef.Worksheets[0];
 
-            // Insert the data from DataTable to the worksheet starting at cell "A1"
-            ws.InsertDataTable(objTable, sStartCell, true);
+                // Extract the data from the worksheet to the DataTable.
+                // Data is extracted starting at first row and first column for 10 rows or until the first empty row appears.
+                // ws.ExtractToDataTable(objTable, 10, ExtractDataOptions.StopAtFirstEmptyRow, ws.Rows[0], ws.Columns[0]);
 
-            // Save the file to XLS format.
-            ef.SaveXls(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + sFileName);
+                // Insert the data from DataTable to the worksheet starting at cell "A1"
+                ws.InsertDataTable(objTable, "D5", true);
 
-            // open the excel file
-            //object misValue = System.Reflection.Missing.Value;
-            //Application appExcel = new Application();
-            //Workbook wbExcel = appExcel.Workbooks.Open(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + sFileName, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue);
+                if (objTableNodes != null)
+                    ws.InsertDataTable(objTableNodes, "R5", true);
 
+                // Save the file to XLS format.
+                ef.SaveXls(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + sFileName);
+
+                // open the excel file
+                //object misValue = System.Reflection.Missing.Value;
+                //Application appExcel = new Application();
+                //Workbook wbExcel = appExcel.Workbooks.Open(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + sFileName, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue, misValue);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
             return true;
         }
 
