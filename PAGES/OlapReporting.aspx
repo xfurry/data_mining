@@ -134,15 +134,27 @@
             </div>
             <div class="notes">
                 <p>
-                    If you liked this template you might like some other CSS templates from <a href="http://www.solucija.com/">
-                        Solucija</a>.</p>
+                    Here you can find information about our donation system</p>
+                <!-- PayPal Logo -->
+                <table border="0" cellpadding="10" cellspacing="0" align="center">
+                    <tr>
+                        <td align="center">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <a href="#" onclick="javascript:window.open('https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');">
+                                <img src="https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif" border="0" alt="Acceptance Mark"/></a>
+                        </td>
+                    </tr>
+                </table>
+                <!-- PayPal Logo -->
             </div>
         </div>
         <%-- Footer --%>
         <div id="footer">
             <p class="right">
-                &copy; 2011 Easy Data Mining, Design: Radu Cantor, <a title="Awsome Web Templates"
-                    href="http://www.solucija.com/">Solucija</a></p>
+                &copy; 2011 Easy Data Mining, Design: Radu Cantor</p>
             <p>
                 <a href="#">RSS Feed</a> &middot; <a href="#">Contact</a> &middot; <a href="#">Accessibility</a>
                 &middot; <a href="#">Products</a> &middot; <a href="#">Disclaimer</a> &middot; <a
