@@ -291,7 +291,7 @@ myReader.Close();*/
             string timeStamp = ((long)sTime.TotalMilliseconds).ToString();
 
             ExcelManager em = new ExcelManager();
-            if (em.ExcelExport(sInputTable, "OlapReport_" + timeStamp + ".xls"))
+            if (em.ExcelExport(sInputTable, "OlapReport_" + timeStamp + ".xls", "D5"))
                 LabelStatus.Text = "Success!";
         }
 

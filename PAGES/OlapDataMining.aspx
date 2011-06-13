@@ -82,6 +82,9 @@
                     &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
                     <asp:DropDownList ID="DropDownListStructures" runat="server">
                     </asp:DropDownList>
+                    &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                    <asp:Button ID="ButtonExport" runat="server" Text="Exporta Raport" 
+                        onclick="ButtonExport_Click" />
                 </p>
                 <p>
                     <asp:Button ID="ButtonStructure" runat="server" Text="Creaza structura de mining cu numele:"
@@ -97,7 +100,7 @@
                     Rezultatele procesului de mining</h2>
                 <p class="date">
                     6th June 2011</p>
-                <div style="width: 600px; height: 230px; overflow: auto;">
+                <div style="width: 600px; height: 400px; overflow: auto;">
                     <asp:GridView ID="GridViewResults" runat="server" OnRowCommand="GridViewResults_RowCommand" Height="225px" Width="595px">
                         <Columns>
                             <asp:TemplateField HeaderText="View Node">
@@ -112,7 +115,7 @@
             <div class="left_articles">
             <h2>
                     Rezultatele detaliate</h2>
-                <div style="width: 600px; height: 230px; overflow: auto;">
+                <div style="width: 600px; height: 400px; overflow: auto;">
                     <asp:Panel ID="PanelViewer" runat="server" Height="225px" Width="595px">
                     </asp:Panel>
                     <asp:GridView ID="GridViewDistribution" runat="server" Height="150px" Width="595px"
@@ -146,7 +149,8 @@
                 <p>
                     Selecteaza algoritmul
                 </p>
-                <asp:DropDownList ID="DropDownListAlgorithm" runat="server">
+                <asp:DropDownList ID="DropDownListAlgorithm" runat="server" AutoPostBack="True" 
+                    onselectedindexchanged="DropDownListAlgorithm_SelectedIndexChanged">
                     <asp:ListItem>Clustering</asp:ListItem>
                     <asp:ListItem>Decision Trees</asp:ListItem>
                     <asp:ListItem>Naive Bayes</asp:ListItem>
@@ -219,17 +223,65 @@
                     </asp:GridView>
                 </div>
             </div>
+            <div class="right_articles">
+                <p>
+                    Customizare:
+                </p>
+                <div style="width: 250px; height: 200px; overflow: auto;">
+                    <asp:Label ID="LabelScore" runat="server" Text="Score Method" Visible="False"></asp:Label>
+                    <br />
+                    <asp:DropDownList ID="DropDownListScore" runat="server" Visible="False">
+                        <asp:ListItem>Entropy</asp:ListItem>
+                        <asp:ListItem>Bayesian with K2</asp:ListItem>
+                        <asp:ListItem Selected="True">Bayesian Dirichlet Equivalent </asp:ListItem>
+                    </asp:DropDownList>
+                    <br />
+                    <asp:Label ID="LabelSplit" runat="server" Text="Split Method" Visible="False"></asp:Label>
+                    <br />
+                    <asp:DropDownList ID="DropDownListSplit" runat="server" Visible="False">
+                        <asp:ListItem>Binary</asp:ListItem>
+                        <asp:ListItem>Complete</asp:ListItem>
+                        <asp:ListItem Selected="True">Both</asp:ListItem>
+                    </asp:DropDownList>
+                    <br />
+                    <asp:Label ID="LabelMethod" runat="server" Text="Clustering Method" Visible="False"></asp:Label>
+                    <br />
+                    <asp:DropDownList ID="DropDownListMethod" runat="server" Visible="False">
+                        <asp:ListItem Selected="True">Scalable EM</asp:ListItem>
+                        <asp:ListItem>Non-Scalable EM</asp:ListItem>
+                        <asp:ListItem>Scalable K-Means</asp:ListItem>
+                        <asp:ListItem>Non-Scalable K-Means</asp:ListItem>
+                    </asp:DropDownList>
+                    <br />
+                    <asp:Label ID="LabelCount" runat="server" Text="Cluster Count" Visible="False"></asp:Label>
+                    <br />
+                    <asp:TextBox ID="TextBoxCount" runat="server" Visible="False">10</asp:TextBox>
+                    
+                </div>
+            </div>
             <div class="notes">
                 <p>
-                    If you liked this template you might like some other CSS templates from <a href="http://www.solucija.com/">
-                        Solucija</a>.</p>
+                    Here you can find information about our donation system</p>
+                <!-- PayPal Logo -->
+                <table border="0" cellpadding="10" cellspacing="0" align="center">
+                    <tr>
+                        <td align="center">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <a href="#" onclick="javascript:window.open('https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');">
+                                <img src="https://www.paypal.com/en_US/i/logo/PayPal_mark_37x23.gif" border="0" alt="Acceptance Mark"></a>
+                        </td>
+                    </tr>
+                </table>
+                <!-- PayPal Logo -->
             </div>
         </div>
-        <%-- Footer --%>
+        <%--Footer--%>
         <div id="footer">
             <p class="right">
-                &copy; 2011 Easy Data Mining, Design: Radu Cantor, <a title="Awsome Web Templates"
-                    href="http://www.solucija.com/">Solucija</a></p>
+                &copy; 2011 Easy Data Mining, Design: Radu Cantor</p>
             <p>
                 <a href="#">RSS Feed</a> &middot; <a href="#">Contact</a> &middot; <a href="#">Accessibility</a>
                 &middot; <a href="#">Products</a> &middot; <a href="#">Disclaimer</a> &middot; <a

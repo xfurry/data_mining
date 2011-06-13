@@ -12,7 +12,7 @@ namespace WebApplication_OLAP
     public class ExcelManager
     {
         // load data to excel
-        public bool ExcelExport(System.Data.DataTable objTable, string sFileName)
+        public bool ExcelExport(System.Data.DataTable objTable, string sFileName, string sStartCell)
         {
             ExcelFile ef = new ExcelFile();
 
@@ -28,7 +28,7 @@ namespace WebApplication_OLAP
             // ws.ExtractToDataTable(objTable, 10, ExtractDataOptions.StopAtFirstEmptyRow, ws.Rows[0], ws.Columns[0]);
 
             // Insert the data from DataTable to the worksheet starting at cell "A1"
-            ws.InsertDataTable(objTable,"D5", true);
+            ws.InsertDataTable(objTable, sStartCell, true);
 
             // Save the file to XLS format.
             ef.SaveXls(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\" + sFileName);

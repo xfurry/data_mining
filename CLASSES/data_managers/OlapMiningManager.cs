@@ -26,7 +26,8 @@ namespace WebApplication_OLAP.classes
          * Create mining structures and models for olap
          */
         public string CreateCubeMiningStructure(string sStructName, string sAlgorithm, int sCubeName, string sDimensionName, string sKeyColumn,
-            List<string> lsInputColumns, List<string> lsPredictColumns, List<string> lsMeasureInput, List<string> lsMeasurePredict, List<bool> lbPredictItems)
+            List<string> lsInputColumns, List<string> lsPredictColumns, List<string> lsMeasureInput, List<string> lsMeasurePredict, List<bool> lbPredictItems,
+            int parOne, int parTwo)
         {
             try
             {
@@ -111,7 +112,7 @@ namespace WebApplication_OLAP.classes
 
                 /***************** Mining model *****************/
                 // create mining models
-                CreateMiningModel(myMiningStructure, sStructName, sAlgorithm, lsPredictColumns, lsMeasurePredict, lbPredictItems);
+                CreateMiningModel(myMiningStructure, sStructName, sAlgorithm, lsPredictColumns, lsMeasurePredict, lbPredictItems, parOne, parTwo);
 
                 // process
                 myMiningStructure.Process();
@@ -128,7 +129,7 @@ namespace WebApplication_OLAP.classes
          * Create mining model
          */
         private void CreateMiningModel(Microsoft.AnalysisServices.MiningStructure objStructure, string sName, string sAlgorithm,
-            List<string> lsAtrPredict, List<string> lsMeasurePredict, List<bool> lbPredictItems)
+            List<string> lsAtrPredict, List<string> lsMeasurePredict, List<bool> lbPredictItems, int parOne, int parTwo)
         {
             Microsoft.AnalysisServices.MiningModel myMiningModel = objStructure.CreateMiningModel(true, sName);
 
@@ -144,6 +145,8 @@ namespace WebApplication_OLAP.classes
             switch (sAlgorithm)
             {
                 case MiningModelAlgorithms.MicrosoftClustering:
+                    myMiningModel.AlgorithmParameters.Add("CLUSTERING_METHOD", parOne);
+                    myMiningModel.AlgorithmParameters.Add("CLUSTER_COUNT", parTwo);
                     break;
                 //case MiningModelAlgorithms.MicrosoftTimeSeries:
                 //    myMiningModel.AlgorithmParameters.Add("PERIODICITY_HINT", "{12}");              // {12} represents the number of months for prediction
@@ -151,6 +154,8 @@ namespace WebApplication_OLAP.classes
                 case MiningModelAlgorithms.MicrosoftNaiveBayes:
                     break;
                 case MiningModelAlgorithms.MicrosoftDecisionTrees:
+                    myMiningModel.AlgorithmParameters.Add("SCORE_METHOD", parOne);
+                    myMiningModel.AlgorithmParameters.Add("SPLIT_METHOD", parTwo);
                     break;
             }
 

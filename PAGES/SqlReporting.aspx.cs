@@ -99,7 +99,7 @@ namespace WebApplication_OLAP
             string timeStamp = ((long)sTime.TotalMilliseconds).ToString();
 
             ExcelManager em = new ExcelManager();
-            if (em.ExcelExport(sInputTable, "RelationalReport_" + timeStamp + ".xls"))
+            if (em.ExcelExport(sInputTable, "RelationalReport_" + timeStamp + ".xls", "D5"))
                 LabelStatus.Text = "Success!";
         }
 
