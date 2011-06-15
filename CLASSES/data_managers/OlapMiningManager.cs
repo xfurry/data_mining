@@ -12,7 +12,7 @@ namespace WebApplication_OLAP.classes
     {
         //private const string sCatalog = "Adventure Works DW 2008";
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
-        private const string sCatalog = "MyFinalDataBase";
+        private const string sCatalog = "MyDataBase";
         //private const string sServer = "localhost";
         private string sResult = "Success!";
 
@@ -146,7 +146,8 @@ namespace WebApplication_OLAP.classes
             {
                 case MiningModelAlgorithms.MicrosoftClustering:
                     myMiningModel.AlgorithmParameters.Add("CLUSTERING_METHOD", parOne);
-                    myMiningModel.AlgorithmParameters.Add("CLUSTER_COUNT", parTwo);
+                    if (parTwo > 0)
+                        myMiningModel.AlgorithmParameters.Add("CLUSTER_COUNT", parTwo);
                     break;
                 //case MiningModelAlgorithms.MicrosoftTimeSeries:
                 //    myMiningModel.AlgorithmParameters.Add("PERIODICITY_HINT", "{12}");              // {12} represents the number of months for prediction

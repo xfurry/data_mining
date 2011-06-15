@@ -13,7 +13,7 @@ namespace WebApplication_OLAP
     public partial class SqlReporting : System.Web.UI.Page
     {
         //private string sSelectedDB = "AdventureWorksDW";
-        private string sSelectedDB = "MyFinalDataBase";
+        private string sSelectedDB = "MyDataBase";
 
         protected void Page_Load(object sender, EventArgs e)
         {

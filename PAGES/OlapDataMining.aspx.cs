@@ -16,7 +16,7 @@ namespace WebApplication_OLAP.classes
     {
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
         //private const string sCatalog = "Adventure Works DW 2008";
-        private const string sCatalog = "MyFinalDataBase";
+        private const string sCatalog = "MyDataBase";
         //private const string sServer = "localhost";
 
         protected void Page_Load(object sender, EventArgs e)
@@ -263,7 +263,7 @@ namespace WebApplication_OLAP.classes
         protected void ButtonResult_Click(object sender, EventArgs e)
         {
             // Query uses mining model name!
-            string sQuery = "select NODE_NAME, NODE_TYPE, ATTRIBUTE_NAME, " +
+            string sQuery = "select NODE_NAME, NODE_CAPTION, NODE_TYPE, ATTRIBUTE_NAME, " +
                 "[PARENT_UNIQUE_NAME], [CHILDREN_CARDINALITY], NODE_PROBABILITY, MARGINAL_PROBABILITY, NODE_SUPPORT, " +
                 "MSOLAP_MODEL_COLUMN, MSOLAP_NODE_SCORE from [" + DropDownListStructures.SelectedItem.ToString() + "].CONTENT";
             InitDataTable(sQuery);

@@ -10,7 +10,7 @@ namespace WebApplication_OLAP
     public class SQLManager
     {
         //private string sCatalog = "AdventureWorksDW";
-        private string sCatalog = "MyFinalDataBase";
+        private string sCatalog = "MyDataBase";
         private const string sServer = "CLARITY-7HYGMQM\\ANA";
         //private const string sServer = "localhost";
 
